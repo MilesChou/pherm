@@ -3,8 +3,8 @@
 namespace MilesChou\Pherm\Concerns;
 
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
-use MilesChou\Pherm\IO\InputStream;
-use MilesChou\Pherm\IO\OutputStream;
+use MilesChou\Pherm\Contracts\InputStream;
+use MilesChou\Pherm\Contracts\OutputStream;
 
 /**
  * Screen size of terminal

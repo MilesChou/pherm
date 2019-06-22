@@ -1,6 +1,6 @@
 <?php
 
-namespace MilesChou\Pherm\IO;
+namespace MilesChou\Pherm\Contracts;
 
 interface OutputStream
 {

@@ -2,7 +2,7 @@
 
 namespace Tests\IO;
 
-use MilesChou\Pherm\IO\ResourceOutputStream;
+use MilesChou\Pherm\Output\OutputStream;
 use PHPUnit\Framework\TestCase;
 
 class ResourceOutputStreamTest extends TestCase
@@ -11,20 +11,20 @@ class ResourceOutputStreamTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a valid stream');
-        new ResourceOutputStream(42);
+        new OutputStream(42);
     }
 
     public function testNotWritable() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a writable stream');
-        new ResourceOutputStream(\STDIN);
+        new OutputStream(\STDIN);
     }
 
     public function testWrite() : void
     {
         $stream = fopen('php://memory', 'r+');
-        $outputStream = new ResourceOutputStream($stream);
+        $outputStream = new OutputStream($stream);
         $outputStream->write('123456789');
 
         rewind($stream);

@@ -1,6 +1,8 @@
 <?php
 
-namespace MilesChou\Pherm\IO;
+namespace MilesChou\Pherm\Output;
+
+use MilesChou\Pherm\Contracts\OutputStream;
 
 class BufferedOutput implements OutputStream
 {

@@ -2,7 +2,7 @@
 
 namespace Tests\IO;
 
-use MilesChou\Pherm\IO\BufferedOutput;
+use MilesChou\Pherm\Output\BufferedOutput;
 use PHPUnit\Framework\TestCase;
 
 class BufferedOutputTest extends TestCase

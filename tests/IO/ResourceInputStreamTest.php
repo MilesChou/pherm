@@ -2,7 +2,7 @@
 
 namespace Tests\IO;
 
-use MilesChou\Pherm\IO\ResourceInputStream;
+use MilesChou\Pherm\Input\InputStream;
 use PHPUnit\Framework\TestCase;
 
 class ResourceInputStreamTest extends TestCase
@@ -11,14 +11,14 @@ class ResourceInputStreamTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a valid stream');
-        new ResourceInputStream(42);
+        new InputStream(42);
     }
 
     public function testNotReadable() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a readable stream');
-        new ResourceInputStream(\STDOUT);
+        new InputStream(\STDOUT);
     }
 
     public function testRead() : void
@@ -27,7 +27,7 @@ class ResourceInputStreamTest extends TestCase
         fwrite($stream, '1234');
         rewind($stream);
 
-        $inputStream = new ResourceInputStream($stream);
+        $inputStream = new InputStream($stream);
 
         $input = '';
         $inputStream->read(4, function ($buffer) use (&$input) {

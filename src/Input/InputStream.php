@@ -1,29 +1,30 @@
 <?php
 
-namespace MilesChou\Pherm\IO;
+namespace MilesChou\Pherm\Input;
 
-use function get_resource_type;
 use InvalidArgumentException;
+use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
+use function get_resource_type;
 use function is_resource;
 use function stream_get_meta_data;
 use function strpos;
 
-class ResourceOutputStream implements OutputStream
+class InputStream implements InputStreamContract
 {
     /**
      * @var resource
      */
     private $stream;
 
-    public function __construct($stream = STDOUT)
+    public function __construct($stream = STDIN)
     {
         if (!is_resource($stream) || get_resource_type($stream) !== 'stream') {
             throw new InvalidArgumentException('Expected a valid stream');
         }
 
         $meta = stream_get_meta_data($stream);
-        if (strpos($meta['mode'], 'r') !== false && strpos($meta['mode'], '+') === false) {
-            throw new InvalidArgumentException('Expected a writable stream');
+        if (strpos($meta['mode'], 'r') === false && strpos($meta['mode'], '+') === false) {
+            throw new InvalidArgumentException('Expected a readable stream');
         }
 
         $this->stream = $stream;
@@ -34,8 +35,9 @@ class ResourceOutputStream implements OutputStream
         return posix_isatty($this->stream);
     }
 
-    public function write(string $buffer): void
+    public function read(int $numBytes, callable $callback): void
     {
-        fwrite($this->stream, $buffer);
+        $buffer = fread($this->stream, $numBytes);
+        $callback($buffer);
     }
 }

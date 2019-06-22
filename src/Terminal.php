@@ -7,8 +7,8 @@ use MilesChou\Pherm\Concerns\EchoBack;
 use MilesChou\Pherm\Concerns\Io;
 use MilesChou\Pherm\Concerns\Size;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
-use MilesChou\Pherm\IO\InputStream;
-use MilesChou\Pherm\IO\OutputStream;
+use MilesChou\Pherm\Contracts\InputStream;
+use MilesChou\Pherm\Contracts\OutputStream;
 
 class Terminal implements TerminalContract
 {

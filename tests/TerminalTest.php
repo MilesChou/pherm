@@ -3,19 +3,19 @@
 namespace Tests;
 
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
-use MilesChou\Pherm\IO\BufferedOutput;
-use MilesChou\Pherm\IO\InputStream;
-use MilesChou\Pherm\IO\OutputStream;
-use MilesChou\Pherm\IO\ResourceInputStream;
+use MilesChou\Pherm\Input\InputStream;
+use MilesChou\Pherm\Output\BufferedOutput;
+use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
+use MilesChou\Pherm\Contracts\OutputStream as OutputStreamContract;
 use MilesChou\Pherm\Terminal;
 use PHPUnit\Framework\TestCase;
 
-class UnixTerminalTest extends TestCase
+class TerminalTest extends TestCase
 {
     public function testIsInteractiveReturnsTrueIfInputAndOutputAreTTYs() : void
     {
-        $input  = $this->createMock(InputStream::class);
-        $output = $this->createMock(OutputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
+        $output = $this->createMock(OutputStreamContract::class);
 
         $input
             ->expects($this->once())
@@ -33,8 +33,8 @@ class UnixTerminalTest extends TestCase
 
     public function testIsInteractiveReturnsFalseIfInputNotTTY() : void
     {
-        $input  = $this->createMock(InputStream::class);
-        $output = $this->createMock(OutputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
+        $output = $this->createMock(OutputStreamContract::class);
 
         $input
             ->expects($this->once())
@@ -51,8 +51,8 @@ class UnixTerminalTest extends TestCase
 
     public function testIsInteractiveReturnsFalseIfOutputNotTTY() : void
     {
-        $input  = $this->createMock(InputStream::class);
-        $output = $this->createMock(OutputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
+        $output = $this->createMock(OutputStreamContract::class);
 
         $input
             ->expects($this->once())
@@ -70,8 +70,8 @@ class UnixTerminalTest extends TestCase
 
     public function testIsInteractiveReturnsFalseIfInputAndOutputNotTTYs() : void
     {
-        $input  = $this->createMock(InputStream::class);
-        $output = $this->createMock(OutputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
+        $output = $this->createMock(OutputStreamContract::class);
 
         $input
             ->expects($this->once())
@@ -91,8 +91,8 @@ class UnixTerminalTest extends TestCase
         $this->expectException(NotInteractiveTerminal::class);
         $this->expectExceptionMessage('Input stream is not interactive (non TTY)');
 
-        $input  = $this->createMock(InputStream::class);
-        $output = $this->createMock(OutputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
+        $output = $this->createMock(OutputStreamContract::class);
 
         $input
             ->expects($this->once())
@@ -108,8 +108,8 @@ class UnixTerminalTest extends TestCase
         $this->expectException(NotInteractiveTerminal::class);
         $this->expectExceptionMessage('Output stream is not interactive (non TTY)');
 
-        $input  = $this->createMock(InputStream::class);
-        $output = $this->createMock(OutputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
+        $output = $this->createMock(OutputStreamContract::class);
 
         $input
             ->expects($this->once())
@@ -127,7 +127,7 @@ class UnixTerminalTest extends TestCase
 
     public function testClear() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -138,7 +138,7 @@ class UnixTerminalTest extends TestCase
 
     public function testClearLine() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -149,7 +149,7 @@ class UnixTerminalTest extends TestCase
 
     public function testClearDown() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -160,7 +160,7 @@ class UnixTerminalTest extends TestCase
 
     public function testClean() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -179,7 +179,7 @@ class UnixTerminalTest extends TestCase
 
     public function testEnableCursor() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -190,7 +190,7 @@ class UnixTerminalTest extends TestCase
 
     public function testDisableCursor() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -201,7 +201,7 @@ class UnixTerminalTest extends TestCase
 
     public function testMoveCursorToTop() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -212,7 +212,7 @@ class UnixTerminalTest extends TestCase
 
     public function testMoveCursorToRow() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -223,7 +223,7 @@ class UnixTerminalTest extends TestCase
 
     public function testMoveCursorToColumn() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -237,7 +237,7 @@ class UnixTerminalTest extends TestCase
      */
     public function shouldReturnCorrectPositionWhenCallMoveCursor() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -248,7 +248,7 @@ class UnixTerminalTest extends TestCase
 
     public function testShowAlternateScreen() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -259,7 +259,7 @@ class UnixTerminalTest extends TestCase
 
     public function testShowMainScreen() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -274,8 +274,8 @@ class UnixTerminalTest extends TestCase
         fwrite($tempStream, 'mystring');
         rewind($tempStream);
 
-        $input  = new ResourceInputStream($tempStream);
-        $output = $this->createMock(OutputStream::class);
+        $input  = new InputStream($tempStream);
+        $output = $this->createMock(OutputStreamContract::class);
 
         $terminal = new Terminal($input, $output);
 
@@ -287,7 +287,7 @@ class UnixTerminalTest extends TestCase
 
     public function testWriteForwardsToOutput() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
@@ -298,7 +298,7 @@ class UnixTerminalTest extends TestCase
 
     public function testGetColourSupport() : void
     {
-        $input  = $this->createMock(InputStream::class);
+        $input  = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $terminal = new Terminal($input, $output);
