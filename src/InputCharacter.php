@@ -1,12 +1,9 @@
 <?php
 
-namespace PhpSchool\Terminal;
+namespace MilesChou\Pherm;
 
 use function in_array;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class InputCharacter
 {
     /**

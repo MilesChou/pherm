@@ -1,13 +1,10 @@
 <?php
 
-namespace PhpSchool\TerminalTest;
+namespace Tests;
 
-use PhpSchool\Terminal\InputCharacter;
+use MilesChou\Pherm\InputCharacter;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class InputCharacterTest extends TestCase
 {
     public function testWhenCharacterIsAControl() : void

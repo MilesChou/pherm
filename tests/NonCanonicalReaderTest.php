@@ -1,18 +1,15 @@
 <?php
 
-namespace PhpSchool\TerminalTest;
+namespace Tests;
 
-use PhpSchool\Terminal\InputCharacter;
-use PhpSchool\Terminal\Terminal;
-use PhpSchool\Terminal\NonCanonicalReader;
+use MilesChou\Pherm\InputCharacter;
+use MilesChou\Pherm\NonCanonicalReader;
+use MilesChou\Pherm\Terminal;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class NonCanonicalReaderTest extends TestCase
 {
-    public function testExceptionIsThrownIfMappingAddedForNonControlCharacter() : void
+    public function testExceptionIsThrownIfMappingAddedForNonControlCharacter(): void
     {
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Control "w" does not exist');
@@ -22,7 +19,7 @@ class NonCanonicalReaderTest extends TestCase
         $terminalReader->addControlMapping('p', 'w');
     }
 
-    public function testExceptionIsThrownIfMappingsAddedForNonControlCharacter() : void
+    public function testExceptionIsThrownIfMappingsAddedForNonControlCharacter(): void
     {
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('Control "w" does not exist');
@@ -32,7 +29,7 @@ class NonCanonicalReaderTest extends TestCase
         $terminalReader->addControlMappings(['p' => 'w']);
     }
 
-    public function testCustomMappingToUpControl() : void
+    public function testCustomMappingToUpControl(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal
@@ -51,7 +48,7 @@ class NonCanonicalReaderTest extends TestCase
         self::assertEquals("\033[A", $char->get());
     }
 
-    public function testReadNormalCharacter() : void
+    public function testReadNormalCharacter(): void
     {
         $terminal = $this->createMock(Terminal::class);
         $terminal

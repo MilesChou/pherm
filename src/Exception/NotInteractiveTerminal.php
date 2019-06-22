@@ -1,10 +1,7 @@
 <?php
 
-namespace PhpSchool\Terminal\Exception;
+namespace MilesChou\Pherm\Exception;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class NotInteractiveTerminal extends \RuntimeException
 {
     public static function inputNotInteractive() : self

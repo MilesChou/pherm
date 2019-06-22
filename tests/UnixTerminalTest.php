@@ -1,14 +1,13 @@
 <?php
 
-namespace PhpSchool\TerminalTest;
+namespace Tests;
 
-use PhpSchool\Terminal\Exception\NotInteractiveTerminal;
-use PhpSchool\Terminal\IO\BufferedOutput;
-use PhpSchool\Terminal\IO\InputStream;
-use PhpSchool\Terminal\IO\OutputStream;
-use PhpSchool\Terminal\IO\ResourceInputStream;
-use PhpSchool\Terminal\IO\ResourceOutputStream;
-use PhpSchool\Terminal\UnixTerminal;
+use MilesChou\Pherm\Exception\NotInteractiveTerminal;
+use MilesChou\Pherm\IO\BufferedOutput;
+use MilesChou\Pherm\IO\InputStream;
+use MilesChou\Pherm\IO\OutputStream;
+use MilesChou\Pherm\IO\ResourceInputStream;
+use MilesChou\Pherm\UnixTerminal;
 use PHPUnit\Framework\TestCase;
 
 class UnixTerminalTest extends TestCase

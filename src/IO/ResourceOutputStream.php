@@ -1,15 +1,12 @@
 <?php
 
-namespace PhpSchool\Terminal\IO;
+namespace MilesChou\Pherm\IO;
 
-use function is_resource;
 use function get_resource_type;
+use function is_resource;
 use function stream_get_meta_data;
 use function strpos;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class ResourceOutputStream implements OutputStream
 {
     /**

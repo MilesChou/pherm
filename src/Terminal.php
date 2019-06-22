@@ -1,11 +1,7 @@
 <?php
 
-namespace PhpSchool\Terminal;
+namespace MilesChou\Pherm;
 
-/**
- * @author Michael Woodward <mikeymike.mw@gmail.com>
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 interface Terminal
 {
     /**

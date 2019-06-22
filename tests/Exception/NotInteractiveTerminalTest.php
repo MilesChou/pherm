@@ -1,13 +1,10 @@
 <?php
 
-namespace PhpSchool\TerminalTest\Exception;
+namespace Tests\Exception;
 
-use PhpSchool\Terminal\Exception\NotInteractiveTerminal;
+use MilesChou\Pherm\Exception\NotInteractiveTerminal;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class NotInteractiveTerminalTest extends TestCase
 {
     public function testInputNotInteractive() : void

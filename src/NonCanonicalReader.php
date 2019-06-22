@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpSchool\Terminal;
+namespace MilesChou\Pherm;
 
 /**
  * This class takes a terminal and disabled canonical mode. It reads the input
@@ -8,8 +8,6 @@ namespace PhpSchool\Terminal;
  * as they are read - character by character.
  *
  * On destruct canonical mode will be enabled if it was when in it was constructed.
- *
- * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class NonCanonicalReader
 {

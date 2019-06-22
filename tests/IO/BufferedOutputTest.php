@@ -1,13 +1,10 @@
 <?php
 
-namespace PhpSchool\TerminalTest\IO;
+namespace Tests\IO;
 
-use PhpSchool\Terminal\IO\BufferedOutput;
+use MilesChou\Pherm\IO\BufferedOutput;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class BufferedOutputTest extends TestCase
 {
     public function testFetch() : void

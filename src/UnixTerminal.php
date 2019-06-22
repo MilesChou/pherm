@@ -1,15 +1,11 @@
 <?php
 
-namespace PhpSchool\Terminal;
+namespace MilesChou\Pherm;
 
-use PhpSchool\Terminal\Exception\NotInteractiveTerminal;
-use PhpSchool\Terminal\IO\InputStream;
-use PhpSchool\Terminal\IO\OutputStream;
+use MilesChou\Pherm\Exception\NotInteractiveTerminal;
+use MilesChou\Pherm\IO\InputStream;
+use MilesChou\Pherm\IO\OutputStream;
 
-/**
- * @author Michael Woodward <mikeymike.mw@gmail.com>
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class UnixTerminal implements Terminal
 {
     /**

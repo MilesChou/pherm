@@ -1,10 +1,7 @@
 <?php
 
-namespace PhpSchool\Terminal\IO;
+namespace MilesChou\Pherm\IO;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 interface OutputStream
 {
     /**

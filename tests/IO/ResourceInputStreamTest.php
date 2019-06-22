@@ -1,13 +1,10 @@
 <?php
 
-namespace PhpSchool\TerminalTest\IO;
+namespace Tests\IO;
 
-use PhpSchool\Terminal\IO\ResourceInputStream;
+use MilesChou\Pherm\IO\ResourceInputStream;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Aydin Hassan <aydin@hotmail.co.uk>
- */
 class ResourceInputStreamTest extends TestCase
 {
     public function testNonStream() : void
