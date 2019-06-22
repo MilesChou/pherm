@@ -8,7 +8,6 @@ use MilesChou\Pherm\Output\BufferedOutput;
 use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputStreamContract;
 use MilesChou\Pherm\Terminal;
-use PHPUnit\Framework\TestCase;
 
 class TerminalTest extends TestCase
 {
@@ -27,7 +26,8 @@ class TerminalTest extends TestCase
             ->willReturn(true);
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $this->assertTrue($target->isInteractive());
     }
@@ -46,7 +46,8 @@ class TerminalTest extends TestCase
             ->willReturn(true);
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $this->assertFalse($target->isInteractive());
     }
@@ -66,7 +67,8 @@ class TerminalTest extends TestCase
             ->willReturn(false);
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $this->assertFalse($target->isInteractive());
     }
@@ -85,7 +87,8 @@ class TerminalTest extends TestCase
             ->willReturn(false);
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $this->assertFalse($target->isInteractive());
     }
@@ -104,7 +107,8 @@ class TerminalTest extends TestCase
             ->willReturn(false);
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $target->mustBeInteractive();
     }
@@ -128,7 +132,8 @@ class TerminalTest extends TestCase
             ->willReturn(false);
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $target->mustBeInteractive();
     }
@@ -139,7 +144,8 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
         $target->clear();
 
         $this->assertSame("\033[2J", $output->fetch());
@@ -151,7 +157,8 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
         $target->clearLine();
 
         $this->assertSame("\033[2K", $output->fetch());
@@ -163,7 +170,8 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
         $target->clearDown();
 
         $this->assertSame("\033[J", $output->fetch());
@@ -175,7 +183,8 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $rf = new \ReflectionObject($target);
         $rp = $rf->getProperty('width');
@@ -196,7 +205,8 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
         $target->enableCursor();
 
         $this->assertSame("\033[?25h", $output->fetch());
@@ -208,7 +218,8 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
         $target->disableCursor();
 
         $this->assertSame("\033[?25l", $output->fetch());
@@ -220,10 +231,27 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
         $target->moveCursorToTop();
 
         $this->assertSame("\033[0;0H", $output->fetch());
+    }
+
+    /**
+     * @test
+     */
+    public function sholudBeOkayWhenCallMoveCursorToEnd() : void
+    {
+        $input  = $this->createMock(InputStreamContract::class);
+        $output = new BufferedOutput;
+
+        $target = new Terminal($input, $output);
+        $target->setStty($this->createSttyMock())
+            ->bootstrap()
+            ->moveCursorToEnd();
+
+        $this->assertSame("\033[24;80H", $output->fetch());
     }
 
     public function testMoveCursorToRow() : void
@@ -232,8 +260,9 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
-        $target->moveCursorToRow(2);
+        $target->setStty($this->createSttyMock())
+            ->bootstrap()
+            ->moveCursorToRow(2);
 
         $this->assertSame("\033[2;0H", $output->fetch());
     }
@@ -244,8 +273,9 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
-        $target->moveCursorToColumn(10);
+        $target->setStty($this->createSttyMock())
+            ->bootstrap()
+            ->moveCursorToColumn(10);
 
         $this->assertSame("\033[10C", $output->fetch());
     }
@@ -259,8 +289,9 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
-        $target->moveCursor(10, 20);
+        $target->setStty($this->createSttyMock())
+            ->bootstrap()
+            ->moveCursor(10, 20);
 
         $this->assertSame("\033[20;10H", $output->fetch());
     }
@@ -271,8 +302,9 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
-        $target->showSecondaryScreen();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap()
+            ->showSecondaryScreen();
 
         $this->assertSame("\033[?47h", $output->fetch());
     }
@@ -283,8 +315,9 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
-        $target->showPrimaryScreen();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap()
+            ->showPrimaryScreen();
 
         $this->assertSame("\033[?47l", $output->fetch());
     }
@@ -299,7 +332,8 @@ class TerminalTest extends TestCase
         $output = $this->createMock(OutputStreamContract::class);
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         $this->assertSame('myst', $target->read(4));
         $this->assertSame('ring', $target->read(4));
@@ -313,8 +347,9 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
-        $target->write('My awesome string');
+        $target->setStty($this->createSttyMock())
+            ->bootstrap()
+            ->write('My awesome string');
 
         $this->assertSame('My awesome string', $output->fetch());
     }
@@ -325,7 +360,8 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
-        $target->bootstrap();
+        $target->setStty($this->createSttyMock())
+            ->bootstrap();
 
         // Travis terminal supports 8 colours, but just in case
         // in ever changes I'll add the 256 colors possibility too
