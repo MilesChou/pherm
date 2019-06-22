@@ -28,16 +28,13 @@ class ResourceOutputStream implements OutputStream
         $this->stream = $stream;
     }
 
+    public function isInteractive(): bool
+    {
+        return posix_isatty($this->stream);
+    }
+
     public function write(string $buffer): void
     {
         fwrite($this->stream, $buffer);
-    }
-
-    /**
-     * Whether the stream is connected to an interactive terminal
-     */
-    public function isInteractive() : bool
-    {
-        return posix_isatty($this->stream);
     }
 }

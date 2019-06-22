@@ -26,9 +26,9 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(true);
 
-        $terminal = new UnixTerminal($input, $output);
+        $target = new UnixTerminal($input, $output);
 
-        self::assertTrue($terminal->isInteractive());
+        $this->assertTrue($target->isInteractive());
     }
 
     public function testIsInteractiveReturnsFalseIfInputNotTTY() : void
@@ -41,13 +41,12 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
         $output
-            ->expects($this->any())
             ->method('isInteractive')
             ->willReturn(true);
 
-        $terminal = new UnixTerminal($input, $output);
+        $target = new UnixTerminal($input, $output);
 
-        self::assertFalse($terminal->isInteractive());
+        $this->assertFalse($target->isInteractive());
     }
 
     public function testIsInteractiveReturnsFalseIfOutputNotTTY() : void
@@ -64,9 +63,9 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $terminal = new UnixTerminal($input, $output);
+        $target = new UnixTerminal($input, $output);
 
-        self::assertFalse($terminal->isInteractive());
+        $this->assertFalse($target->isInteractive());
     }
 
     public function testIsInteractiveReturnsFalseIfInputAndOutputNotTTYs() : void
@@ -79,19 +78,18 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
         $output
-            ->expects($this->any())
             ->method('isInteractive')
             ->willReturn(false);
 
-        $terminal = new UnixTerminal($input, $output);
+        $target = new UnixTerminal($input, $output);
 
-        self::assertFalse($terminal->isInteractive());
+        $this->assertFalse($target->isInteractive());
     }
 
     public function testMustBeInteractiveThrowsExceptionIfInputNotTTY() : void
     {
-        self::expectException(NotInteractiveTerminal::class);
-        self::expectExceptionMessage('Input stream is not interactive (non TTY)');
+        $this->expectException(NotInteractiveTerminal::class);
+        $this->expectExceptionMessage('Input stream is not interactive (non TTY)');
 
         $input  = $this->createMock(InputStream::class);
         $output = $this->createMock(OutputStream::class);
@@ -101,14 +99,14 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $terminal = new UnixTerminal($input, $output);
-        $terminal->mustBeInteractive();
+        $target = new UnixTerminal($input, $output);
+        $target->mustBeInteractive();
     }
 
     public function testMustBeInteractiveThrowsExceptionIfOutputNotTTY() : void
     {
-        self::expectException(NotInteractiveTerminal::class);
-        self::expectExceptionMessage('Output stream is not interactive (non TTY)');
+        $this->expectException(NotInteractiveTerminal::class);
+        $this->expectExceptionMessage('Output stream is not interactive (non TTY)');
 
         $input  = $this->createMock(InputStream::class);
         $output = $this->createMock(OutputStream::class);
@@ -123,8 +121,8 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $terminal = new UnixTerminal($input, $output);
-        $terminal->mustBeInteractive();
+        $target = new UnixTerminal($input, $output);
+        $target->mustBeInteractive();
     }
 
     public function testClear() : void
@@ -135,7 +133,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->clear();
 
-        self::assertEquals("\033[2J", $output->fetch());
+        $this->assertSame("\033[2J", $output->fetch());
     }
 
     public function testClearLine() : void
@@ -146,7 +144,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->clearLine();
 
-        self::assertEquals("\033[2K", $output->fetch());
+        $this->assertSame("\033[2K", $output->fetch());
     }
 
     public function testClearDown() : void
@@ -157,7 +155,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->clearDown();
 
-        self::assertEquals("\033[J", $output->fetch());
+        $this->assertSame("\033[J", $output->fetch());
     }
 
     public function testClean() : void
@@ -176,7 +174,7 @@ class UnixTerminalTest extends TestCase
 
         $terminal->clean();
 
-        self::assertEquals("\033[0;0H\033[2K\033[1;0H\033[2K\033[2;0H\033[2K", $output->fetch());
+        $this->assertSame("\033[0;0H\033[2K\033[1;0H\033[2K\033[2;0H\033[2K", $output->fetch());
     }
 
     public function testEnableCursor() : void
@@ -187,7 +185,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->enableCursor();
 
-        self::assertEquals("\033[?25h", $output->fetch());
+        $this->assertSame("\033[?25h", $output->fetch());
     }
 
     public function testDisableCursor() : void
@@ -198,7 +196,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->disableCursor();
 
-        self::assertEquals("\033[?25l", $output->fetch());
+        $this->assertSame("\033[?25l", $output->fetch());
     }
 
     public function testMoveCursorToTop() : void
@@ -209,7 +207,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->moveCursorToTop();
 
-        self::assertEquals("\033[H", $output->fetch());
+        $this->assertSame("\033[H", $output->fetch());
     }
 
     public function testMoveCursorToRow() : void
@@ -220,7 +218,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->moveCursorToRow(2);
 
-        self::assertEquals("\033[2;0H", $output->fetch());
+        $this->assertSame("\033[2;0H", $output->fetch());
     }
 
     public function testMoveCursorToColumn() : void
@@ -231,7 +229,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->moveCursorToColumn(10);
 
-        self::assertEquals("\033[10C", $output->fetch());
+        $this->assertSame("\033[10C", $output->fetch());
     }
 
     /**
@@ -256,7 +254,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->showSecondaryScreen();
 
-        self::assertEquals("\033[?47h", $output->fetch());
+        $this->assertSame("\033[?47h", $output->fetch());
     }
 
     public function testShowMainScreen() : void
@@ -267,12 +265,12 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->showPrimaryScreen();
 
-        self::assertEquals("\033[?47l", $output->fetch());
+        $this->assertSame("\033[?47l", $output->fetch());
     }
 
     public function testRead() : void
     {
-        $tempStream = fopen('php://temp', 'r+');
+        $tempStream = fopen('php://temp', 'rb+');
         fwrite($tempStream, 'mystring');
         rewind($tempStream);
 
@@ -281,8 +279,8 @@ class UnixTerminalTest extends TestCase
 
         $terminal = new UnixTerminal($input, $output);
 
-        self::assertEquals('myst', $terminal->read(4));
-        self::assertEquals('ring', $terminal->read(4));
+        $this->assertSame('myst', $terminal->read(4));
+        $this->assertSame('ring', $terminal->read(4));
 
         fclose($tempStream);
     }
@@ -295,7 +293,7 @@ class UnixTerminalTest extends TestCase
         $terminal = new UnixTerminal($input, $output);
         $terminal->write('My awesome string');
 
-        self::assertEquals('My awesome string', $output->fetch());
+        $this->assertSame('My awesome string', $output->fetch());
     }
 
     public function testGetColourSupport() : void
@@ -307,6 +305,6 @@ class UnixTerminalTest extends TestCase
 
         // Travis terminal supports 8 colours, but just in case
         // in ever changes I'll add the 256 colors possibility too
-        self::assertTrue($terminal->getColourSupport() === 8 || $terminal->getColourSupport() === 256);
+        $this->assertTrue($terminal->getColourSupport() === 8 || $terminal->getColourSupport() === 256);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace MilesChou\Pherm;
 
+use InvalidArgumentException;
+use RuntimeException;
 use function in_array;
 
 class InputCharacter
@@ -30,16 +32,16 @@ class InputCharacter
         "\033[B" => self::DOWN,
         "\033[C" => self::RIGHT,
         "\033[D" => self::LEFT,
-        "\001"   => self::CTRLA,
-        "\002"   => self::CTRLB,
-        "\005"   => self::CTRLE,
-        "\006"   => self::CTRLF,
-        "\010"   => self::BACKSPACE,
-        "\177"   => self::BACKSPACE,
-        "\027"   => self::CTRLW,
-        "\n"     => self::ENTER,
-        "\t"     => self::TAB,
-        "\e"     => self::ESC,
+        "\001" => self::CTRLA,
+        "\002" => self::CTRLB,
+        "\005" => self::CTRLE,
+        "\006" => self::CTRLF,
+        "\010" => self::BACKSPACE,
+        "\177" => self::BACKSPACE,
+        "\027" => self::CTRLW,
+        "\n" => self::ENTER,
+        "\t" => self::TAB,
+        "\e" => self::ESC,
     ];
 
     public function __construct(string $data)
@@ -47,7 +49,7 @@ class InputCharacter
         $this->data = $data;
     }
 
-    public function isHandledControl() : bool
+    public function isHandledControl(): bool
     {
         return isset(static::$controls[$this->data]);
     }
@@ -55,7 +57,7 @@ class InputCharacter
     /**
      * Is this character a control sequence?
      */
-    public function isControl() : bool
+    public function isControl(): bool
     {
         return preg_match('/[\x00-\x1F\x7F]/', $this->data);
     }
@@ -63,15 +65,15 @@ class InputCharacter
     /**
      * Is this character a normal character?
      */
-    public function isNotControl() : bool
+    public function isNotControl(): bool
     {
-        return ! $this->isControl();
+        return !$this->isControl();
     }
 
     /**
      * Get the raw character or control sequence
      */
-    public function get() : string
+    public function get(): string
     {
         return $this->data;
     }
@@ -82,10 +84,10 @@ class InputCharacter
      *
      * Throws an exception if the character is not actually a control sequence
      */
-    public function getControl() : string
+    public function getControl(): string
     {
         if (!isset(static::$controls[$this->data])) {
-            throw new \RuntimeException(sprintf('Character "%s" is not a control', $this->data));
+            throw new RuntimeException(sprintf('Character "%s" is not a control', $this->data));
         }
 
         return static::$controls[$this->data];
@@ -94,15 +96,18 @@ class InputCharacter
     /**
      * Get the raw character or control sequence
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->get();
     }
 
     /**
      * Does the given control name exist? eg self::UP.
+     *
+     * @param string $controlName
+     * @return bool
      */
-    public static function controlExists(string $controlName) : bool
+    public static function controlExists(string $controlName): bool
     {
         return in_array($controlName, static::$controls, true);
     }
@@ -110,7 +115,7 @@ class InputCharacter
     /**
      * Get all of the available control names
      */
-    public static function getControls() : array
+    public static function getControls(): array
     {
         return array_values(array_unique(static::$controls));
     }
@@ -118,11 +123,14 @@ class InputCharacter
     /**
      * Create a instance from a given control name. Throws an exception if the
      * control name does not exist.
+     *
+     * @param string $controlName
+     * @return InputCharacter
      */
-    public static function fromControlName(string $controlName) : self
+    public static function fromControlName(string $controlName): self
     {
         if (!static::controlExists($controlName)) {
-            throw new \InvalidArgumentException(sprintf('Control "%s" does not exist', $controlName));
+            throw new InvalidArgumentException(sprintf('Control "%s" does not exist', $controlName));
         }
 
         return new static(array_search($controlName, static::$controls, true));

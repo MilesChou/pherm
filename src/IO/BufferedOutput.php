@@ -6,12 +6,12 @@ class BufferedOutput implements OutputStream
 {
     private $buffer = '';
 
-    public function write(string $buffer): void
+    public function __toString(): string
     {
-        $this->buffer .= $buffer;
+        return $this->fetch();
     }
 
-    public function fetch(bool $clean = true) : string
+    public function fetch(bool $clean = true): string
     {
         $buffer = $this->buffer;
 
@@ -22,16 +22,13 @@ class BufferedOutput implements OutputStream
         return $buffer;
     }
 
-    public function __toString() : string
-    {
-        return $this->fetch();
-    }
-
-    /**
-     * Whether the stream is connected to an interactive terminal
-     */
-    public function isInteractive() : bool
+    public function isInteractive(): bool
     {
         return false;
+    }
+
+    public function write(string $buffer): void
+    {
+        $this->buffer .= $buffer;
     }
 }

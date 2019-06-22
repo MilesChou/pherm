@@ -5,13 +5,18 @@ namespace MilesChou\Pherm\IO;
 interface InputStream
 {
     /**
-     * Callback should be called with the number of bytes requested
-     * when ready.
+     * Whether the stream is connected to an interactive terminal
+     *
+     * @return bool
      */
-    public function read(int $numBytes, callable $callback) : void;
+    public function isInteractive(): bool;
 
     /**
-     * Whether the stream is connected to an interactive terminal
+     * Callback should be called with the number of bytes requested
+     * when ready.
+     *
+     * @param int $numBytes
+     * @param callable $callback
      */
-    public function isInteractive() : bool;
+    public function read(int $numBytes, callable $callback): void;
 }

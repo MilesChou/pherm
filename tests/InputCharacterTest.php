@@ -11,29 +11,29 @@ class InputCharacterTest extends TestCase
     {
         $char = new InputCharacter("\n");
 
-        self::assertTrue($char->isControl());
-        self::assertTrue($char->isHandledControl());
-        self::assertFalse($char->isNotControl());
-        self::assertEquals('ENTER', $char->getControl());
-        self::assertEquals("\n", $char->get());
-        self::assertEquals("\n", $char->__toString());
+        $this->assertTrue($char->isControl());
+        $this->assertTrue($char->isHandledControl());
+        $this->assertFalse($char->isNotControl());
+        $this->assertSame('ENTER', $char->getControl());
+        $this->assertSame("\n", $char->get());
+        $this->assertSame("\n", $char->__toString());
     }
 
     public function testWhenCharacterIsNotAControl() : void
     {
         $char = new InputCharacter('p');
 
-        self::assertFalse($char->isControl());
-        self::assertFalse($char->isHandledControl());
-        self::assertTrue($char->isNotControl());
-        self::assertEquals('p', $char->get());
-        self::assertEquals('p', $char->__toString());
+        $this->assertFalse($char->isControl());
+        $this->assertFalse($char->isHandledControl());
+        $this->assertTrue($char->isNotControl());
+        $this->assertSame('p', $char->get());
+        $this->assertSame('p', $char->__toString());
     }
 
     public function testExceptionIsThrownIfGetControlCalledWhenNotAControl() : void
     {
-        self::expectException(\RuntimeException::class);
-        self::expectExceptionMessage('Character "p" is not a control');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Character "p" is not a control');
 
         $char = new InputCharacter('p');
         $char->getControl();
@@ -41,7 +41,7 @@ class InputCharacterTest extends TestCase
 
     public function testGetControls() : void
     {
-        self::assertEquals(
+        $this->assertSame(
             [
                 'UP',
                 'DOWN',
@@ -63,8 +63,8 @@ class InputCharacterTest extends TestCase
 
     public function testFromControlNameThrowsExceptionIfControlDoesNotExist() : void
     {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Control "w" does not exist');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Control "w" does not exist');
 
         InputCharacter::fromControlName('w');
     }
@@ -73,38 +73,38 @@ class InputCharacterTest extends TestCase
     {
         $char = InputCharacter::fromControlName(InputCharacter::UP);
 
-        self::assertTrue($char->isControl());
-        self::assertEquals('UP', $char->getControl());
-        self::assertEquals("\033[A", $char->get());
+        $this->assertTrue($char->isControl());
+        $this->assertSame('UP', $char->getControl());
+        $this->assertSame("\033[A", $char->get());
     }
 
     public function testControlExists() : void
     {
-        self::assertTrue(InputCharacter::controlExists(InputCharacter::UP));
-        self::assertFalse(InputCharacter::controlExists('w'));
+        $this->assertTrue(InputCharacter::controlExists(InputCharacter::UP));
+        $this->assertFalse(InputCharacter::controlExists('w'));
     }
 
     public function testIsControlOnNotExplicitlyHandledControls() : void
     {
         $char = new InputCharacter("\016"); //ctrl + p (I think)
 
-        self::assertTrue($char->isControl());
-        self::assertFalse($char->isHandledControl());
+        $this->assertTrue($char->isControl());
+        $this->assertFalse($char->isHandledControl());
 
         $char = new InputCharacter("\021"); //ctrl + u (I think)
 
-        self::assertTrue($char->isControl());
-        self::assertFalse($char->isHandledControl());
+        $this->assertTrue($char->isControl());
+        $this->assertFalse($char->isHandledControl());
     }
 
     public function testUnicodeCharacter() : void
     {
         $char = new InputCharacter('ß');
 
-        self::assertFalse($char->isControl());
-        self::assertFalse($char->isHandledControl());
-        self::assertTrue($char->isNotControl());
-        self::assertEquals('ß', $char->get());
-        self::assertEquals('ß', $char->__toString());
+        $this->assertFalse($char->isControl());
+        $this->assertFalse($char->isHandledControl());
+        $this->assertTrue($char->isNotControl());
+        $this->assertSame('ß', $char->get());
+        $this->assertSame('ß', $char->__toString());
     }
 }

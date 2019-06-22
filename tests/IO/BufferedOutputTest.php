@@ -12,7 +12,7 @@ class BufferedOutputTest extends TestCase
         $output = new BufferedOutput;
         $output->write('one');
 
-        static::assertEquals('one', $output->fetch());
+        $this->assertSame('one', $output->fetch());
     }
 
     public function testFetchWithMultipleWrites() : void
@@ -21,7 +21,7 @@ class BufferedOutputTest extends TestCase
         $output->write('one');
         $output->write('two');
 
-        static::assertEquals('onetwo', $output->fetch());
+        $this->assertSame('onetwo', $output->fetch());
     }
 
     public function testFetchCleansBufferByDefault() : void
@@ -29,8 +29,8 @@ class BufferedOutputTest extends TestCase
         $output = new BufferedOutput;
         $output->write('one');
 
-        static::assertEquals('one', $output->fetch());
-        static::assertEquals('', $output->fetch());
+        $this->assertSame('one', $output->fetch());
+        $this->assertSame('', $output->fetch());
     }
 
     public function testFetchWithoutCleaning() : void
@@ -38,11 +38,11 @@ class BufferedOutputTest extends TestCase
         $output = new BufferedOutput;
         $output->write('one');
 
-        static::assertEquals('one', $output->fetch(false));
+        $this->assertSame('one', $output->fetch(false));
 
         $output->write('two');
 
-        static::assertEquals('onetwo', $output->fetch(false));
+        $this->assertSame('onetwo', $output->fetch(false));
     }
 
     public function testToString() : void
@@ -50,6 +50,6 @@ class BufferedOutputTest extends TestCase
         $output = new BufferedOutput;
         $output->write('one');
 
-        static::assertEquals('one', (string) $output);
+        $this->assertSame('one', (string) $output);
     }
 }

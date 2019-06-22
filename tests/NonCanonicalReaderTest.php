@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use InvalidArgumentException;
 use MilesChou\Pherm\InputCharacter;
 use MilesChou\Pherm\NonCanonicalReader;
 use MilesChou\Pherm\Terminal;
@@ -11,8 +12,8 @@ class NonCanonicalReaderTest extends TestCase
 {
     public function testExceptionIsThrownIfMappingAddedForNonControlCharacter(): void
     {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Control "w" does not exist');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Control "w" does not exist');
 
         $terminal = $this->createMock(Terminal::class);
         $terminalReader = new NonCanonicalReader($terminal);
@@ -21,8 +22,8 @@ class NonCanonicalReaderTest extends TestCase
 
     public function testExceptionIsThrownIfMappingsAddedForNonControlCharacter(): void
     {
-        self::expectException(\InvalidArgumentException::class);
-        self::expectExceptionMessage('Control "w" does not exist');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Control "w" does not exist');
 
         $terminal = $this->createMock(Terminal::class);
         $terminalReader = new NonCanonicalReader($terminal);
@@ -43,9 +44,9 @@ class NonCanonicalReaderTest extends TestCase
 
         $char = $terminalReader->readCharacter();
 
-        self::assertTrue($char->isControl());
-        self::assertEquals('UP', $char->getControl());
-        self::assertEquals("\033[A", $char->get());
+        $this->assertTrue($char->isControl());
+        $this->assertSame('UP', $char->getControl());
+        $this->assertSame("\033[A", $char->get());
     }
 
     public function testReadNormalCharacter(): void
@@ -61,8 +62,8 @@ class NonCanonicalReaderTest extends TestCase
 
         $char = $terminalReader->readCharacter();
 
-        self::assertFalse($char->isControl());
-        self::assertEquals('w', $char->get());
+        $this->assertFalse($char->isControl());
+        $this->assertSame('w', $char->get());
     }
 
     public function testReadControlCharacter()
@@ -78,8 +79,8 @@ class NonCanonicalReaderTest extends TestCase
 
         $char = $terminalReader->readCharacter();
 
-        self::assertTrue($char->isControl());
-        self::assertEquals('ENTER', $char->getControl());
-        self::assertEquals("\n", $char->get());
+        $this->assertTrue($char->isControl());
+        $this->assertSame('ENTER', $char->getControl());
+        $this->assertSame("\n", $char->get());
     }
 }

@@ -28,6 +28,7 @@ class ResourceOutputStreamTest extends TestCase
         $outputStream->write('123456789');
 
         rewind($stream);
-        static::assertEquals('123456789', stream_get_contents($stream));
+
+        $this->assertSame('123456789', stream_get_contents($stream));
     }
 }

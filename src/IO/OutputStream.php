@@ -5,12 +5,16 @@ namespace MilesChou\Pherm\IO;
 interface OutputStream
 {
     /**
-     * Write the buffer to the stream
+     * Whether the stream is connected to an interactive terminal
+     *
+     * @return bool
      */
-    public function write(string $buffer) : void;
+    public function isInteractive(): bool;
 
     /**
-     * Whether the stream is connected to an interactive terminal
+     * Write the buffer to the stream
+     *
+     * @param string $buffer
      */
-    public function isInteractive() : bool;
+    public function write(string $buffer): void;
 }

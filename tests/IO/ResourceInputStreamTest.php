@@ -34,7 +34,7 @@ class ResourceInputStreamTest extends TestCase
             $input .= $buffer;
         });
 
-        static::assertSame('1234', $input);
+        $this->assertSame('1234', $input);
 
         fclose($stream);
     }
