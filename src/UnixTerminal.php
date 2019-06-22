@@ -243,6 +243,11 @@ class UnixTerminal implements Terminal
         $this->output->write(sprintf("\033[%dC", $column));
     }
 
+    public function moveCursor(int $column, int $row): void
+    {
+        $this->output->write(sprintf("\033[%d;%dH", $row, $column));
+    }
+
     public function showSecondaryScreen() : void
     {
         $this->output->write("\033[?47h");
@@ -265,11 +270,14 @@ class UnixTerminal implements Terminal
         return $buffer;
     }
 
-    /**
-     * Write to the output stream
-     */
     public function write(string $buffer): void
     {
+        $this->output->write($buffer);
+    }
+
+    public function writeCursor(int $column, int $row, string $buffer): void
+    {
+        $this->moveCursor($column, $row);
         $this->output->write($buffer);
     }
 

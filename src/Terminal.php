@@ -118,6 +118,14 @@ interface Terminal
     public function moveCursorToColumn(int $columnNumber) : void;
 
     /**
+     * Move the cursor to specific position
+     *
+     * @param int $column
+     * @param int $row
+     */
+    public function moveCursor(int $column, int $row) : void;
+
+    /**
      * Read from the input stream
      */
     public function read(int $bytes) : string;
@@ -126,4 +134,13 @@ interface Terminal
      * Write to the output stream
      */
     public function write(string $buffer) : void;
+
+    /**
+     * Write to the output stream on specific cursor
+     *
+     * @param int $column
+     * @param int $row
+     * @param string $buffer
+     */
+    public function writeCursor(int $column, int $row, string $buffer) : void;
 }

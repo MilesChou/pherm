@@ -234,6 +234,20 @@ class UnixTerminalTest extends TestCase
         self::assertEquals("\033[10C", $output->fetch());
     }
 
+    /**
+     * @test
+     */
+    public function shouldReturnCorrectPositionWhenCallMoveCursor() : void
+    {
+        $input  = $this->createMock(InputStream::class);
+        $output = new BufferedOutput;
+
+        $terminal = new UnixTerminal($input, $output);
+        $terminal->moveCursor(10, 20);
+
+        $this->assertSame("\033[20;10H", $output->fetch());
+    }
+
     public function testShowAlternateScreen() : void
     {
         $input  = $this->createMock(InputStream::class);
