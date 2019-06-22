@@ -1,8 +1,10 @@
 <?php
 
-namespace MilesChou\Pherm\Exception;
+namespace MilesChou\Pherm\Exceptions;
 
-class NotInteractiveTerminal extends \RuntimeException
+use RuntimeException;
+
+class NotInteractiveTerminal extends RuntimeException
 {
     public static function inputNotInteractive(): self
     {

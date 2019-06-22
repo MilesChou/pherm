@@ -2,12 +2,12 @@
 
 namespace Tests;
 
-use MilesChou\Pherm\Exception\NotInteractiveTerminal;
+use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 use MilesChou\Pherm\IO\BufferedOutput;
 use MilesChou\Pherm\IO\InputStream;
 use MilesChou\Pherm\IO\OutputStream;
 use MilesChou\Pherm\IO\ResourceInputStream;
-use MilesChou\Pherm\UnixTerminal;
+use MilesChou\Pherm\Terminal;
 use PHPUnit\Framework\TestCase;
 
 class UnixTerminalTest extends TestCase
@@ -26,7 +26,7 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(true);
 
-        $target = new UnixTerminal($input, $output);
+        $target = new Terminal($input, $output);
 
         $this->assertTrue($target->isInteractive());
     }
@@ -44,7 +44,7 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(true);
 
-        $target = new UnixTerminal($input, $output);
+        $target = new Terminal($input, $output);
 
         $this->assertFalse($target->isInteractive());
     }
@@ -63,7 +63,7 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new UnixTerminal($input, $output);
+        $target = new Terminal($input, $output);
 
         $this->assertFalse($target->isInteractive());
     }
@@ -81,7 +81,7 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new UnixTerminal($input, $output);
+        $target = new Terminal($input, $output);
 
         $this->assertFalse($target->isInteractive());
     }
@@ -99,7 +99,7 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new UnixTerminal($input, $output);
+        $target = new Terminal($input, $output);
         $target->mustBeInteractive();
     }
 
@@ -121,7 +121,7 @@ class UnixTerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new UnixTerminal($input, $output);
+        $target = new Terminal($input, $output);
         $target->mustBeInteractive();
     }
 
@@ -130,7 +130,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->clear();
 
         $this->assertSame("\033[2J", $output->fetch());
@@ -141,7 +141,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->clearLine();
 
         $this->assertSame("\033[2K", $output->fetch());
@@ -152,7 +152,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->clearDown();
 
         $this->assertSame("\033[J", $output->fetch());
@@ -163,7 +163,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $rf = new \ReflectionObject($terminal);
         $rp = $rf->getProperty('width');
         $rp->setAccessible(true);
@@ -182,7 +182,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->enableCursor();
 
         $this->assertSame("\033[?25h", $output->fetch());
@@ -193,7 +193,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->disableCursor();
 
         $this->assertSame("\033[?25l", $output->fetch());
@@ -204,7 +204,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->moveCursorToTop();
 
         $this->assertSame("\033[H", $output->fetch());
@@ -215,7 +215,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->moveCursorToRow(2);
 
         $this->assertSame("\033[2;0H", $output->fetch());
@@ -226,7 +226,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->moveCursorToColumn(10);
 
         $this->assertSame("\033[10C", $output->fetch());
@@ -240,7 +240,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->moveCursor(10, 20);
 
         $this->assertSame("\033[20;10H", $output->fetch());
@@ -251,7 +251,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->showSecondaryScreen();
 
         $this->assertSame("\033[?47h", $output->fetch());
@@ -262,7 +262,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->showPrimaryScreen();
 
         $this->assertSame("\033[?47l", $output->fetch());
@@ -277,7 +277,7 @@ class UnixTerminalTest extends TestCase
         $input  = new ResourceInputStream($tempStream);
         $output = $this->createMock(OutputStream::class);
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
 
         $this->assertSame('myst', $terminal->read(4));
         $this->assertSame('ring', $terminal->read(4));
@@ -290,7 +290,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
         $terminal->write('My awesome string');
 
         $this->assertSame('My awesome string', $output->fetch());
@@ -301,7 +301,7 @@ class UnixTerminalTest extends TestCase
         $input  = $this->createMock(InputStream::class);
         $output = new BufferedOutput;
 
-        $terminal = new UnixTerminal($input, $output);
+        $terminal = new Terminal($input, $output);
 
         // Travis terminal supports 8 colours, but just in case
         // in ever changes I'll add the 256 colors possibility too

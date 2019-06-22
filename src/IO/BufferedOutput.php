@@ -4,6 +4,9 @@ namespace MilesChou\Pherm\IO;
 
 class BufferedOutput implements OutputStream
 {
+    /**
+     * @var string
+     */
     private $buffer = '';
 
     public function __toString(): string
@@ -11,6 +14,10 @@ class BufferedOutput implements OutputStream
         return $this->fetch();
     }
 
+    /**
+     * @param bool $clean
+     * @return string
+     */
     public function fetch(bool $clean = true): string
     {
         $buffer = $this->buffer;

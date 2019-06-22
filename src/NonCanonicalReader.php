@@ -2,6 +2,8 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Contracts\Terminal;
+
 /**
  * This class takes a terminal and disabled canonical mode. It reads the input
  * and returns characters and control sequences as `InputCharacters` as soon

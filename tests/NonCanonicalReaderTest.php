@@ -5,7 +5,7 @@ namespace Tests;
 use InvalidArgumentException;
 use MilesChou\Pherm\InputCharacter;
 use MilesChou\Pherm\NonCanonicalReader;
-use MilesChou\Pherm\Terminal;
+use MilesChou\Pherm\Contracts\Terminal;
 use PHPUnit\Framework\TestCase;
 
 class NonCanonicalReaderTest extends TestCase
