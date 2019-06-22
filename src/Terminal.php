@@ -14,13 +14,18 @@ class Terminal implements TerminalContract
     use Io;
 
     /**
-     * @param InputStream $input
-     * @param OutputStream $output
+     * @param InputStream|null $input
+     * @param OutputStream|null $output
      */
-    public function __construct(InputStream $input, OutputStream $output)
+    public function __construct(InputStream $input = null, OutputStream $output = null)
     {
-        $this->setInput($input);
-        $this->setOutput($output);
+        if (null !== $input) {
+            $this->setInput($input);
+        }
+
+        if (null !== $output) {
+            $this->setOutput($output);
+        }
     }
 
     /**

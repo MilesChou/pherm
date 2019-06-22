@@ -12,9 +12,22 @@ use Tests\TestCase;
 
 class TerminalTest extends TestCase
 {
-    public function testIsInteractiveReturnsTrueIfInputAndOutputAreTTYs() : void
+    /**
+     * @var Terminal
+     */
+    private $target;
+
+    protected function setUp()
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $this->target = $this->createTerminalInstance();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnsTrueIfInputAndOutputAreTTYs(): void
+    {
+        $input = $this->createMock(InputStreamContract::class);
         $output = $this->createMock(OutputStreamContract::class);
 
         $input
@@ -26,16 +39,19 @@ class TerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(true);
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setInput($input)
+            ->setOutput($output)
             ->bootstrap();
 
-        $this->assertTrue($target->isInteractive());
+        $this->assertTrue($this->target->isInteractive());
     }
 
-    public function testIsInteractiveReturnsFalseIfInputNotTTY() : void
+    /**
+     * @test
+     */
+    public function shouldReturnsFalseIfInputNotTTY(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = $this->createMock(OutputStreamContract::class);
 
         $input
@@ -46,16 +62,19 @@ class TerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(true);
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setInput($input)
+            ->setOutput($output)
             ->bootstrap();
 
-        $this->assertFalse($target->isInteractive());
+        $this->assertFalse($this->target->isInteractive());
     }
 
-    public function testIsInteractiveReturnsFalseIfOutputNotTTY() : void
+    /**
+     * @test
+     */
+    public function shouldReturnsFalseIfOutputNotTTY(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = $this->createMock(OutputStreamContract::class);
 
         $input
@@ -67,16 +86,19 @@ class TerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setInput($input)
+            ->setOutput($output)
             ->bootstrap();
 
-        $this->assertFalse($target->isInteractive());
+        $this->assertFalse($this->target->isInteractive());
     }
 
-    public function testIsInteractiveReturnsFalseIfInputAndOutputNotTTYs() : void
+    /**
+     * @test
+     */
+    public function shouldReturnsFalseIfInputAndOutputNotTTYs(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = $this->createMock(OutputStreamContract::class);
 
         $input
@@ -87,39 +109,43 @@ class TerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setInput($input)
+            ->setOutput($output)
             ->bootstrap();
 
-        $this->assertFalse($target->isInteractive());
+        $this->assertFalse($this->target->isInteractive());
     }
 
-    public function testMustBeInteractiveThrowsExceptionIfInputNotTTY() : void
+    /**
+     * @test
+     */
+    public function shouldThrowsExceptionWhenCallMustBeInteractiveWithInputNotTTY(): void
     {
         $this->expectException(NotInteractiveTerminal::class);
         $this->expectExceptionMessage('Input stream is not interactive (non TTY)');
 
-        $input  = $this->createMock(InputStreamContract::class);
-        $output = $this->createMock(OutputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
 
         $input
             ->expects($this->once())
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setInput($input)
             ->bootstrap();
 
-        $target->mustBeInteractive();
+        $this->target->mustBeInteractive();
     }
 
-    public function testMustBeInteractiveThrowsExceptionIfOutputNotTTY() : void
+    /**
+     * @test
+     */
+    public function shouldThrowsExceptionWhenCallMustBeInteractiveWithOutputNotTTY(): void
     {
         $this->expectException(NotInteractiveTerminal::class);
         $this->expectExceptionMessage('Output stream is not interactive (non TTY)');
 
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = $this->createMock(OutputStreamContract::class);
 
         $input
@@ -132,42 +158,46 @@ class TerminalTest extends TestCase
             ->method('isInteractive')
             ->willReturn(false);
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setInput($input)
+            ->setOutput($output)
             ->bootstrap();
 
-        $target->mustBeInteractive();
+        $this->target->mustBeInteractive();
     }
 
-    public function testClear() : void
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenCallClear(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
-        $output = new BufferedOutput;
+        $actual = new BufferedOutput;
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setOutput($actual)
             ->bootstrap();
-        $target->clear();
 
-        $this->assertSame("\033[2J", $output->fetch());
+        $this->target->clear();
+
+        $this->assertSame("\033[2J", $actual->fetch());
     }
 
-    public function testClearLine() : void
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenCallClearLine(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
-        $output = new BufferedOutput;
+        $actual = new BufferedOutput;
 
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setOutput($actual)
             ->bootstrap();
-        $target->clearLine();
 
-        $this->assertSame("\033[2K", $output->fetch());
+        $this->target->clearLine();
+
+        $this->assertSame("\033[2K", $actual->fetch());
     }
 
-    public function testClearDown() : void
+    public function testClearDown(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -178,9 +208,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[J", $output->fetch());
     }
 
-    public function testClean() : void
+    public function testClean(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -200,9 +230,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[0;0H\033[2K\033[1;0H\033[2K\033[2;0H\033[2K", $output->fetch());
     }
 
-    public function testEnableCursor() : void
+    public function testEnableCursor(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -213,9 +243,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[?25h", $output->fetch());
     }
 
-    public function testDisableCursor() : void
+    public function testDisableCursor(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -226,9 +256,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[?25l", $output->fetch());
     }
 
-    public function testMoveCursorToTop() : void
+    public function testMoveCursorToTop(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -242,9 +272,9 @@ class TerminalTest extends TestCase
     /**
      * @test
      */
-    public function sholudBeOkayWhenCallMoveCursorToEnd() : void
+    public function sholudBeOkayWhenCallMoveCursorToEnd(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -255,9 +285,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[24;80H", $output->fetch());
     }
 
-    public function testMoveCursorToRow() : void
+    public function testMoveCursorToRow(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -268,9 +298,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[2;0H", $output->fetch());
     }
 
-    public function testMoveCursorToColumn() : void
+    public function testMoveCursorToColumn(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -284,9 +314,9 @@ class TerminalTest extends TestCase
     /**
      * @test
      */
-    public function shouldReturnCorrectPositionWhenCallMoveCursor() : void
+    public function shouldReturnCorrectPositionWhenCallMoveCursor(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -297,9 +327,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[20;10H", $output->fetch());
     }
 
-    public function testShowAlternateScreen() : void
+    public function testShowAlternateScreen(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -310,9 +340,9 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[?47h", $output->fetch());
     }
 
-    public function testShowMainScreen() : void
+    public function testShowMainScreen(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -323,13 +353,13 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[?47l", $output->fetch());
     }
 
-    public function testRead() : void
+    public function testRead(): void
     {
         $tempStream = fopen('php://temp', 'rb+');
         fwrite($tempStream, 'mystring');
         rewind($tempStream);
 
-        $input  = new InputStream($tempStream);
+        $input = new InputStream($tempStream);
         $output = $this->createMock(OutputStreamContract::class);
 
         $target = new Terminal($input, $output);
@@ -342,9 +372,9 @@ class TerminalTest extends TestCase
         fclose($tempStream);
     }
 
-    public function testWriteForwardsToOutput() : void
+    public function testWriteForwardsToOutput(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
@@ -355,9 +385,9 @@ class TerminalTest extends TestCase
         $this->assertSame('My awesome string', $output->fetch());
     }
 
-    public function testGetColourSupport() : void
+    public function testGetColourSupport(): void
     {
-        $input  = $this->createMock(InputStreamContract::class);
+        $input = $this->createMock(InputStreamContract::class);
         $output = new BufferedOutput;
 
         $target = new Terminal($input, $output);
