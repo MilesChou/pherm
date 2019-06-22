@@ -23,9 +23,14 @@ class Terminal implements TerminalContract
         $this->setOutput($output);
     }
 
-    public function bootstrap(): void
+    /**
+     * @return static
+     */
+    public function bootstrap()
     {
         $this->prepareConfiguration();
+
+        return $this;
     }
 
     /**

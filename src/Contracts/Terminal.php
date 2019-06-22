@@ -23,12 +23,12 @@ interface Terminal
      * Disables echoing every character back to the terminal. This means
      * we do not have to clear the line when reading.
      */
-    public function disableEchoBack(): void;
+    public function disableEchoBack();
 
     /**
      * Enable echoing back every character input to the terminal.
      */
-    public function enableEchoBack(): void;
+    public function enableEchoBack();
 
     /**
      * Is echo back mode enabled
@@ -40,14 +40,14 @@ interface Terminal
      *
      * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
-    public function disableCanonicalMode(): void;
+    public function disableCanonicalMode();
 
     /**
      * Enable canonical input - read input by line
      *
      * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
-    public function enableCanonicalMode(): void;
+    public function enableCanonicalMode();
 
     /**
      * Is canonical mode enabled or not
@@ -70,51 +70,79 @@ interface Terminal
     /**
      * Clear the terminal window
      */
-    public function clear(): void;
+    public function clear();
 
     /**
      * Clear the current cursors line
      */
-    public function clearLine(): void;
+    public function clearLine();
 
     /**
      * Erase screen from the current line down to the bottom of the screen
      */
-    public function clearDown(): void;
+    public function clearDown();
 
     /**
      * Clean the whole console without jumping the window
      */
-    public function clean(): void;
+    public function clean();
 
     /**
      * Enable cursor display
      */
-    public function enableCursor(): void;
+    public function enableCursor();
 
     /**
      * Disable cursor display
      */
-    public function disableCursor(): void;
+    public function disableCursor();
 
     /**
      * Move the cursor to the top left of the window
+     *
+     * @param $column
      */
-    public function moveCursorToTop(): void;
+    public function moveCursorToTop($column = 0);
+
+    /**
+     * Move the cursor to the middle of the window
+     *
+     * @param int $column
+     */
+    public function moveCursorToMiddle($column = 0);
+
+    /**
+     * Move the cursor to the center of the window
+     *
+     * @param int $columnDelta
+     */
+    public function moveCursorToCenter($columnDelta = 0);
+
+    /**
+     * Move the cursor to the bottom left of the window
+     *
+     * @param int $column
+     */
+    public function moveCursorToDown($column = 0);
+
+    /**
+     * Move the cursor to the bottom right of the window
+     */
+    public function moveCursorToEnd();
 
     /**
      * Move the cursor to the start of a specific row
      *
      * @param int $row
      */
-    public function moveCursorToRow(int $row): void;
+    public function moveCursorToRow(int $row);
 
     /**
      * Move the cursor to a specific column
      *
      * @param int $column
      */
-    public function moveCursorToColumn(int $column): void;
+    public function moveCursorToColumn(int $column);
 
     /**
      * Move the cursor to specific position
@@ -122,7 +150,7 @@ interface Terminal
      * @param int $column
      * @param int $row
      */
-    public function moveCursor(int $column, int $row): void;
+    public function moveCursor(int $column, int $row);
 
     /**
      * Read from the input stream
@@ -137,7 +165,7 @@ interface Terminal
      *
      * @param string $buffer
      */
-    public function write(string $buffer): void;
+    public function write(string $buffer);
 
     /**
      * Write to the output stream on specific cursor
@@ -146,5 +174,5 @@ interface Terminal
      * @param int $row
      * @param string $buffer
      */
-    public function writeCursor(int $column, int $row, string $buffer): void;
+    public function writeCursor(int $column, int $row, string $buffer);
 }

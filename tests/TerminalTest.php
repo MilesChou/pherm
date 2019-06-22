@@ -223,7 +223,7 @@ class TerminalTest extends TestCase
         $target->bootstrap();
         $target->moveCursorToTop();
 
-        $this->assertSame("\033[H", $output->fetch());
+        $this->assertSame("\033[0;0H", $output->fetch());
     }
 
     public function testMoveCursorToRow() : void
