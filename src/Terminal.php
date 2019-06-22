@@ -2,6 +2,7 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Concerns\Canonical;
 use MilesChou\Pherm\Concerns\Configuration;
 use MilesChou\Pherm\Concerns\EchoBack;
 use MilesChou\Pherm\Concerns\Io;
@@ -12,15 +13,11 @@ use MilesChou\Pherm\Contracts\OutputStream;
 
 class Terminal implements TerminalContract
 {
+    use Canonical;
     use Configuration;
     use EchoBack;
     use Io;
     use Size;
-
-    /**
-     * @var bool
-     */
-    private $isCanonical;
 
     /**
      * @var int;
@@ -42,33 +39,12 @@ class Terminal implements TerminalContract
     private function getOriginalCanonicalMode(): void
     {
         exec('stty -a', $output);
-        $this->isCanonical = (strpos(implode("\n", $output), ' icanon') !== false);
+        $this->isCanonical = strpos(implode("\n", $output), ' icanon') !== false;
     }
 
     public function getColourSupport(): int
     {
         return $this->colourSupport ?: $this->colourSupport = (int)exec('tput colors');
-    }
-
-    public function disableCanonicalMode(): void
-    {
-        if ($this->isCanonical) {
-            exec('stty -icanon');
-            $this->isCanonical = false;
-        }
-    }
-
-    public function enableCanonicalMode(): void
-    {
-        if (!$this->isCanonical) {
-            exec('stty canon');
-            $this->isCanonical = true;
-        }
-    }
-
-    public function isCanonicalMode(): bool
-    {
-        return $this->isCanonical;
     }
 
     /**

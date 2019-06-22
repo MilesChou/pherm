@@ -6,9 +6,6 @@ use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 
-/**
- * Screen size of terminal
- */
 trait Io
 {
     /**

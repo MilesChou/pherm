@@ -2,9 +2,6 @@
 
 namespace MilesChou\Pherm\Concerns;
 
-/**
- * Screen size of terminal
- */
 trait Configuration
 {
     /**
