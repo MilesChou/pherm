@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use InvalidArgumentException;
 use MilesChou\Pherm\InputCharacter;

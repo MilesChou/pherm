@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\IO;
+namespace Tests\Unit\Output;
 
 use MilesChou\Pherm\Output\BufferedOutput;
 use PHPUnit\Framework\TestCase;

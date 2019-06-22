@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 use MilesChou\Pherm\Input\InputStream;
@@ -8,6 +8,7 @@ use MilesChou\Pherm\Output\BufferedOutput;
 use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputStreamContract;
 use MilesChou\Pherm\Terminal;
+use Tests\TestCase;
 
 class TerminalTest extends TestCase
 {

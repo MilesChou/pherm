@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\IO;
+namespace Tests\Unit\Input;
 
 use MilesChou\Pherm\Input\InputStream;
 use PHPUnit\Framework\TestCase;

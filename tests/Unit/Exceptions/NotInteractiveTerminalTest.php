@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Exception;
+namespace Tests\Unit\Exceptions;
 
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 use PHPUnit\Framework\TestCase;
