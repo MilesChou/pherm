@@ -21,7 +21,8 @@
         "phpunit/phpunit": "^7.1",
         "squizlabs/php_codesniffer": "^3.4",
         "phpstan/phpstan": "^0.9.2",
-        "php-coveralls/php-coveralls": "^2.1"
+        "php-coveralls/php-coveralls": "^2.1",
+        "psy/psysh": "^0.9.9"
     },
     "autoload": {
         "psr-4": {

@@ -63,11 +63,6 @@ interface Terminal
     public function isInteractive(): bool;
 
     /**
-     * Restore the terminals original configuration
-     */
-    public function restoreOriginalConfiguration(): void;
-
-    /**
      * Test whether terminal supports colour output
      */
     public function supportsColour(): bool;
