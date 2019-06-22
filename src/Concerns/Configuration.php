@@ -36,28 +36,36 @@ trait Configuration
      */
     private $width;
 
-    public function disableCanonicalMode(): void
+    public function disableCanonicalMode()
     {
         $this->stty->exec('-icanon');
         $this->isCanonical = false;
+
+        return $this;
     }
 
-    public function disableEchoBack(): void
+    public function disableEchoBack()
     {
         $this->stty->exec('-echo');
         $this->echoBack = false;
+
+        return $this;
     }
 
-    public function enableCanonicalMode(): void
+    public function enableCanonicalMode()
     {
         $this->stty->exec('icanon');
         $this->isCanonical = true;
+
+        return $this;
     }
 
-    public function enableEchoBack(): void
+    public function enableEchoBack()
     {
         $this->stty->exec('echo');
         $this->echoBack = true;
+
+        return $this;
     }
 
     public function getColourSupport(): int
@@ -102,7 +110,7 @@ trait Configuration
         return $this->width;
     }
 
-    protected function prepareConfiguration(): void
+    protected function prepareConfiguration()
     {
         if (null === $this->stty) {
             $this->setStty(new Stty());
