@@ -89,7 +89,7 @@ trait Io
     public function clean()
     {
         foreach (range(0, $this->height()) as $rowNum) {
-            $this->moveCursorToRow($rowNum);
+            $this->cursor()->moveRow($rowNum);
             $this->clearLine();
         }
 
@@ -106,62 +106,6 @@ trait Io
     public function disableCursor()
     {
         $this->output->write("\033[?25l");
-
-        return $this;
-    }
-
-    public function moveCursorToTop($column = 0)
-    {
-        $this->moveCursor($column, 0);
-
-        return $this;
-    }
-
-    public function moveCursorToMiddle($column = 0)
-    {
-        $this->moveCursor($column, $this->height() / 2);
-
-        return $this;
-    }
-
-    public function moveCursorToCenter($columnDelta = 0)
-    {
-        $this->moveCursor($this->width() / 2 + $columnDelta, $this->height() / 2);
-
-        return $this;
-    }
-
-    public function moveCursorToDown($column = 0)
-    {
-        $this->moveCursor($column, $this->height());
-
-        return $this;
-    }
-
-    public function moveCursorToEnd()
-    {
-        $this->moveCursor($this->width(), $this->height());
-
-        return $this;
-    }
-
-    public function moveCursorToRow(int $rowNumber)
-    {
-        $this->output->write(sprintf("\033[%d;0H", $rowNumber));
-
-        return $this;
-    }
-
-    public function moveCursorToColumn(int $column)
-    {
-        $this->output->write(sprintf("\033[%dC", $column));
-
-        return $this;
-    }
-
-    public function moveCursor(int $column, int $row)
-    {
-        $this->output->write(sprintf("\033[%d;%dH", $row, $column));
 
         return $this;
     }
@@ -191,14 +135,6 @@ trait Io
 
     public function write(string $buffer)
     {
-        $this->output->write($buffer);
-
-        return $this;
-    }
-
-    public function writeCursor(int $column, int $row, string $buffer)
-    {
-        $this->moveCursor($column, $row);
         $this->output->write($buffer);
 
         return $this;

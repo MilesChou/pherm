@@ -98,61 +98,6 @@ interface Terminal
     public function disableCursor();
 
     /**
-     * Move the cursor to the top left of the window
-     *
-     * @param $column
-     */
-    public function moveCursorToTop($column = 0);
-
-    /**
-     * Move the cursor to the middle of the window
-     *
-     * @param int $column
-     */
-    public function moveCursorToMiddle($column = 0);
-
-    /**
-     * Move the cursor to the center of the window
-     *
-     * @param int $columnDelta
-     */
-    public function moveCursorToCenter($columnDelta = 0);
-
-    /**
-     * Move the cursor to the bottom left of the window
-     *
-     * @param int $column
-     */
-    public function moveCursorToDown($column = 0);
-
-    /**
-     * Move the cursor to the bottom right of the window
-     */
-    public function moveCursorToEnd();
-
-    /**
-     * Move the cursor to the start of a specific row
-     *
-     * @param int $row
-     */
-    public function moveCursorToRow(int $row);
-
-    /**
-     * Move the cursor to a specific column
-     *
-     * @param int $column
-     */
-    public function moveCursorToColumn(int $column);
-
-    /**
-     * Move the cursor to specific position
-     *
-     * @param int $column
-     * @param int $row
-     */
-    public function moveCursor(int $column, int $row);
-
-    /**
      * Read from the input stream
      *
      * @param int $bytes
@@ -170,9 +115,9 @@ interface Terminal
     /**
      * Write to the output stream on specific cursor
      *
-     * @param int $column
      * @param int $row
+     * @param int $column
      * @param string $buffer
      */
-    public function writeCursor(int $column, int $row, string $buffer);
+    public function writeCursor(int $row, int $column, string $buffer);
 }

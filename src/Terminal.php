@@ -39,6 +39,42 @@ class Terminal implements TerminalContract
     }
 
     /**
+     * @return Cursor
+     */
+    public function cursor(): Cursor
+    {
+        return new Cursor($this);
+    }
+
+    /**
+     * Alias for cursor()
+     *
+     * @return Cursor|TerminalContract
+     */
+    public function move()
+    {
+        if (2 === func_num_args()) {
+            return $this->cursor()->move(...func_get_args());
+        }
+
+        return $this->cursor();
+    }
+
+    /**
+     * @param int $row
+     * @param int $column
+     * @param string $buffer
+     * @return static
+     */
+    public function writeCursor(int $row, int $column, string $buffer)
+    {
+        $this->cursor()->move($row, $column);
+        $this->output->write($buffer);
+
+        return $this;
+    }
+
+    /**
      * Restore the original terminal configuration on shutdown.
      */
     public function __destruct()

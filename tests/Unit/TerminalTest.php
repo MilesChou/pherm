@@ -237,8 +237,8 @@ class TerminalTest extends TestCase
 
         $target = new Terminal($input, $output);
         $target->setStty($this->createSttyMock())
-            ->bootstrap();
-        $target->enableCursor();
+            ->bootstrap()
+            ->enableCursor();
 
         $this->assertSame("\033[?25h", $output->fetch());
     }
@@ -250,8 +250,8 @@ class TerminalTest extends TestCase
 
         $target = new Terminal($input, $output);
         $target->setStty($this->createSttyMock())
-            ->bootstrap();
-        $target->disableCursor();
+            ->bootstrap()
+            ->disableCursor();
 
         $this->assertSame("\033[?25l", $output->fetch());
     }
@@ -263,8 +263,8 @@ class TerminalTest extends TestCase
 
         $target = new Terminal($input, $output);
         $target->setStty($this->createSttyMock())
-            ->bootstrap();
-        $target->moveCursorToTop();
+            ->bootstrap()
+            ->move()->top();
 
         $this->assertSame("\033[0;0H", $output->fetch());
     }
@@ -280,7 +280,7 @@ class TerminalTest extends TestCase
         $target = new Terminal($input, $output);
         $target->setStty($this->createSttyMock())
             ->bootstrap()
-            ->moveCursorToEnd();
+            ->move()->end();
 
         $this->assertSame("\033[24;80H", $output->fetch());
     }
@@ -293,7 +293,7 @@ class TerminalTest extends TestCase
         $target = new Terminal($input, $output);
         $target->setStty($this->createSttyMock())
             ->bootstrap()
-            ->moveCursorToRow(2);
+            ->move()->row(2);
 
         $this->assertSame("\033[2;0H", $output->fetch());
     }
@@ -306,9 +306,9 @@ class TerminalTest extends TestCase
         $target = new Terminal($input, $output);
         $target->setStty($this->createSttyMock())
             ->bootstrap()
-            ->moveCursorToColumn(10);
+            ->move()->column(10);
 
-        $this->assertSame("\033[10C", $output->fetch());
+        $this->assertSame("\033[0;10H", $output->fetch());
     }
 
     /**
@@ -322,7 +322,7 @@ class TerminalTest extends TestCase
         $target = new Terminal($input, $output);
         $target->setStty($this->createSttyMock())
             ->bootstrap()
-            ->moveCursor(10, 20);
+            ->move(20, 10);
 
         $this->assertSame("\033[20;10H", $output->fetch());
     }
