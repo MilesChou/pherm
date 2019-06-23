@@ -13,6 +13,6 @@ $terminal->clear();
 
 $str = 'Hello world!';
 
-$terminal->moveCursorToCenter(-(mb_strlen($str) / 2))
+$terminal->move()->center(-(mb_strlen($str) / 2))
     ->write('Hello world!')
-    ->moveCursorToDown();
+    ->move()->down();

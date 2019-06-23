@@ -22,11 +22,15 @@ interface Terminal
     /**
      * Disables echoing every character back to the terminal. This means
      * we do not have to clear the line when reading.
+     *
+     * @return static
      */
     public function disableEchoBack();
 
     /**
      * Enable echoing back every character input to the terminal.
+     *
+     * @return static
      */
     public function enableEchoBack();
 
@@ -38,6 +42,7 @@ interface Terminal
     /**
      * Disable canonical input (allow each key press for reading, rather than the whole line)
      *
+     * @return static
      * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
     public function disableCanonicalMode();
@@ -45,6 +50,7 @@ interface Terminal
     /**
      * Enable canonical input - read input by line
      *
+     * @return static
      * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
     public function enableCanonicalMode();
@@ -69,31 +75,43 @@ interface Terminal
 
     /**
      * Clear the terminal window
+     *
+     * @return static
      */
     public function clear();
 
     /**
      * Clear the current cursors line
+     *
+     * @return static
      */
     public function clearLine();
 
     /**
      * Erase screen from the current line down to the bottom of the screen
+     *
+     * @return static
      */
     public function clearDown();
 
     /**
      * Clean the whole console without jumping the window
+     *
+     * @return static
      */
     public function clean();
 
     /**
      * Enable cursor display
+     *
+     * @return static
      */
     public function enableCursor();
 
     /**
      * Disable cursor display
+     *
+     * @return static
      */
     public function disableCursor();
 
@@ -109,6 +127,7 @@ interface Terminal
      * Write to the output stream
      *
      * @param string $buffer
+     * @return static
      */
     public function write(string $buffer);
 
@@ -118,6 +137,7 @@ interface Terminal
      * @param int $row
      * @param int $column
      * @param string $buffer
+     * @return static
      */
     public function writeCursor(int $row, int $column, string $buffer);
 }
