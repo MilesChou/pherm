@@ -14,7 +14,7 @@ trait Configuration
     /**
      * @var bool
      */
-    private $echoBack = true;
+    private $echoBack;
 
     /**
      * @var int
@@ -24,7 +24,7 @@ trait Configuration
     /**
      * @var bool
      */
-    private $isCanonical = true;
+    private $isCanonical;
 
     /**
      * @var Stty
