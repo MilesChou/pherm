@@ -398,4 +398,53 @@ class TerminalTest extends TestCase
         // in ever changes I'll add the 256 colors possibility too
         $this->assertTrue($target->getColourSupport() === 8 || $target->getColourSupport() === 256);
     }
+
+    /**
+     * @test
+     */
+    public function shouldWriteBackgroundWhenCallBackground(): void
+    {
+        $output = new BufferedOutput;
+
+        $this->target->setOutput($output)
+            ->setStty($this->createSttyMock())
+            ->bootstrap();
+
+        $this->target->background(123);
+
+        $this->assertSame("\033[48;5;123m", $output->fetch());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldWriteForegroundWhenCallForeground(): void
+    {
+        $output = new BufferedOutput;
+
+        $this->target->setOutput($output)
+            ->setStty($this->createSttyMock())
+            ->bootstrap();
+
+        $this->target->foreground(123);
+
+        $this->assertSame("\033[38;5;123m", $output->fetch());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldWriteBackgroundAndForegroundWhenCallAttribute(): void
+    {
+        $output = new BufferedOutput;
+
+        $this->target->setOutput($output)
+            ->setStty($this->createSttyMock())
+            ->bootstrap();
+
+        $this->target->attribute(48, 62);
+
+        $this->assertContains("\033[38;5;48m", $output->fetch(false));
+        $this->assertContains("\033[48;5;62m", $output->fetch(false));
+    }
 }

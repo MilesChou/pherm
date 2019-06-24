@@ -14,6 +14,16 @@ class Terminal implements TerminalContract
     use Io;
 
     /**
+     * @var int
+     */
+    private $currentBackground;
+
+    /**
+     * @var int
+     */
+    private $currentForeground;
+
+    /**
      * @param InputStream|null $input
      * @param OutputStream|null $output
      */
@@ -28,12 +38,52 @@ class Terminal implements TerminalContract
         }
     }
 
+    public function attribute(?int $foreground = null, ?int $background = null)
+    {
+        if ($foreground === null) {
+            $foreground = $this->defaultForeground;
+        }
+
+        if ($background === null) {
+            $background = $this->defaultBackground;
+        }
+
+        $this->background($background);
+        $this->foreground($foreground);
+
+        return $this;
+    }
+
+    public function background(int $background)
+    {
+        $background &= 0x1FF;
+
+        if ($background !== $this->currentBackground) {
+            $this->currentBackground = $background;
+            $this->write("\033[48;5;{$background}m");
+        }
+
+        return $this;
+    }
+
     /**
      * @return static
      */
     public function bootstrap()
     {
         $this->prepareConfiguration();
+
+        return $this;
+    }
+
+    public function foreground(int $foreground)
+    {
+        $foreground &= 0x1FF;
+
+        if ($foreground !== $this->currentForeground) {
+            $this->currentForeground = $foreground;
+            $this->write("\033[38;5;{$foreground}m");
+        }
 
         return $this;
     }
