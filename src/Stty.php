@@ -13,7 +13,7 @@ class Stty
 
     /**
      * @param string $parameter
-     * @return bool|string
+     * @return string
      */
     public function exec($parameter = '')
     {
@@ -41,7 +41,7 @@ class Stty
             fclose($pipes[2]);
             proc_close($process);
 
-            return $info;
+            return (string)$info;
         } else {
             throw new RuntimeException("Execute 'stty -a' error");
         }

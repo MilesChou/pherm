@@ -59,7 +59,7 @@ class InputCharacter
      */
     public function isControl(): bool
     {
-        return preg_match('/[\x00-\x1F\x7F]/', $this->data);
+        return (bool)preg_match('/[\x00-\x1F\x7F]/', $this->data);
     }
 
     /**

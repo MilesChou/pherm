@@ -50,7 +50,7 @@ class Cursor implements CursorContract
 
     public function moveCenter(int $columnDelta = 0): Terminal
     {
-        return $this->move($this->terminal->height() / 2, $this->terminal->width() / 2 + $columnDelta);
+        return $this->move((int)($this->terminal->height() / 2), (int)($this->terminal->width() / 2) + $columnDelta);
     }
 
     public function moveColumn(int $column): Terminal
