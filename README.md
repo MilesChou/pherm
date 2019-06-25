@@ -1,4 +1,4 @@
-# Terminal Utility
+# Pherm - the terminal utility written by PHP
 
 [![Build Status](https://travis-ci.com/MilesChou/pherm.svg?branch=master)](https://travis-ci.com/MilesChou/pherm)
 [![Coverage Status](https://coveralls.io/repos/github/MilesChou/pherm/badge.svg?branch=master)](https://coveralls.io/github/MilesChou/pherm?branch=master)
