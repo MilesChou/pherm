@@ -24,6 +24,11 @@ class Terminal implements TerminalContract
     private $currentForeground;
 
     /**
+     * @var KeyBinding
+     */
+    private $keyBinding;
+
+    /**
      * @param InputStream|null $input
      * @param OutputStream|null $output
      */
@@ -122,6 +127,18 @@ class Terminal implements TerminalContract
         $this->output->write($buffer);
 
         return $this;
+    }
+
+    /**
+     * @return KeyBinding
+     */
+    public function keyBinding()
+    {
+        if (null === $this->keyBinding) {
+            $this->keyBinding = new KeyBinding($this);
+        }
+
+        return $this->keyBinding;
     }
 
     /**
