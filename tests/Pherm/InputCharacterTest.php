@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use MilesChou\Pherm\InputCharacter;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class InputCharacterTest extends TestCase
 {

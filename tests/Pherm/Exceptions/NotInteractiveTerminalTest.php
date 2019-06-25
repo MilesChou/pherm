@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Exceptions;
+namespace Tests\Pherm\Exceptions;
 
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class NotInteractiveTerminalTest extends TestCase
 {

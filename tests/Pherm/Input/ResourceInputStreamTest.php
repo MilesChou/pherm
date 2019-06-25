@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Input;
+namespace Tests\Pherm\Input;
 
 use MilesChou\Pherm\Input\InputStream;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class ResourceInputStreamTest extends TestCase
 {

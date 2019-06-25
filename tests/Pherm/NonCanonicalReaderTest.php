@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use MilesChou\Pherm\InputCharacter;
 use MilesChou\Pherm\NonCanonicalReader;
 use MilesChou\Pherm\Contracts\Terminal;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class NonCanonicalReaderTest extends TestCase
 {

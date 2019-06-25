@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit\Output;
+namespace Tests\Pherm\Output;
 
 use MilesChou\Pherm\Output\BufferedOutput;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class BufferedOutputTest extends TestCase
 {
