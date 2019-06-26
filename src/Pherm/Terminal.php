@@ -31,14 +31,14 @@ class Terminal implements TerminalContract
     /**
      * @var Control
      */
-    private $keyboard;
+    private $control;
 
     /**
      * @param InputStream|null $input
      * @param OutputStream|null $output
-     * @param Control|null $keyboard
+     * @param Control|null $control
      */
-    public function __construct(InputStream $input = null, OutputStream $output = null, Control $keyboard = null)
+    public function __construct(InputStream $input = null, OutputStream $output = null, Control $control = null)
     {
         if (null !== $input) {
             $this->setInput($input);
@@ -48,8 +48,8 @@ class Terminal implements TerminalContract
             $this->setOutput($output);
         }
 
-        if (null === $keyboard) {
-            $this->keyboard = new Control();
+        if (null === $control) {
+            $this->control = new Control();
         }
     }
 
@@ -108,7 +108,7 @@ class Terminal implements TerminalContract
      */
     public function cursor(): Cursor
     {
-        return new Cursor($this);
+        return new Cursor($this, $this->control);
     }
 
     /**
@@ -126,14 +126,14 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * @param int $row
      * @param int $column
+     * @param int $row
      * @param string $buffer
      * @return static
      */
-    public function writeCursor(int $row, int $column, string $buffer)
+    public function writeCursor(int $column, int $row, string $buffer)
     {
-        $this->cursor()->move($row, $column);
+        $this->cursor()->move($column, $row);
         $this->output->write($buffer);
 
         return $this;

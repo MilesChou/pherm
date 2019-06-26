@@ -83,7 +83,7 @@ $terminal->attribute(15, 32);
 
 foreach ($keyboard as $key => $data) {
     foreach ($data as $item) {
-        $terminal->writeCursor($item[1], $item[0], $item[2]);
+        $terminal->writeCursor($item[0], $item[1], $item[2]);
     }
 }
 

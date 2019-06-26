@@ -14,7 +14,7 @@ interface Cursor
      * @param int $row
      * @return Terminal
      */
-    public function move(int $row, int $column): Terminal;
+    public function move(int $column, int $row): Terminal;
 
     /**
      * Move the cursor to the bottom left of the window

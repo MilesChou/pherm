@@ -261,7 +261,7 @@ class TerminalTest extends TestCase
         $this->target->setOutput($output)
             ->setStty($this->createSttyMock())
             ->bootstrap()
-            ->move(20, 10);
+            ->move(10, 20);
 
         $this->assertSame("\033[20;10H", $output->fetch());
     }

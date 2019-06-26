@@ -22,11 +22,18 @@ class Cursor implements CursorContract
     private $terminal;
 
     /**
-     * @param Terminal $terminal
+     * @var Control
      */
-    public function __construct(Terminal $terminal)
+    private $control;
+
+    /**
+     * @param Terminal $terminal
+     * @param Control $control
+     */
+    public function __construct(Terminal $terminal, Control $control)
     {
         $this->terminal = $terminal;
+        $this->control = $control;
     }
 
     public function __call($name, $arguments)
@@ -36,45 +43,45 @@ class Cursor implements CursorContract
         }
     }
 
-    public function move(int $row, int $column): Terminal
+    public function move(int $column, int $row): Terminal
     {
-        $this->terminal->write(sprintf("\033[%d;%dH", $row, $column));
+        $this->terminal->write($this->control->cup($row, $column));
 
         return $this->terminal;
     }
 
     public function moveBottom(int $column = 0): Terminal
     {
-        return $this->move($this->terminal->height(), $column);
+        return $this->move($column, $this->terminal->height());
     }
 
     public function moveCenter(int $columnDelta = 0): Terminal
     {
-        return $this->move((int)($this->terminal->height() / 2), (int)($this->terminal->width() / 2) + $columnDelta);
+        return $this->move((int)($this->terminal->width() / 2) + $columnDelta, (int)($this->terminal->height() / 2));
     }
 
     public function moveColumn(int $column): Terminal
     {
-        return $this->move(0, $column);
+        return $this->move($column, 0);
     }
 
     public function moveEnd(): Terminal
     {
-        return $this->move($this->terminal->height(), $this->terminal->width());
+        return $this->move($this->terminal->width(), $this->terminal->height());
     }
 
     public function moveMiddle(int $column = 0): Terminal
     {
-        return $this->move($this->terminal->height() / 2, $column);
+        return $this->move($column, $this->terminal->height() / 2);
     }
 
     public function moveRow(int $row): Terminal
     {
-        return $this->move($row, 0);
+        return $this->move(0, $row);
     }
 
     public function moveTop(int $column = 0): Terminal
     {
-        return $this->move(0, $column);
+        return $this->move($column, 0);
     }
 }
