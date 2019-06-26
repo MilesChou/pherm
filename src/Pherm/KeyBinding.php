@@ -8,6 +8,10 @@ class KeyBinding
      * @var Terminal
      */
     private $terminal;
+
+    /**
+     * @var array
+     */
     private $binding = [];
 
     public function __construct(Terminal $terminal)

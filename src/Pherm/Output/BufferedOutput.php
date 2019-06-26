@@ -11,6 +11,11 @@ class BufferedOutput implements OutputStream
      */
     private $buffer = '';
 
+    /**
+     * @var bool
+     */
+    private $interactive;
+
     public function __toString(): string
     {
         return $this->fetch();
@@ -31,9 +36,20 @@ class BufferedOutput implements OutputStream
         return $buffer;
     }
 
+    /**
+     * @param bool $value
+     * @return static
+     */
+    public function mockInteractive(bool $value)
+    {
+        $this->interactive = $value;
+
+        return $this;
+    }
+
     public function isInteractive(): bool
     {
-        return false;
+        return $this->interactive;
     }
 
     public function write(string $buffer): void

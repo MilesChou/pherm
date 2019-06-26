@@ -10,21 +10,25 @@ use Tests\TestCase;
 
 class NonCanonicalReaderTest extends TestCase
 {
-    public function testExceptionIsThrownIfMappingAddedForNonControlCharacter(): void
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Control "w" does not exist
+     */
+    public function shouldThrowExceptionWhenMappingAddedForNonControlCharacter(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Control "w" does not exist');
-
         $terminal = $this->createMock(Terminal::class);
         $terminalReader = new NonCanonicalReader($terminal);
         $terminalReader->addControlMapping('p', 'w');
     }
 
-    public function testExceptionIsThrownIfMappingsAddedForNonControlCharacter(): void
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Control "w" does not exist
+     */
+    public function shouldThrowExceptionWhenMappingsAddedForNonControlCharacter(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Control "w" does not exist');
-
         $terminal = $this->createMock(Terminal::class);
         $terminalReader = new NonCanonicalReader($terminal);
         $terminalReader->addControlMappings(['p' => 'w']);

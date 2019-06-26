@@ -3,6 +3,7 @@
 namespace Tests;
 
 use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
+use MilesChou\Pherm\Input\StringInput;
 use MilesChou\Pherm\Output\BufferedOutput;
 use MilesChou\Pherm\Stty;
 use MilesChou\Pherm\Terminal;
@@ -37,7 +38,7 @@ class TestCase extends BaseTestCase
      */
     protected function createTerminalInstance($parseAllMock = []): Terminal
     {
-        $instance = new Terminal($this->createMock(InputStreamContract::class), new BufferedOutput());
+        $instance = new Terminal(new StringInput, new BufferedOutput);
         $instance->setStty($this->createSttyMock($parseAllMock));
 
         return $instance;
