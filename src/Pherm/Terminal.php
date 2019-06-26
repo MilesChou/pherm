@@ -29,10 +29,16 @@ class Terminal implements TerminalContract
     private $keyBinding;
 
     /**
+     * @var Control
+     */
+    private $keyboard;
+
+    /**
      * @param InputStream|null $input
      * @param OutputStream|null $output
+     * @param Control|null $keyboard
      */
-    public function __construct(InputStream $input = null, OutputStream $output = null)
+    public function __construct(InputStream $input = null, OutputStream $output = null, Control $keyboard = null)
     {
         if (null !== $input) {
             $this->setInput($input);
@@ -40,6 +46,10 @@ class Terminal implements TerminalContract
 
         if (null !== $output) {
             $this->setOutput($output);
+        }
+
+        if (null === $keyboard) {
+            $this->keyboard = new Control();
         }
     }
 
