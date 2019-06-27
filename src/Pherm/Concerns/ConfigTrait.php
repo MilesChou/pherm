@@ -4,7 +4,7 @@ namespace MilesChou\Pherm\Concerns;
 
 use MilesChou\Pherm\Stty;
 
-trait Configuration
+trait ConfigTrait
 {
     /**
      * @var int

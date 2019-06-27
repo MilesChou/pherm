@@ -6,7 +6,7 @@ use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 
-trait Io
+trait IoTrait
 {
     /**
      * @var InputStream

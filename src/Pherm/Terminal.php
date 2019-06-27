@@ -3,8 +3,8 @@
 namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Concerns\CellsTrait;
-use MilesChou\Pherm\Concerns\Configuration;
-use MilesChou\Pherm\Concerns\Io;
+use MilesChou\Pherm\Concerns\ConfigTrait;
+use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
@@ -12,8 +12,8 @@ use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
 class Terminal implements TerminalContract
 {
     use CellsTrait;
-    use Configuration;
-    use Io;
+    use ConfigTrait;
+    use IoTrait;
 
     /**
      * @var int
