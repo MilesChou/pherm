@@ -47,4 +47,26 @@ class CellsTraitTest extends TestCase
 
         $this->assertSame(['ok', 50, 30], $this->target->getCell(5, 5));
     }
+
+    /**
+     * @test
+     * @expectedException \OutOfRangeException
+     */
+    public function shouldThrowExceptionWhenGetCellWithOutOfRange(): void
+    {
+        $this->target->resetCell();
+
+        $this->target->getCell(10, 19);
+    }
+
+    /**
+     * @test
+     * @expectedException \OutOfRangeException
+     */
+    public function shouldThrowExceptionWhenWriteCellWithOutOfRange(): void
+    {
+        $this->target->resetCell();
+
+        $this->target->writeCell(9, 20, ' ');
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace MilesChou\Pherm\Concerns;
 
+use OutOfRangeException;
+
 trait CellsTrait
 {
     /**
@@ -16,7 +18,11 @@ trait CellsTrait
      */
     public function getCell(int $x, int $y): array
     {
-        return $this->cells[static::resolveCellPosition($x, $y)];
+        if (!$this->isDisplayable($x, $y)) {
+            throw new OutOfRangeException("X: $x, Y: $y is not displayable in terminal");
+        }
+
+        return $this->cells[$this->resolveCellPosition($x, $y)];
     }
 
     /**
@@ -50,7 +56,11 @@ trait CellsTrait
      */
     public function writeCell(int $x, int $y, string $cell, int $fg = null, int $bg = null)
     {
-        $this->cells[static::resolveCellPosition($x, $y)] = [$cell, $fg, $bg];
+        if (!$this->isDisplayable($x, $y)) {
+            throw new OutOfRangeException("X: $x, Y: $y is not displayable in terminal");
+        }
+
+        $this->cells[$this->resolveCellPosition($x, $y)] = [$cell, $fg, $bg];
 
         return $this;
     }
@@ -67,6 +77,26 @@ trait CellsTrait
         [$sizeX, $sizeY] = $this->size();
 
         return $y * (int)$sizeX + $x;
+    }
+
+    /**
+     * @param int $x
+     * @param int $y
+     * @return bool
+     */
+    public function isDisplayable(int $x, int $y): bool
+    {
+        [$sizeX, $sizeY] = $this->size();
+
+        if ($x < 0 || $x >= $sizeX) {
+            return false;
+        }
+
+        if ($y < 0 || $y >= $sizeY) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
