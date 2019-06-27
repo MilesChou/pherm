@@ -3,17 +3,11 @@
 namespace Tests\Unit;
 
 use LogicException;
-use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
-use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Control;
-use MilesChou\Pherm\Output\BufferedOutput;
-use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
-use MilesChou\Pherm\Contracts\OutputStream as OutputStreamContract;
-use MilesChou\Pherm\Terminal;
 use OutOfRangeException;
 use Tests\TestCase;
 
-class KeyboardTest extends TestCase
+class ControlTest extends TestCase
 {
     /**
      * @var Control
