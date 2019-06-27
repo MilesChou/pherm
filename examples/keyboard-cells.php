@@ -101,5 +101,3 @@ while (true) {
         break;
     }
 }
-
-$terminal->enableCursor();

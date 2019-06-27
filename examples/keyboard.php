@@ -89,6 +89,7 @@ foreach ($keyboard as $key => $data) {
 
 $terminal->disableCanonicalMode();
 $terminal->disableEchoBack();
+$terminal->disableCursor();
 $terminal->move()->bottom();
 
 while (true) {
