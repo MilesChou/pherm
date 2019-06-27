@@ -8,11 +8,13 @@ use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
+use MilesChou\Pherm\Concerns\InstantOutputTrait;
 
 class Terminal implements TerminalContract
 {
     use CellsTrait;
     use ConfigTrait;
+    use InstantOutputTrait;
     use IoTrait;
 
     /**
@@ -111,6 +113,18 @@ class Terminal implements TerminalContract
     public function cursor(): Cursor
     {
         return new Cursor($this, $this->control);
+    }
+
+    public function flushCells(): void
+    {
+        [$sizeX, $siezY] = $this->size();
+
+        foreach ($this->getCells() as $index => $cell) {
+            $y = (int)($index / $sizeX);
+            $x = $index % $sizeX;
+
+            $this->writeCursor($x, $y, $cell[0] ?? ' ');
+        }
     }
 
     /**
