@@ -14,7 +14,7 @@ trait InstantOutputTrait
      */
     public function disableInstantOutput()
     {
-        $this->instantOutput = true;
+        $this->instantOutput = false;
         return $this;
     }
 
