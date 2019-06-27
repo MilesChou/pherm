@@ -2,6 +2,7 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Binding\Key;
 use MilesChou\Pherm\Concerns\CellsTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
@@ -28,7 +29,7 @@ class Terminal implements TerminalContract
     private $currentForeground;
 
     /**
-     * @var KeyBinding
+     * @var Key
      */
     private $keyBinding;
 
@@ -128,6 +129,14 @@ class Terminal implements TerminalContract
     }
 
     /**
+     * @return OutputStream
+     */
+    public function getOutput(): OutputStream
+    {
+        return $this->output;
+    }
+
+    /**
      * Alias for cursor()
      *
      * @return Cursor|TerminalContract
@@ -156,12 +165,12 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * @return KeyBinding
+     * @return Key
      */
     public function keyBinding()
     {
         if (null === $this->keyBinding) {
-            $this->keyBinding = new KeyBinding($this);
+            $this->keyBinding = new Key($this);
         }
 
         return $this->keyBinding;
