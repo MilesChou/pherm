@@ -358,4 +358,17 @@ class TerminalTest extends TestCase
         $this->assertContains("\033[38;5;48m", $output->fetch(false));
         $this->assertContains("\033[48;5;62m", $output->fetch(false));
     }
+
+    /**
+     * @test
+     */
+    public function shouldResetAllCell(): void
+    {
+        $this->target->bootstrap()->clear();
+
+        // 80 * 24 = 1920
+        $this->assertCount(1920, $this->target->getBuffer());
+        $this->assertSame([' ', 0, 0], $this->target->getCell(1, 1));
+        $this->assertSame([' ', 0, 0], $this->target->getCell(80, 24));
+    }
 }

@@ -3,17 +3,17 @@
 namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Binding\Key;
-use MilesChou\Pherm\Concerns\CellsTrait;
+use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
+use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
-use MilesChou\Pherm\Concerns\InstantOutputTrait;
 
 class Terminal implements TerminalContract
 {
-    use CellsTrait;
+    use BufferTrait;
     use ConfigTrait;
     use InstantOutputTrait;
     use IoTrait;
@@ -92,6 +92,24 @@ class Terminal implements TerminalContract
     public function bootstrap()
     {
         $this->prepareConfiguration();
+        $this->prepareBuffer();
+
+        return $this;
+    }
+
+    /**
+     * Clear screen and buffer
+     *
+     * @return static
+     */
+    public function clear()
+    {
+        // Clear terminal
+        $this->output->write("\033[2J");
+
+        // Clear buffer
+        $this->backBuffer->clear($this->defaultForeground, $this->defaultBackground);
+        $this->frontBuffer->clear($this->defaultForeground, $this->defaultBackground);
 
         return $this;
     }
@@ -120,7 +138,7 @@ class Terminal implements TerminalContract
     {
         [$sizeX, $siezY] = $this->size();
 
-        foreach ($this->getCells() as $index => $cell) {
+        foreach ($this->getBuffer() as $index => $cell) {
             $y = (int)($index / $sizeX);
             $x = $index % $sizeX;
 

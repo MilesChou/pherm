@@ -15,7 +15,7 @@ class CellBuffer
     public $height;
 
     /**
-     * @var array
+     * @var array [char, fg, bg]
      */
     public $cells = [];
 

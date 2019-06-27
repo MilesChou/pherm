@@ -65,13 +65,6 @@ trait IoTrait
         return $this->isInteractive();
     }
 
-    public function clear()
-    {
-        $this->output->write("\033[2J");
-
-        return $this;
-    }
-
     public function clearLine()
     {
         $this->output->write("\033[2K");

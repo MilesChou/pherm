@@ -2,21 +2,23 @@
 
 namespace Tests\Pherm\Exceptions;
 
-use MilesChou\Pherm\Concerns\CellsTrait;
+use MilesChou\Pherm\Concerns\BufferTrait;
 use Tests\TestCase;
 
 class CellsTraitTest extends TestCase
 {
     /**
-     * @var CellsTrait|\PHPUnit\Framework\MockObject\MockObject
+     * @var BufferTrait|\PHPUnit\Framework\MockObject\MockObject
      */
     private $target;
 
     protected function setUp(): void
     {
-        $this->target = $this->getMockForTrait(CellsTrait::class);
+        $this->target = $this->getMockForTrait(BufferTrait::class);
         $this->target->method('size')
             ->willReturn([10, 20]);
+
+        $this->target->prepareBuffer();
     }
 
     protected function tearDown(): void
@@ -27,22 +29,8 @@ class CellsTraitTest extends TestCase
     /**
      * @test
      */
-    public function shouldResetAllCell(): void
-    {
-        $this->target->resetCell();
-
-        $this->assertCount(200, $this->target->getCells());
-        $this->assertSame([], $this->target->getCell(0, 0));
-        $this->assertSame([], $this->target->getCell(9, 19));
-    }
-
-    /**
-     * @test
-     */
     public function shouldWriteAndGetAtSameCell(): void
     {
-        $this->target->resetCell();
-
         $this->target->writeCell(5, 5, 'ok', 50, 30);
 
         $this->assertSame(['ok', 50, 30], $this->target->getCell(5, 5));
@@ -54,9 +42,7 @@ class CellsTraitTest extends TestCase
      */
     public function shouldThrowExceptionWhenGetCellWithOutOfRange(): void
     {
-        $this->target->resetCell();
-
-        $this->target->getCell(10, 19);
+        $this->target->getCell(11, 20);
     }
 
     /**
@@ -65,8 +51,6 @@ class CellsTraitTest extends TestCase
      */
     public function shouldThrowExceptionWhenWriteCellWithOutOfRange(): void
     {
-        $this->target->resetCell();
-
-        $this->target->writeCell(9, 20, ' ');
+        $this->target->writeCell(10, 21, ' ');
     }
 }
