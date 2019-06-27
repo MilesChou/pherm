@@ -2,6 +2,7 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Concerns\CellsTrait;
 use MilesChou\Pherm\Concerns\Configuration;
 use MilesChou\Pherm\Concerns\Io;
 use MilesChou\Pherm\Contracts\InputStream;
@@ -10,6 +11,7 @@ use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
 
 class Terminal implements TerminalContract
 {
+    use CellsTrait;
     use Configuration;
     use Io;
 
@@ -149,6 +151,14 @@ class Terminal implements TerminalContract
         }
 
         return $this->keyBinding;
+    }
+
+    /**
+     * @return array [x, y]
+     */
+    public function size(): array
+    {
+        return [$this->width, $this->height];
     }
 
     /**
