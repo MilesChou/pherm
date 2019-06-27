@@ -77,6 +77,10 @@ $keyboard = [
 
 $terminal = new Terminal(new InputStream(), new OutputStream());
 $terminal->bootstrap();
+$terminal->disableInstantOutput();
+$terminal->disableCanonicalMode();
+$terminal->disableEchoBack();
+$terminal->disableCursor();
 $terminal->clear();
 
 $terminal->attribute(15, 32);
@@ -89,9 +93,6 @@ foreach ($keyboard as $key => $data) {
 
 $terminal->flushCells();
 
-$terminal->disableCanonicalMode();
-$terminal->disableEchoBack();
-$terminal->disableCursor();
 $terminal->move()->bottom();
 
 while (true) {

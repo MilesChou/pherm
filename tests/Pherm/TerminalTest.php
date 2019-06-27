@@ -154,28 +154,6 @@ class TerminalTest extends TestCase
         $this->assertSame("\033[J", $output->fetch());
     }
 
-    public function testClean(): void
-    {
-        $input = new StringInput;
-        $output = new BufferedOutput;
-
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
-            ->bootstrap();
-
-        $rf = new \ReflectionObject($target);
-        $rp = $rf->getProperty('width');
-        $rp->setAccessible(true);
-        $rp->setValue($target, 23);
-        $rp = $rf->getProperty('height');
-        $rp->setAccessible(true);
-        $rp->setValue($target, 2);
-
-        $target->clean();
-
-        $this->assertSame("\033[0;0H\033[2K\033[1;0H\033[2K\033[2;0H\033[2K", $output->fetch());
-    }
-
     public function testEnableCursor(): void
     {
         $output = new BufferedOutput;
@@ -209,7 +187,7 @@ class TerminalTest extends TestCase
             ->bootstrap()
             ->move()->top();
 
-        $this->assertSame("\033[0;0H", $output->fetch());
+        $this->assertSame("\033[1;1H", $output->fetch());
     }
 
     /**
@@ -236,7 +214,7 @@ class TerminalTest extends TestCase
             ->bootstrap()
             ->move()->row(2);
 
-        $this->assertSame("\033[2;0H", $output->fetch());
+        $this->assertSame("\033[2;1H", $output->fetch());
     }
 
     public function testMoveCursorToColumn(): void
@@ -248,7 +226,7 @@ class TerminalTest extends TestCase
             ->bootstrap()
             ->move()->column(10);
 
-        $this->assertSame("\033[0;10H", $output->fetch());
+        $this->assertSame("\033[1;10H", $output->fetch());
     }
 
     /**
@@ -328,8 +306,6 @@ class TerminalTest extends TestCase
         $this->target->setOutput($output)
             ->setStty($this->createSttyMock())
             ->bootstrap();
-
-        $this->markTestIncomplete();
 
         $this->assertTrue($this->target->getColourSupport() === 8 || $this->target->getColourSupport() === 256);
     }

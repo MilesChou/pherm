@@ -8,6 +8,13 @@ namespace MilesChou\Pherm\Contracts;
 interface Cursor
 {
     /**
+     * Return the last position
+     *
+     * @return array
+     */
+    public function last(): array;
+
+    /**
      * Move the cursor to specific position
      *
      * @param int $column
@@ -22,7 +29,7 @@ interface Cursor
      * @param int $column
      * @return Terminal
      */
-    public function moveBottom(int $column = 0): Terminal;
+    public function moveBottom(int $column = 1): Terminal;
 
     /**
      * Move the cursor to the center of the window
@@ -56,7 +63,7 @@ interface Cursor
      * @param int $column
      * @return Terminal
      */
-    public function moveMiddle(int $column = 0): Terminal;
+    public function moveMiddle(int $column = 1): Terminal;
 
     /**
      * Move the cursor to the start of a specific row
@@ -72,5 +79,12 @@ interface Cursor
      * @param int $column
      * @return Terminal
      */
-    public function moveTop(int $column = 0): Terminal;
+    public function moveTop(int $column = 1): Terminal;
+
+    /**
+     * @param int $x
+     * @param int $y
+     * @return static
+     */
+    public function position(int $x, int $y);
 }

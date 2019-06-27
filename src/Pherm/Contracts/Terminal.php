@@ -131,13 +131,6 @@ interface Terminal
     public function clearDown();
 
     /**
-     * Clean the whole console without jumping the window
-     *
-     * @return static
-     */
-    public function clean();
-
-    /**
      * Enable cursor display
      *
      * @return static
@@ -176,4 +169,19 @@ interface Terminal
      * @return static
      */
     public function writeCursor(int $row, int $column, string $buffer);
+
+    /**
+     * @return bool
+     */
+    public function isInstantOutput(): bool;
+
+    /**
+     * @return OutputStream
+     */
+    public function getOutput(): OutputStream;
+
+    /**
+     * @return array [x, y]
+     */
+    public function size(): array;
 }
