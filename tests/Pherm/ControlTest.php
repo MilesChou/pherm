@@ -104,4 +104,13 @@ class ControlTest extends TestCase
     {
         $this->assertSame("\033[2;3f", $this->target->hvp(2, 3));
     }
+
+    /**
+     * @test
+     * @expectedException \LogicException
+     */
+    public function shouldThrowExceptionWhenSetProperty(): void
+    {
+        $this->target->whatever = 'whatever';
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace MilesChou\Pherm;
 
-use BadMethodCallException;
 use LogicException;
 use OutOfRangeException;
 
@@ -73,21 +72,11 @@ class Control
 
     public function __get($key)
     {
-        $key = strtoupper($key);
-
-        if (isset($this->overwrite[$key])) {
-            return $this->overwrite[$key];
-        }
-
         if (method_exists($this, $key)) {
             throw new LogicException("Key '$key' has the same name method, use method instead");
         }
 
-        if (!$this->__isset($key)) {
-            throw new OutOfRangeException("Key '$key' is not exist");
-        }
-
-        return self::CONTROL_CHARACTER[$key] ?? self::CONTROL_SEQUENCES[$key];
+        return $this->characters($key);
     }
 
     public function __isset($key)
@@ -97,7 +86,7 @@ class Control
 
     public function __set($name, $value)
     {
-        throw new BadMethodCallException('Cannot set the value in Keyboard object');
+        throw new LogicException('Cannot set the value on Control');
     }
 
     /**
@@ -130,10 +119,16 @@ class Control
      */
     private function characters(string $key): string
     {
-        if (!$this->__isset($key)) {
-            throw new OutOfRangeException("Key '$key' is not exist");
+        $key = strtoupper($key);
+
+        if (isset($this->overwrite[$key])) {
+            return $this->overwrite[$key];
         }
 
-        return self::CONTROL_CHARACTER[$key] ?? self::CONTROL_SEQUENCES[$key];
+        if ($this->__isset($key)) {
+            return self::CONTROL_CHARACTER[$key] ?? self::CONTROL_SEQUENCES[$key];
+        }
+
+        throw new OutOfRangeException("Key '$key' is not defined");
     }
 }
