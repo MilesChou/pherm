@@ -86,16 +86,6 @@ trait IoTrait
         return $this;
     }
 
-    public function clean()
-    {
-        foreach (range(0, $this->height()) as $rowNum) {
-            $this->cursor()->moveRow($rowNum);
-            $this->clearLine();
-        }
-
-        return $this;
-    }
-
     public function enableCursor()
     {
         $this->output->write("\033[?25h");

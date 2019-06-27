@@ -12,10 +12,30 @@ class CursorTest extends TestCase
      */
     private $target;
 
+    public function overflowCase()
+    {
+        return [
+            [0, 5],
+            [5, 0],
+            [81, 5],
+            [5, 25],
+        ];
+    }
+
     protected function setUp()
     {
         // col 80, row 24
         $this->target = $this->createTerminalInstance()->bootstrap()->cursor();
+    }
+
+    /**
+     * @test
+     * @dataProvider overflowCase
+     * @expectedException \OverflowException
+     */
+    public function shouldThrowWriteCorrectStringWhenCallMove($x, $y): void
+    {
+        $this->target->move($x, $y);
     }
 
     /**
@@ -34,7 +54,7 @@ class CursorTest extends TestCase
     public function shouldWriteCorrectStringWhenCallMoveBottomAndAliasMethod(): void
     {
         $this->assertSame("\033[24;10H", $this->target->moveBottom(10)->getOutput()->fetch());
-        $this->assertSame("\033[24;0H", $this->target->bottom()->getOutput()->fetch());
+        $this->assertSame("\033[24;1H", $this->target->bottom()->getOutput()->fetch());
     }
 
     /**
@@ -60,7 +80,7 @@ class CursorTest extends TestCase
      */
     public function shouldWriteCorrectStringWhenCallMoveMiddleAndAliasMethod(): void
     {
-        $this->assertSame("\033[12;0H", $this->target->moveMiddle()->getOutput()->fetch());
+        $this->assertSame("\033[12;1H", $this->target->moveMiddle()->getOutput()->fetch());
         $this->assertSame("\033[12;6H", $this->target->middle(6)->getOutput()->fetch());
     }
 
@@ -69,8 +89,8 @@ class CursorTest extends TestCase
      */
     public function shouldWriteCorrectStringWhenCallMoveRowAndAliasMethod(): void
     {
-        $this->assertSame("\033[4;0H", $this->target->moveRow(4)->getOutput()->fetch());
-        $this->assertSame("\033[8;0H", $this->target->row(8)->getOutput()->fetch());
+        $this->assertSame("\033[4;1H", $this->target->moveRow(4)->getOutput()->fetch());
+        $this->assertSame("\033[8;1H", $this->target->row(8)->getOutput()->fetch());
     }
 
     /**
@@ -78,7 +98,7 @@ class CursorTest extends TestCase
      */
     public function shouldWriteCorrectStringWhenCallMoveTopAndAliasMethod(): void
     {
-        $this->assertSame("\033[0;0H", $this->target->moveTop()->getOutput()->fetch());
-        $this->assertSame("\033[0;5H", $this->target->top(5)->getOutput()->fetch());
+        $this->assertSame("\033[1;1H", $this->target->moveTop()->getOutput()->fetch());
+        $this->assertSame("\033[1;5H", $this->target->top(5)->getOutput()->fetch());
     }
 }

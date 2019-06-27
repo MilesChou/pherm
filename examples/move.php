@@ -7,6 +7,7 @@ use MilesChou\Pherm\Terminal;
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $terminal = (new Terminal(new InputStream(), new OutputStream()))
+    ->enableInstantOutput()
     ->bootstrap();
 
 $terminal->clear()->cursor()->moveCenter();

@@ -40,6 +40,7 @@ class TestCase extends BaseTestCase
     {
         $instance = new Terminal(new StringInput, new BufferedOutput);
         $instance->setStty($this->createSttyMock($parseAllMock));
+        $instance->enableInstantOutput();
 
         return $instance;
     }

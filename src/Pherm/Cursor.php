@@ -4,15 +4,16 @@ namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\Terminal;
+use OverflowException;
 
 /**
- * @method Terminal bottom(int $column = 0)
- * @method Terminal center(int $deltaColumn = 0, int $deltaRow = 0)
+ * @method Terminal bottom(int $column = 1)
+ * @method Terminal center(int $deltaColumn = 1, int $deltaRow = 1)
  * @method Terminal column(int $column)
- * @method Terminal end(int $backwardColumn = 0, int $backwardRow = 0)
- * @method Terminal middle(int $column = 0)
+ * @method Terminal end(int $backwardColumn = 1, int $backwardRow = 1)
+ * @method Terminal middle(int $column = 1)
  * @method Terminal row(int $row)
- * @method Terminal top(int $column = 0)
+ * @method Terminal top(int $column = 1)
  */
 class Cursor implements CursorContract
 {
@@ -22,6 +23,16 @@ class Cursor implements CursorContract
      * @var Control
      */
     private $control;
+
+    /**
+     * @var int
+     */
+    private $x = 1;
+
+    /**
+     * @var int
+     */
+    private $y = 1;
 
     /**
      * @param Terminal $terminal
@@ -40,14 +51,23 @@ class Cursor implements CursorContract
         }
     }
 
+    public function last(): array
+    {
+        return [$this->x, $this->y];
+    }
+
     public function move(int $column, int $row): Terminal
     {
-        $this->terminal->write($this->control->cup($row, $column));
+        $this->position($column, $row);
+
+        if ($this->terminal->isInstantOutput()) {
+            $this->terminal->getOutput()->write($this->control->cup($row, $column));
+        }
 
         return $this->terminal;
     }
 
-    public function moveBottom(int $column = 0): Terminal
+    public function moveBottom(int $column = 1): Terminal
     {
         return $this->move($column, $this->terminal->height());
     }
@@ -62,7 +82,7 @@ class Cursor implements CursorContract
 
     public function moveColumn(int $column): Terminal
     {
-        return $this->move($column, 0);
+        return $this->move($column, 1);
     }
 
     public function moveEnd(int $backwardColumn = 0, int $backwardRow = 0): Terminal
@@ -73,18 +93,36 @@ class Cursor implements CursorContract
         );
     }
 
-    public function moveMiddle(int $column = 0): Terminal
+    public function moveMiddle(int $column = 1): Terminal
     {
         return $this->move($column, $this->terminal->height() / 2);
     }
 
     public function moveRow(int $row): Terminal
     {
-        return $this->move(0, $row);
+        return $this->move(1, $row);
     }
 
-    public function moveTop(int $column = 0): Terminal
+    public function moveTop(int $column = 1): Terminal
     {
-        return $this->move($column, 0);
+        return $this->move($column, 1);
+    }
+
+    public function position(int $x, int $y)
+    {
+        [$sizeX, $sizeY] = $this->terminal->size();
+
+        if ($x < 1 || $x > $sizeX) {
+            throw new OverflowException("X expect in range 1 to $sizeX, actual is '$x'");
+        }
+
+        if ($y < 1 || $y > $sizeY) {
+            throw new OverflowException("Y expect in range 1 to $sizeY, actual is '$y'");
+        }
+
+        $this->x = $x;
+        $this->y = $y;
+
+        return $this;
     }
 }
