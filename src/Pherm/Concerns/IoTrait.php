@@ -115,11 +115,4 @@ trait IoTrait
         });
         return $buffer;
     }
-
-    public function write(string $buffer)
-    {
-        $this->output->write($buffer);
-
-        return $this;
-    }
 }

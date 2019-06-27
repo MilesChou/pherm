@@ -91,7 +91,7 @@ foreach ($keyboard as $key => $data) {
     }
 }
 
-$terminal->flushCells();
+$terminal->flush();
 
 $terminal->move()->bottom();
 

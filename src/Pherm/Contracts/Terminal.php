@@ -13,25 +13,11 @@ interface Terminal
     public function attribute(?int $foreground = null, ?int $background = null);
 
     /**
-     * @param int $background
-     * @return static
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    public function background(int $background);
-
-    /**
      * @param int $defaultBackground
      * @return static
      * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
      */
     public function defaultBackground(int $defaultBackground);
-
-    /**
-     * @param int $foreground
-     * @return static
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    public function foreground(int $foreground);
 
     /**
      * @param int $defaultForeground
@@ -110,6 +96,11 @@ interface Terminal
     public function supportsColour(): bool;
 
     /**
+     * @return bool
+     */
+    public function isInstantOutput(): bool;
+
+    /**
      * Clear the terminal window
      *
      * @return static
@@ -155,25 +146,22 @@ interface Terminal
     /**
      * Write to the output stream
      *
-     * @param string $buffer
+     * @param string $chars
+     * @param int|null $fg
+     * @param int|null $bg
      * @return static
      */
-    public function write(string $buffer);
+    public function write(string $chars, ?int $fg = null, ?int $bg = null);
 
     /**
      * Write to the output stream on specific cursor
      *
-     * @param int $row
-     * @param int $column
-     * @param string $buffer
+     * @param int $x
+     * @param int $y
+     * @param string $char
      * @return static
      */
-    public function writeCursor(int $row, int $column, string $buffer);
-
-    /**
-     * @return bool
-     */
-    public function isInstantOutput(): bool;
+    public function writeCursor(int $x, int $y, string $char);
 
     /**
      * @return OutputStream

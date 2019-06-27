@@ -7,6 +7,7 @@ use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
+use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
@@ -19,6 +20,11 @@ class Terminal implements TerminalContract
     use IoTrait;
 
     /**
+     * @var Control
+     */
+    private $control;
+
+    /**
      * @var int
      */
     private $currentBackground;
@@ -29,14 +35,14 @@ class Terminal implements TerminalContract
     private $currentForeground;
 
     /**
+     * @var CursorContract
+     */
+    private $cursor;
+
+    /**
      * @var Key
      */
     private $keyBinding;
-
-    /**
-     * @var Control
-     */
-    private $control;
 
     /**
      * @param InputStream|null $input
@@ -60,27 +66,49 @@ class Terminal implements TerminalContract
 
     public function attribute(?int $foreground = null, ?int $background = null)
     {
-        if ($foreground === null) {
-            $foreground = $this->defaultForeground;
-        }
-
-        if ($background === null) {
-            $background = $this->defaultBackground;
-        }
-
-        $this->background($background);
-        $this->foreground($foreground);
+        $this->currentForeground = $foreground;
+        $this->currentBackground = $background;
 
         return $this;
     }
 
-    public function background(int $background)
+    private function background(?int $background)
     {
+        if (null === $background && null === $this->defaultBackground) {
+            $this->output->write("\033[0m");
+            return $this;
+        }
+
+        if (null === $background) {
+            $background = $this->defaultBackground;
+        }
+
         $background &= 0x1FF;
 
         if ($background !== $this->currentBackground) {
             $this->currentBackground = $background;
-            $this->write("\033[48;5;{$background}m");
+            $this->output->write("\033[48;5;{$background}m");
+        }
+
+        return $this;
+    }
+
+    private function foreground(?int $foreground)
+    {
+        if (null === $foreground && null === $this->defaultForeground) {
+            $this->output->write("\033[0m");
+            return $this;
+        }
+
+        if (null === $foreground) {
+            $foreground = $this->defaultForeground;
+        }
+
+        $foreground &= 0x1FF;
+
+        if ($foreground !== $this->currentForeground) {
+            $this->currentForeground = $foreground;
+            $this->output->write("\033[38;5;{$foreground}m");
         }
 
         return $this;
@@ -111,17 +139,8 @@ class Terminal implements TerminalContract
         $this->backBuffer->clear($this->defaultForeground, $this->defaultBackground);
         $this->frontBuffer->clear($this->defaultForeground, $this->defaultBackground);
 
-        return $this;
-    }
-
-    public function foreground(int $foreground)
-    {
-        $foreground &= 0x1FF;
-
-        if ($foreground !== $this->currentForeground) {
-            $this->currentForeground = $foreground;
-            $this->write("\033[38;5;{$foreground}m");
-        }
+        // Initial the position to origin point 1, 1
+        $this->cursor()->position(1, 1);
 
         return $this;
     }
@@ -131,18 +150,32 @@ class Terminal implements TerminalContract
      */
     public function cursor(): Cursor
     {
-        return new Cursor($this, $this->control);
+        if (null === $this->cursor) {
+            $this->cursor = new Cursor($this, $this->control);
+        }
+
+        return $this->cursor;
     }
 
-    public function flushCells(): void
+    public function flush(): void
     {
+        if ($this->isInstantOutput()) {
+            return;
+        }
+
         [$sizeX, $siezY] = $this->size();
 
         foreach ($this->getBuffer() as $index => $cell) {
             $y = (int)($index / $sizeX);
             $x = $index % $sizeX;
 
-            $this->writeCursor($x, $y, $cell[0] ?? ' ');
+            $this->writeCursorInstant(
+                $x,
+                $y,
+                $cell[0] ?? ' ',
+                $cell[1] ?? $this->currentForeground,
+                $cell[2] ?? $this->currentBackground
+            );
         }
     }
 
@@ -168,16 +201,52 @@ class Terminal implements TerminalContract
         return $this->cursor();
     }
 
+    public function write(string $char, ?int $fg = null, ?int $bg = null)
+    {
+        if ($this->isInstantOutput()) {
+            $this->foreground($fg);
+            $this->background($bg);
+            $this->output->write($char);
+        } else {
+            [$x, $y] = $this->cursor->last();
+            $this->writeCell($x, $y, $char, $fg, $bg);
+        }
+
+        return $this;
+    }
+
     /**
-     * @param int $column
-     * @param int $row
-     * @param string $buffer
+     * @param int $x
+     * @param int $y
+     * @param string $char
      * @return static
      */
-    public function writeCursor(int $column, int $row, string $buffer)
+    public function writeCursor(int $x, int $y, string $char)
     {
-        $this->cursor()->move($column, $row);
-        $this->output->write($buffer);
+        if ($this->isInstantOutput()) {
+            $this->writeCursorInstant($x, $y, $char, $this->currentForeground, $this->currentBackground);
+        } else {
+            $this->writeCell($x, $y, $char, $this->currentForeground, $this->currentBackground);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param int $x
+     * @param int $y
+     * @param string $char
+     * @param int $fg
+     * @param int $bg
+     * @return static
+     */
+    private function writeCursorInstant(int $x, int $y, string $char, ?int $fg = null, ?int $bg = null)
+    {
+        $this->cursor()->move($x, $y);
+
+        $this->foreground($fg);
+        $this->background($bg);
+        $this->output->write($char);
 
         return $this;
     }

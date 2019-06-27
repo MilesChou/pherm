@@ -67,7 +67,7 @@ trait BufferTrait
      * @param int $bg
      * @return static
      */
-    public function writeCell(int $x, int $y, string $cell, int $fg = null, int $bg = null)
+    public function writeCell(int $x, int $y, string $cell, ?int $fg = null, ?int $bg = null)
     {
         if (!$this->isDisplayable($x, $y)) {
             throw new OutOfRangeException("X: $x, Y: $y is not displayable in terminal");

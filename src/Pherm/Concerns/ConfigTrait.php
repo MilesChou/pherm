@@ -11,14 +11,14 @@ trait ConfigTrait
      *
      * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
      */
-    private $defaultBackground = 0;
+    private $defaultBackground;
 
     /**
      * @var int
      *
      * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
      */
-    private $defaultForeground = 0;
+    private $defaultForeground;
 
     /**
      * @var int

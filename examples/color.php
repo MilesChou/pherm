@@ -7,22 +7,23 @@ use MilesChou\Pherm\Terminal;
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $terminal = (new Terminal(new InputStream(), new OutputStream()))
+    ->enableInstantOutput()
     ->bootstrap();
 
 $terminal->clear();
-
-$str = 'Hello world!';
 
 $terminal->move()->top();
 
 $payload = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 foreach (range(16, 231) as $i => $bg) {
-    $terminal->attribute(((int)$i % 36 < 18 ? 15 : 0), $bg)->write($payload[$i % 36]);
+    $terminal->write($payload[$i % 36], ((int)$i % 36 < 18 ? 15 : 0), $bg);
 
     if ($i % 36 === 35) {
         $terminal->write("\n");
     }
 }
 
-$terminal->move()->center(-(mb_strlen($str) / 2))->write($str);
+$terminal->move()->center(-(mb_strlen('Hello world!') / 2))->write('Hello world!');
+
+$terminal->flush();

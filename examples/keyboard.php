@@ -83,10 +83,9 @@ $terminal->disableEchoBack();
 $terminal->disableCursor();
 $terminal->clear();
 
-$terminal->attribute(15, 32);
-
 foreach ($keyboard as $key => $data) {
     foreach ($data as $item) {
+        $terminal->attribute(15, 32);
         $terminal->writeCursor($item[0], $item[1], $item[2]);
     }
 }
