@@ -7,6 +7,11 @@ php:
   - 7.2
   - 7.3
 
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.\d+$/
+
 install:
   - composer install --prefer-dist
 
