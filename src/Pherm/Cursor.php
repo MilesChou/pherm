@@ -7,19 +7,16 @@ use MilesChou\Pherm\Contracts\Terminal;
 
 /**
  * @method Terminal bottom(int $column = 0)
- * @method Terminal center(int $columnDelta = 0)
+ * @method Terminal center(int $deltaColumn = 0, int $deltaRow = 0)
  * @method Terminal column(int $column)
- * @method Terminal end()
+ * @method Terminal end(int $backwardColumn = 0, int $backwardRow = 0)
  * @method Terminal middle(int $column = 0)
  * @method Terminal row(int $row)
  * @method Terminal top(int $column = 0)
  */
 class Cursor implements CursorContract
 {
-    /**
-     * @var Terminal
-     */
-    private $terminal;
+    use TerminalAwareTrait;
 
     /**
      * @var Control
@@ -32,7 +29,7 @@ class Cursor implements CursorContract
      */
     public function __construct(Terminal $terminal, Control $control)
     {
-        $this->terminal = $terminal;
+        $this->setTerminal($terminal);
         $this->control = $control;
     }
 
@@ -55,9 +52,12 @@ class Cursor implements CursorContract
         return $this->move($column, $this->terminal->height());
     }
 
-    public function moveCenter(int $columnDelta = 0): Terminal
+    public function moveCenter(int $deltaColumn = 0, int $deltaRow = 0): Terminal
     {
-        return $this->move((int)($this->terminal->width() / 2) + $columnDelta, (int)($this->terminal->height() / 2));
+        return $this->move(
+            (int)($this->terminal->width() / 2) + $deltaColumn,
+            (int)($this->terminal->height() / 2) + $deltaRow
+        );
     }
 
     public function moveColumn(int $column): Terminal
@@ -65,9 +65,12 @@ class Cursor implements CursorContract
         return $this->move($column, 0);
     }
 
-    public function moveEnd(): Terminal
+    public function moveEnd(int $backwardColumn = 0, int $backwardRow = 0): Terminal
     {
-        return $this->move($this->terminal->width(), $this->terminal->height());
+        return $this->move(
+            $this->terminal->width() - $backwardColumn,
+            $this->terminal->height() - $backwardRow
+        );
     }
 
     public function moveMiddle(int $column = 0): Terminal

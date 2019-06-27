@@ -12,10 +12,21 @@ trait TerminalAwareTrait
     protected $terminal;
 
     /**
-     * @param TerminalContract $terminal
+     * @return TerminalContract
      */
-    public function setTerminal(TerminalContract $terminal): void
+    public function getTerminal(): TerminalContract
+    {
+        return $this->terminal;
+    }
+
+    /**
+     * @param TerminalContract $terminal
+     * @return static
+     */
+    public function setTerminal(TerminalContract $terminal)
     {
         $this->terminal = $terminal;
+
+        return $this;
     }
 }
