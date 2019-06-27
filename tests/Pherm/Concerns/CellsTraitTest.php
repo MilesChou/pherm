@@ -51,6 +51,6 @@ class CellsTraitTest extends TestCase
      */
     public function shouldThrowExceptionWhenWriteCellWithOutOfRange(): void
     {
-        $this->target->writeCell(10, 21, ' ');
+        $this->target->writeCell(10, 21, ' ', 0, 0);
     }
 }

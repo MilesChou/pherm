@@ -31,6 +31,18 @@ class CellBuffer
     }
 
     /**
+     * @param int $x
+     * @param int $y
+     * @throws OutOfRangeException
+     */
+    public function checkRange(int $x, int $y): void
+    {
+        if (!$this->inRange($x, $y)) {
+            throw new OutOfRangeException("X: $x is out of range in cell buffer");
+        }
+    }
+
+    /**
      * @param int $fg
      * @param int $bg
      */
@@ -70,6 +82,24 @@ class CellBuffer
         $this->width = $width;
         $this->height = $height;
         $this->cells = array_fill(0, $width * $height, []);
+    }
+
+    /**
+     * @param int $x
+     * @param int $y
+     * @return bool
+     */
+    public function inRange(int $x, int $y): bool
+    {
+        if ($x < 1 || $x > $this->width) {
+            return false;
+        }
+
+        if ($y < 1 || $y > $this->height) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -131,24 +161,6 @@ class CellBuffer
     public function width(): int
     {
         return $this->width;
-    }
-
-    /**
-     * @param int $x
-     * @param int $y
-     * @return bool
-     */
-    protected function checkRange(int $x, int $y): bool
-    {
-        if ($x < 1 || $x > $this->width) {
-            throw new OutOfRangeException("X: $x is out of range in cell buffer");
-        }
-
-        if ($y < 1 || $y > $this->height) {
-            throw new OutOfRangeException("Y: $y is out of range in cell buffer");
-        }
-
-        return true;
     }
 
     /**

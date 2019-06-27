@@ -87,7 +87,7 @@ $terminal->attribute(15, 32);
 
 foreach ($keyboard as $key => $data) {
     foreach ($data as $item) {
-        $terminal->writeCell($item[0], $item[1], $item[2]);
+        $terminal->writeCell($item[0], $item[1], $item[2], 0, 0);
     }
 }
 

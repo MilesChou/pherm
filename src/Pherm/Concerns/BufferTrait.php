@@ -24,11 +24,7 @@ trait BufferTrait
      */
     public function getCell(int $x, int $y): array
     {
-        if (!$this->isDisplayable($x, $y)) {
-            throw new OutOfRangeException("X: $x, Y: $y is not displayable in terminal");
-        }
-
-        return $this->backBuffer->cells[$this->resolveCellPosition($x, $y)];
+        return $this->backBuffer->get($x, $y);
     }
 
     /**
@@ -46,34 +42,24 @@ trait BufferTrait
      */
     public function isDisplayable(int $x, int $y): bool
     {
-        [$sizeX, $sizeY] = $this->size();
-
-        if ($x < 1 || $x > $sizeX) {
-            return false;
-        }
-
-        if ($y < 1 || $y > $sizeY) {
-            return false;
-        }
-
-        return true;
+        return $this->backBuffer->inRange($x, $y);
     }
 
     /**
      * @param int $x
      * @param int $y
-     * @param string $cell
+     * @param string $string
      * @param int $fg
      * @param int $bg
      * @return static
      */
-    public function writeCell(int $x, int $y, string $cell, int $fg = null, int $bg = null)
+    public function writeCell(int $x, int $y, string $string, int $fg, int $bg)
     {
         if (!$this->isDisplayable($x, $y)) {
             throw new OutOfRangeException("X: $x, Y: $y is not displayable in terminal");
         }
 
-        $this->backBuffer->cells[$this->resolveCellPosition($x, $y)] = [$cell, $fg, $bg];
+        $this->backBuffer->set($x, $y, $string, $fg, $bg);
 
         return $this;
     }
@@ -84,20 +70,6 @@ trait BufferTrait
 
         $this->backBuffer = new CellBuffer($width, $height);
         $this->frontBuffer = new CellBuffer($width, $height);
-    }
-
-    /**
-     * Return the position in 1-axis array
-     *
-     * @param int $x
-     * @param int $y
-     * @return int
-     */
-    protected function resolveCellPosition(int $x, int $y): int
-    {
-        [$sizeX, $sizeY] = $this->size();
-
-        return ($y - 1) * (int)$sizeX + ($x - 1);
     }
 
     /**
