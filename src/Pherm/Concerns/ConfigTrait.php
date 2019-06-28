@@ -6,6 +6,8 @@ use MilesChou\Pherm\Stty;
 
 trait ConfigTrait
 {
+    use SizeAwareTrait;
+
     /**
      * @var int
      */
@@ -17,11 +19,6 @@ trait ConfigTrait
     private $echoBack;
 
     /**
-     * @var int
-     */
-    private $height;
-
-    /**
      * @var bool
      */
     private $isCanonical;
@@ -30,11 +27,6 @@ trait ConfigTrait
      * @var Stty
      */
     private $stty;
-
-    /**
-     * @var int
-     */
-    private $width;
 
     public function disableCanonicalMode()
     {
@@ -73,14 +65,6 @@ trait ConfigTrait
         return $this->colourSupport;
     }
 
-    /**
-     * @return int
-     */
-    public function height(): int
-    {
-        return $this->height;
-    }
-
     public function isCanonicalMode(): bool
     {
         return $this->isCanonical;
@@ -102,15 +86,7 @@ trait ConfigTrait
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function width(): int
-    {
-        return $this->width;
-    }
-
-    protected function prepareConfiguration()
+    protected function prepareConfiguration(): void
     {
         if (null === $this->stty) {
             $this->setStty(new Stty());

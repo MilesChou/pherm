@@ -10,6 +10,8 @@ use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 
 trait IoTrait
 {
+    use IoAwareTrait;
+
     /**
      * @var Control
      */
@@ -19,16 +21,6 @@ trait IoTrait
      * @var Cursor
      */
     private $cursor;
-
-    /**
-     * @var InputStream
-     */
-    private $input;
-
-    /**
-     * @var OutputStream
-     */
-    private $output;
 
     public function clearDown()
     {
@@ -92,28 +84,6 @@ trait IoTrait
     public function setCursor(Cursor $cursor)
     {
         $this->cursor = $cursor;
-
-        return $this;
-    }
-
-    /**
-     * @param InputStream $input
-     * @return static
-     */
-    public function setInput(InputStream $input)
-    {
-        $this->input = $input;
-
-        return $this;
-    }
-
-    /**
-     * @param OutputStream $output
-     * @return static
-     */
-    public function setOutput(OutputStream $output)
-    {
-        $this->output = $output;
 
         return $this;
     }

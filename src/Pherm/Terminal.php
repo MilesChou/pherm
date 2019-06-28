@@ -211,22 +211,6 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * @return InputContract
-     */
-    public function getInput(): InputContract
-    {
-        return $this->input;
-    }
-
-    /**
-     * @return OutputContract
-     */
-    public function getOutput(): OutputContract
-    {
-        return $this->output;
-    }
-
-    /**
      * @return Key
      */
     public function keyBinding()
@@ -257,14 +241,6 @@ class Terminal implements TerminalContract
             $buffer .= $data;
         });
         return $buffer;
-    }
-
-    /**
-     * @return array [x, y]
-     */
-    public function size(): array
-    {
-        return [$this->width, $this->height];
     }
 
     public function write(string $buffer)
