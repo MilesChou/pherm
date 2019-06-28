@@ -9,10 +9,12 @@ use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Contracts\Attribute;
-use MilesChou\Pherm\Contracts\InputStream;
-use MilesChou\Pherm\Contracts\OutputStream;
+use MilesChou\Pherm\Contracts\InputStream as InputContract;
+use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
+use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Output\Attributes\Color256;
+use MilesChou\Pherm\Output\OutputStream;
 use MilesChou\Pherm\Support\Char;
 
 class Terminal implements TerminalContract
@@ -43,28 +45,31 @@ class Terminal implements TerminalContract
     private $currentBackground;
 
     /**
-     * @param InputStream|null $input
-     * @param OutputStream|null $output
+     * @param InputContract|null $input
+     * @param OutputContract|null $output
      * @param Control|null $control
      */
-    public function __construct(InputStream $input = null, OutputStream $output = null, Control $control = null)
+    public function __construct(InputContract $input = null, OutputContract $output = null, Control $control = null)
     {
-        if (null !== $input) {
-            $this->setInput($input);
+        if (null === $input) {
+            $input = new InputStream();
         }
 
-        if (null !== $output) {
-            $this->setOutput($output);
-            // TODO: Now just use Color256
-            $this->attribute = new Color256($output);
+        if (null === $output) {
+            $output = new OutputStream();
         }
 
         if (null === $control) {
             $control = new Control();
         }
 
+        $this->setInput($input);
+        $this->setOutput($output);
         $this->setControl($control);
         $this->setCursor(new Cursor($this, $control));
+
+        // TODO: Now just use Color256
+        $this->attribute = new Color256($output);
     }
 
     /**
@@ -130,6 +135,34 @@ class Terminal implements TerminalContract
     }
 
     /**
+     * @return static
+     */
+    public function disableInstantOutput()
+    {
+        $this->instantOutput = false;
+
+        if (method_exists($this->output, 'disableInstantOutput')) {
+            $this->output->disableInstantOutput();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function enableInstantOutput()
+    {
+        $this->instantOutput = true;
+
+        if (method_exists($this->output, 'enableInstantOutput')) {
+            $this->output->enableInstantOutput();
+        }
+
+        return $this;
+    }
+
+    /**
      * Flush buffer to output
      */
     public function flush(): void
@@ -173,20 +206,22 @@ class Terminal implements TerminalContract
                 $x += $w;
             }
         }
+
+        $this->output->flush();
     }
 
     /**
-     * @return InputStream
+     * @return InputContract
      */
-    public function getInput(): InputStream
+    public function getInput(): InputContract
     {
         return $this->input;
     }
 
     /**
-     * @return OutputStream
+     * @return OutputContract
      */
-    public function getOutput(): OutputStream
+    public function getOutput(): OutputContract
     {
         return $this->output;
     }

@@ -30,10 +30,15 @@ class BufferedOutput implements OutputStream
         $buffer = $this->buffer;
 
         if ($clean) {
-            $this->buffer = '';
+            $this->flush();
         }
 
         return $buffer;
+    }
+
+    public function flush(): void
+    {
+        $this->buffer = '';
     }
 
     public function isEmpty(): bool

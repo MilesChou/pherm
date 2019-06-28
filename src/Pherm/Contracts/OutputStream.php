@@ -5,6 +5,11 @@ namespace MilesChou\Pherm\Contracts;
 interface OutputStream
 {
     /**
+     * Flush the buffer to output stream
+     */
+    public function flush(): void;
+
+    /**
      * Whether the stream is connected to an interactive terminal
      *
      * @return bool

@@ -3,6 +3,7 @@
 namespace MilesChou\Pherm\Output;
 
 use InvalidArgumentException;
+use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Contracts\OutputStream as OutputStreamContract;
 use function get_resource_type;
 use function is_resource;
@@ -11,6 +12,13 @@ use function strpos;
 
 class OutputStream implements OutputStreamContract
 {
+    use InstantOutputTrait;
+
+    /**
+     * @var string
+     */
+    private $buffer = '';
+
     /**
      * @var resource
      */
@@ -30,6 +38,13 @@ class OutputStream implements OutputStreamContract
         $this->stream = $stream;
     }
 
+    public function flush(): void
+    {
+        fwrite($this->stream, $this->buffer);
+
+        $this->buffer = '';
+    }
+
     public function isInteractive(): bool
     {
         return posix_isatty($this->stream);
@@ -37,6 +52,10 @@ class OutputStream implements OutputStreamContract
 
     public function write(string $buffer): void
     {
-        fwrite($this->stream, $buffer);
+        $this->buffer .= $buffer;
+
+        if ($this->isInstantOutput()) {
+            $this->flush();
+        }
     }
 }
