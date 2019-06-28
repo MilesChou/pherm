@@ -15,17 +15,23 @@ use OutOfRangeException;
  * @property-read string $cr Carriage Return
  * @property-read string $can Cancel
  * @property-read string $esc Escape
+ * @property-read string $cpr Cursor Position Report
  * @property-read string $cuu Cursor Up
  * @property-read string $cud Cursor Down
  * @property-read string $cuf Cursor Forward
  * @property-read string $cub Cursor Backward
+ * @property-read string $dsr Device Status Report
  * @property-read string $ed Erase in Display
  * @property-read string $rcp
  * @property-read string $scp
+ *
+ * @see https://www.xfree86.org/current/ctlseqs.html
  */
 class Control
 {
     /**
+     * SGR parameters
+     *
      * array key is mnemonic and value is character
      *
      * @see https://en.wikipedia.org/wiki/Control_character
@@ -43,14 +49,18 @@ class Control
     ];
 
     /**
+     * CSI sequences
+     *
      * array key is mnemonic and value is control sequences
      */
     public const CONTROL_SEQUENCES = [
+        'CPR' => "\033[%d;%dR",
         'CUU' => "\033[A",
         'CUD' => "\033[B",
         'CUF' => "\033[C",
         'CUB' => "\033[D",
         'CUP' => "\033[%d;%dH",
+        'DSR' => "\033[6n",
         'ED' => "\033[2J",
         'HVP' => "\033[%d;%df",
         'RCP' => "\033[u",
@@ -103,6 +113,8 @@ class Control
 
     /**
      * Horz & Vertical Position
+     *
+     * Same as CUP
      *
      * @param int $row
      * @param int $col

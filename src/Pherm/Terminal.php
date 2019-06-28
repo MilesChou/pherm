@@ -125,6 +125,14 @@ class Terminal implements TerminalContract
     }
 
     /**
+     * @return InputStream
+     */
+    public function getInput(): InputStream
+    {
+        return $this->input;
+    }
+
+    /**
      * @return OutputStream
      */
     public function getOutput(): OutputStream

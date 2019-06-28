@@ -11,32 +11,46 @@ $terminal = (new Terminal(new InputStream(), new OutputStream()))
     ->bootstrap();
 
 $terminal->clear()->cursor()->center();
-
 sleep(1);
-$terminal->moveCursor()->top()->write('1');
 
+$terminal->moveCursor()->top();
+$terminal->write(implode(',', $terminal->cursor()->current()));
 sleep(1);
-$terminal->moveCursor()->top($terminal->width() / 2)->write('2');
 
+$terminal->moveCursor()->top($terminal->width() / 2);
+$str = implode(',', $terminal->cursor()->current());
+$terminal->moveCursor()->top($terminal->width() / 2 - strlen($str) / 2)->write($str);
 sleep(1);
-$terminal->moveCursor()->top($terminal->width())->write('3');
 
+$terminal->moveCursor()->top($terminal->width());
+$str = implode(',', $terminal->cursor()->current());
+$terminal->moveCursor()->top($terminal->width() - strlen($str) + 1)->write($str);
 sleep(1);
-$terminal->moveCursor()->middle()->write('4');
 
+$terminal->moveCursor()->middle();
+$terminal->write(implode(',', $terminal->cursor()->current()));
 sleep(1);
-$terminal->moveCursor()->center()->write('5');
 
+$terminal->moveCursor()->center();
+$str = implode(',', $terminal->cursor()->current());
+$terminal->moveCursor()->center(-(strlen($str) / 2))->write($str);
 sleep(1);
-$terminal->moveCursor()->middle($terminal->width())->write('6');
 
+$terminal->moveCursor()->middle($terminal->width());
+$str = implode(',', $terminal->cursor()->current());
+$terminal->moveCursor()->middle($terminal->width() - strlen($str) + 1)->write($str);
 sleep(1);
-$terminal->moveCursor()->bottom()->write('7');
 
+$terminal->moveCursor()->bottom();
+$terminal->write(implode(',', $terminal->cursor()->current()));
 sleep(1);
-$terminal->moveCursor()->bottom($terminal->width() / 2)->write('8');
 
+$terminal->moveCursor()->bottom($terminal->width() / 2);
+$str = implode(',', $terminal->cursor()->current());
+$terminal->moveCursor()->bottom($terminal->width() / 2 - strlen($str) / 2)->write($str);
 sleep(1);
-$terminal->moveCursor()->end()->write('9');
 
+$terminal->moveCursor()->end();
+$str = implode(',', $terminal->cursor()->current());
+$terminal->moveCursor()->end(strlen($str) -1)->write($str);
 sleep(1);

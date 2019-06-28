@@ -140,6 +140,11 @@ interface Terminal
     public function isInstantOutput(): bool;
 
     /**
+     * @return InputStream
+     */
+    public function getInput(): InputStream;
+
+    /**
      * @return OutputStream
      */
     public function getOutput(): OutputStream;

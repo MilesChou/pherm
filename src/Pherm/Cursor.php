@@ -60,6 +60,43 @@ class Cursor implements CursorContract
         return $this->move($column, 1);
     }
 
+    public function current(): array
+    {
+        // store state
+        $icanon = $this->terminal->isCanonicalMode();
+        $echo = $this->terminal->isEchoBack();
+
+        if ($icanon) {
+            $this->terminal->disableCanonicalMode();
+        }
+
+        if ($echo) {
+            $this->terminal->disableEchoBack();
+        }
+
+        fwrite(STDOUT, $this->control->dsr);
+
+        // 16 is work when return "\033[xxx;xxxH"
+        if (!$cpr = fread(STDIN, 16)) {
+            return [-1, -1];
+        }
+
+        // restore state
+        if ($icanon) {
+            $this->terminal->enableCanonicalMode();
+        }
+
+        if ($echo) {
+            $this->terminal->enableEchoBack();
+        }
+
+        if (sscanf(trim($cpr), $this->control->cpr, $row, $col) === 2) {
+            return [$col, $row];
+        }
+
+        return [-1, -1];
+    }
+
     public function end(int $backwardColumn = 0, int $backwardRow = 0): Terminal
     {
         return $this->move(

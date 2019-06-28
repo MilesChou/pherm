@@ -49,6 +49,11 @@ interface Cursor
     public function column(int $column): Terminal;
 
     /**
+     * @return array [x, y]
+     */
+    public function current(): array;
+
+    /**
      * Move the cursor to the bottom right of the window
      *
      * @param int $backwardColumn
