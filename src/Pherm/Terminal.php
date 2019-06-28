@@ -7,9 +7,11 @@ use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
+use MilesChou\Pherm\Contracts\Attribute;
 use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
+use MilesChou\Pherm\Output\Attributes\Color256;
 
 class Terminal implements TerminalContract
 {
@@ -17,6 +19,16 @@ class Terminal implements TerminalContract
     use ConfigTrait;
     use InstantOutputTrait;
     use IoTrait;
+
+    /**
+     * @var Attribute
+     */
+    private $attribute;
+
+    /**
+     * @var Control
+     */
+    private $control;
 
     /**
      * @var int
@@ -34,11 +46,6 @@ class Terminal implements TerminalContract
     private $keyBinding;
 
     /**
-     * @var Control
-     */
-    private $control;
-
-    /**
      * @param InputStream|null $input
      * @param OutputStream|null $output
      * @param Control|null $control
@@ -51,6 +58,8 @@ class Terminal implements TerminalContract
 
         if (null !== $output) {
             $this->setOutput($output);
+            // TODO: Now just use Color256
+            $this->attribute = new Color256($output);
         }
 
         if (null === $control) {

@@ -5,7 +5,7 @@ namespace Tests\Pherm\Exceptions;
 use MilesChou\Pherm\Concerns\BufferTrait;
 use Tests\TestCase;
 
-class CellsTraitTest extends TestCase
+class BufferTraitTest extends TestCase
 {
     /**
      * @var BufferTrait|\PHPUnit\Framework\MockObject\MockObject

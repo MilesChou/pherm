@@ -36,6 +36,16 @@ class BufferedOutput implements OutputStream
         return $buffer;
     }
 
+    public function isEmpty(): bool
+    {
+        return '' === $this->buffer;
+    }
+
+    public function isInteractive(): bool
+    {
+        return $this->interactive;
+    }
+
     /**
      * @param bool $value
      * @return static
@@ -47,9 +57,9 @@ class BufferedOutput implements OutputStream
         return $this;
     }
 
-    public function isInteractive(): bool
+    public function toByteArray()
     {
-        return $this->interactive;
+        return array_map('ord', str_split($this->buffer));
     }
 
     public function write(string $buffer): void

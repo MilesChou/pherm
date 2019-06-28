@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class BufferedOutputTest extends TestCase
 {
-    public function testFetch() : void
+    public function testFetch(): void
     {
         $output = new BufferedOutput;
         $output->write('one');
@@ -15,7 +15,7 @@ class BufferedOutputTest extends TestCase
         $this->assertSame('one', $output->fetch());
     }
 
-    public function testFetchWithMultipleWrites() : void
+    public function testFetchWithMultipleWrites(): void
     {
         $output = new BufferedOutput;
         $output->write('one');
@@ -24,7 +24,7 @@ class BufferedOutputTest extends TestCase
         $this->assertSame('onetwo', $output->fetch());
     }
 
-    public function testFetchCleansBufferByDefault() : void
+    public function testFetchCleansBufferByDefault(): void
     {
         $output = new BufferedOutput;
         $output->write('one');
@@ -33,7 +33,7 @@ class BufferedOutputTest extends TestCase
         $this->assertSame('', $output->fetch());
     }
 
-    public function testFetchWithoutCleaning() : void
+    public function testFetchWithoutCleaning(): void
     {
         $output = new BufferedOutput;
         $output->write('one');
@@ -45,11 +45,22 @@ class BufferedOutputTest extends TestCase
         $this->assertSame('onetwo', $output->fetch(false));
     }
 
-    public function testToString() : void
+    public function testToString(): void
     {
         $output = new BufferedOutput;
         $output->write('one');
 
-        $this->assertSame('one', (string) $output);
+        $this->assertSame('one', (string)$output);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSeeByteWhenCallToByteArray(): void
+    {
+        $output = new BufferedOutput;
+        $output->write("\033");
+
+        $this->assertSame([033], $output->toByteArray());
     }
 }
