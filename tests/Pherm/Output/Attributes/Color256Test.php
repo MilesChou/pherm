@@ -42,7 +42,7 @@ class Color256Test extends TestCase
         /** @var BufferedOutput $output */
         $output = $this->target->getOutput();
 
-        $this->assertStringStartsWith("\033[m\017", $output->fetch());
+        $this->assertStringStartsWith("\033[m", $output->fetch());
     }
 
     /**
@@ -55,7 +55,7 @@ class Color256Test extends TestCase
         /** @var BufferedOutput $output */
         $output = $this->target->getOutput();
 
-        $this->assertStringStartsWith("\033[m\017", $output->fetch());
+        $this->assertStringStartsWith("\033[m", $output->fetch());
     }
 
     /**
