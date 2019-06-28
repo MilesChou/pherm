@@ -81,7 +81,7 @@ class CellBuffer
     {
         $this->width = $width;
         $this->height = $height;
-        $this->cells = array_fill(0, $width * $height, []);
+        $this->cells = array_fill(0, $width * $height, [' ', null, null]);
     }
 
     /**

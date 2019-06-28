@@ -17,7 +17,7 @@ class CellBufferTest extends TestCase
         $this->assertSame(10, $target->width());
         $this->assertSame(20, $target->height());
         $this->assertCount(200, $target->cells);
-        $this->assertSame([], $target->cells[0]);
+        $this->assertSame([' ', null, null], $target->cells[0]);
     }
 
     /**

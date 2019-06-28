@@ -134,13 +134,44 @@ class Terminal implements TerminalContract
      */
     public function flush(): void
     {
-        foreach ($this->getBuffer() as $index => $cell) {
-            $y = (int)($index / $this->width);
-            $x = $index % $this->width;
+        for ($y = 0; $y < $this->frontBuffer->height(); $y++) {
+            $lineOffset = $y * $this->frontBuffer->width();
+            for ($x = 0; $x < $this->frontBuffer->width();) {
+                $cellOffset = $lineOffset + $x;
+                $back = $this->backBuffer->cells[$cellOffset];
 
-            $this->cursor->moveInstant($x + 1, $y + 1);
-            $this->attribute->send($cell[1], $cell[2]);
-            $this->output->write($cell[0]);
+                if ($back[0] < ' ') {
+                    $back[0] = ' ';
+                }
+
+                $w = Char::width($back[0]);
+
+                if ($back === $this->frontBuffer->cells[$cellOffset]) {
+                    $x += $w;
+                    continue;
+                }
+
+                $this->frontBuffer->cells[$cellOffset] = $back;
+
+                $this->attribute->send($back[1], $back[2]);
+
+                if ($w === 2 && $x === $this->frontBuffer->width() - 1) {
+                    $this->output->write(' ');
+                } else {
+                    $this->cursor->moveInstant($x + 1, $y + 1);
+                    $this->output->write($back[0]);
+                    if ($w === 2) {
+                        $next = $cellOffset + 1;
+                        $this->frontBuffer->cells[$next] = [
+                            "\0",
+                            $back[1],
+                            $back[2],
+                        ];
+                    }
+                }
+
+                $x += $w;
+            }
         }
     }
 
