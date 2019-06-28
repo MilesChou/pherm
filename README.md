@@ -15,13 +15,14 @@ Hello world example:
 
 ```php
 $terminal = (new Terminal(new InputStream(), new OutputStream()))
+    ->enableInstantOutput()
     ->bootstrap();
 
 $terminal->clear();
 
 $str = 'Hello world!';
 
-$terminal->move()->center(-(mb_strlen($str) / 2))
-    ->write('Hello world!')
-    ->move()->down();
+$terminal->moveCursor()->center(-(mb_strlen($str) / 2))->write($str);
+
+$terminal->moveCursor()->bottom();
 ```
