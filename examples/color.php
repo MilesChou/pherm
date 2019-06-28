@@ -7,14 +7,12 @@ use MilesChou\Pherm\Terminal;
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $terminal = (new Terminal(new InputStream(), new OutputStream()))
-    ->enableInstantOutput()
     ->bootstrap();
 
 $terminal->clear();
 $terminal->moveCursor()->top();
 
-$str = 'Hello world!';
-
+$str = 'Hello 世界!';
 
 $payload = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -27,3 +25,5 @@ foreach (range(16, 231) as $i => $bg) {
 }
 
 $terminal->moveCursor()->center(-(mb_strlen($str) / 2))->write($str);
+
+$terminal->flush();

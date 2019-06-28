@@ -127,12 +127,12 @@ interface Terminal
     /**
      * Write to the output stream on specific cursor
      *
-     * @param int $row
-     * @param int $column
+     * @param int $x
+     * @param int $y
      * @param string $buffer
      * @return static
      */
-    public function writeCursor(int $row, int $column, string $buffer);
+    public function writeCursor(int $x, int $y, string $buffer);
 
     /**
      * @return bool

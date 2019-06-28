@@ -2,6 +2,7 @@
 
 namespace MilesChou\Pherm;
 
+use InvalidArgumentException;
 use MilesChou\Pherm\Binding\Key;
 use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
@@ -12,6 +13,7 @@ use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
 use MilesChou\Pherm\Output\Attributes\Color256;
+use MilesChou\Pherm\Support\Char;
 
 class Terminal implements TerminalContract
 {
@@ -29,6 +31,16 @@ class Terminal implements TerminalContract
      * @var Key
      */
     private $keyBinding;
+
+    /**
+     * @var int|null
+     */
+    private $currentForeground;
+
+    /**
+     * @var int|null
+     */
+    private $currentBackground;
 
     /**
      * @param InputStream|null $input
@@ -64,7 +76,12 @@ class Terminal implements TerminalContract
      */
     public function attribute(?int $foreground = null, ?int $background = null)
     {
-        $this->attribute->send($foreground, $background);
+        if ($this->isInstantOutput()) {
+            $this->attribute->send($foreground, $background);
+        } else {
+            $this->currentForeground = $foreground;
+            $this->currentBackground = $background;
+        }
 
         return $this;
     }
@@ -95,6 +112,9 @@ class Terminal implements TerminalContract
         // Clear backend buffer
         $this->backBuffer->clear($fg, $bg);
 
+        // Reset cursor
+        $this->cursor->position(1, 1);
+
         return $this;
     }
 
@@ -118,9 +138,9 @@ class Terminal implements TerminalContract
             $y = (int)($index / $this->width);
             $x = $index % $this->width;
 
-            $this->cursor($x + 1, $y + 1);
-            $this->attribute($cell[1], $cell[2]);
-            $this->write($cell[0]);
+            $this->cursor->moveInstant($x + 1, $y + 1);
+            $this->attribute->send($cell[1], $cell[2]);
+            $this->output->write($cell[0]);
         }
     }
 
@@ -183,15 +203,63 @@ class Terminal implements TerminalContract
 
     public function write(string $buffer)
     {
-        $this->output->write($buffer);
+        if ($this->isInstantOutput()) {
+            $this->output->write($buffer);
+        } else {
+            foreach (Char::charsToArray($buffer) as $char) {
+                $this->writeChar($char);
+            }
+        }
+    }
+
+    /**
+     * @param string $char
+     * @return static
+     */
+    public function writeChar(string $char)
+    {
+        if (mb_strlen($char) > 1) {
+            throw new InvalidArgumentException('Char must be only one mbstring');
+        }
+
+        if ($this->isInstantOutput()) {
+            $this->output->write($char);
+        } else {
+            [$x, $y] = $this->cursor->last();
+
+            if ($char === "\n") {
+                if ($y + 1 > $this->height) {
+                    return $this;
+                }
+                $this->cursor->position(1, $y + 1);
+
+                return $this;
+            }
+
+            $this->backBuffer->set($x, $y, $char, $this->currentForeground, $this->currentBackground);
+
+            if ($x + 1 > $this->width) {
+                if ($y + 1 > $this->height) {
+                    return $this;
+                }
+                $x = 0;
+                $y++;
+            }
+
+            $this->cursor->position($x + 1, $y);
+        }
 
         return $this;
     }
 
-    public function writeCursor(int $column, int $row, string $buffer)
+    public function writeCursor(int $x, int $y, string $buffer)
     {
-        $this->cursor->move($column, $row);
-        $this->output->write($buffer);
+        if ($this->isInstantOutput()) {
+            $this->cursor->move($x, $y);
+            $this->output->write($buffer);
+        } else {
+            $this->backBuffer->set($x, $y, $buffer, $this->currentForeground, $this->currentBackground);
+        }
 
         return $this;
     }

@@ -42,22 +42,22 @@ class Cursor implements CursorContract
         }
     }
 
-    public function bottom(int $column = 1): Terminal
+    public function bottom(int $x = 1): Terminal
     {
-        return $this->move($column, $this->terminal->height());
+        return $this->move($x, $this->terminal->height());
     }
 
-    public function center(int $deltaColumn = 0, int $deltaRow = 0): Terminal
+    public function center(int $deltaX = 0, int $deltaY = 0): Terminal
     {
         return $this->move(
-            (int)($this->terminal->width() / 2) + $deltaColumn,
-            (int)($this->terminal->height() / 2) + $deltaRow
+            (int)($this->terminal->width() / 2) + $deltaX,
+            (int)($this->terminal->height() / 2) + $deltaY
         );
     }
 
-    public function column(int $column): Terminal
+    public function column(int $x): Terminal
     {
-        return $this->move($column, 1);
+        return $this->move($x, 1);
     }
 
     public function current(): array
@@ -97,11 +97,11 @@ class Cursor implements CursorContract
         return [-1, -1];
     }
 
-    public function end(int $backwardColumn = 0, int $backwardRow = 0): Terminal
+    public function end(int $backwardX = 0, int $backwardY = 0): Terminal
     {
         return $this->move(
-            $this->terminal->width() - $backwardColumn,
-            $this->terminal->height() - $backwardRow
+            $this->terminal->width() - $backwardX,
+            $this->terminal->height() - $backwardY
         );
     }
 
@@ -110,23 +110,55 @@ class Cursor implements CursorContract
         return [$this->x, $this->y];
     }
 
-    public function middle(int $column = 1): Terminal
+    public function middle(int $x = 1): Terminal
     {
-        return $this->move($column, $this->terminal->height() / 2);
+        return $this->move($x, $this->terminal->height() / 2);
     }
 
-    public function move(int $column, int $row): Terminal
+    public function move(int $x, int $y): Terminal
     {
-        $this->position($column, $row);
-
         if ($this->terminal->isInstantOutput()) {
-            $this->terminal->getOutput()->write($this->control->cup($row, $column));
+            $this->checkPosition($x, $y);
+            $this->moveInstant($x, $y);
+        } else {
+            $this->position($x, $y);
         }
 
         return $this->terminal;
     }
 
+    public function moveInstant(int $x, int $y): Terminal
+    {
+        $this->terminal->getOutput()->write($this->control->cup($y, $x));
+
+        return $this->terminal;
+    }
+
     public function position(int $x, int $y)
+    {
+        $this->checkPosition($x, $y);
+
+        $this->x = $x;
+        $this->y = $y;
+
+        return $this;
+    }
+
+    public function row(int $y): Terminal
+    {
+        return $this->move(1, $y);
+    }
+
+    public function top(int $x = 1): Terminal
+    {
+        return $this->move($x, 1);
+    }
+
+    /**
+     * @param int $x
+     * @param int $y
+     */
+    private function checkPosition(int $x, int $y): void
     {
         [$sizeX, $sizeY] = $this->terminal->size();
 
@@ -137,20 +169,5 @@ class Cursor implements CursorContract
         if ($y < 1 || $y > $sizeY) {
             throw new OverflowException("Y expect in range 1 to $sizeY, actual is '$y'");
         }
-
-        $this->x = $x;
-        $this->y = $y;
-
-        return $this;
-    }
-
-    public function row(int $row): Terminal
-    {
-        return $this->move(1, $row);
-    }
-
-    public function top(int $column = 1): Terminal
-    {
-        return $this->move($column, 1);
     }
 }

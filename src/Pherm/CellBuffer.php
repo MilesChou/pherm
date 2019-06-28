@@ -131,11 +131,11 @@ class CellBuffer
      * @param int $x
      * @param int $y
      * @param string $char
-     * @param int $fg
-     * @param int $bg
+     * @param int|null $fg
+     * @param int|null $bg
      * @return static
      */
-    public function set(int $x, int $y, string $char, int $fg, int $bg)
+    public function set(int $x, int $y, string $char, ?int $fg, ?int $bg)
     {
         return $this->setCell($x, $y, [$char, $fg, $bg]);
     }
