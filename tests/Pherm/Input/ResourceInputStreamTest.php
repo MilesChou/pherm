@@ -7,21 +7,21 @@ use Tests\TestCase;
 
 class ResourceInputStreamTest extends TestCase
 {
-    public function testNonStream() : void
+    public function testNonStream(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a valid stream');
         new InputStream(42);
     }
 
-    public function testNotReadable() : void
+    public function testNotReadable(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a readable stream');
         new InputStream(\STDOUT);
     }
 
-    public function testRead() : void
+    public function testRead(): void
     {
         $stream = fopen('php://memory', 'r+');
         fwrite($stream, '1234');

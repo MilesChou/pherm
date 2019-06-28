@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Pherm;
 
 use MilesChou\Pherm\InputCharacter;
 use Tests\TestCase;
 
 class InputCharacterTest extends TestCase
 {
-    public function testWhenCharacterIsAControl() : void
+    public function testWhenCharacterIsAControl(): void
     {
         $char = new InputCharacter("\n");
 
@@ -19,7 +19,7 @@ class InputCharacterTest extends TestCase
         $this->assertSame("\n", $char->__toString());
     }
 
-    public function testWhenCharacterIsNotAControl() : void
+    public function testWhenCharacterIsNotAControl(): void
     {
         $char = new InputCharacter('p');
 
@@ -30,7 +30,7 @@ class InputCharacterTest extends TestCase
         $this->assertSame('p', $char->__toString());
     }
 
-    public function testExceptionIsThrownIfGetControlCalledWhenNotAControl() : void
+    public function testExceptionIsThrownIfGetControlCalledWhenNotAControl(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Character "p" is not a control');
@@ -39,7 +39,7 @@ class InputCharacterTest extends TestCase
         $char->getControl();
     }
 
-    public function testGetControls() : void
+    public function testGetControls(): void
     {
         $this->assertSame(
             [
@@ -61,7 +61,7 @@ class InputCharacterTest extends TestCase
         );
     }
 
-    public function testFromControlNameThrowsExceptionIfControlDoesNotExist() : void
+    public function testFromControlNameThrowsExceptionIfControlDoesNotExist(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Control "w" does not exist');
@@ -69,7 +69,7 @@ class InputCharacterTest extends TestCase
         InputCharacter::fromControlName('w');
     }
 
-    public function testFromControlName() : void
+    public function testFromControlName(): void
     {
         $char = InputCharacter::fromControlName(InputCharacter::UP);
 
@@ -78,13 +78,13 @@ class InputCharacterTest extends TestCase
         $this->assertSame("\033[A", $char->get());
     }
 
-    public function testControlExists() : void
+    public function testControlExists(): void
     {
         $this->assertTrue(InputCharacter::controlExists(InputCharacter::UP));
         $this->assertFalse(InputCharacter::controlExists('w'));
     }
 
-    public function testIsControlOnNotExplicitlyHandledControls() : void
+    public function testIsControlOnNotExplicitlyHandledControls(): void
     {
         $char = new InputCharacter("\016"); //ctrl + p (I think)
 
@@ -97,7 +97,7 @@ class InputCharacterTest extends TestCase
         $this->assertFalse($char->isHandledControl());
     }
 
-    public function testUnicodeCharacter() : void
+    public function testUnicodeCharacter(): void
     {
         $char = new InputCharacter('ß');
 

@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
 use MilesChou\Pherm\Input\StringInput;
 use MilesChou\Pherm\Output\BufferedOutput;
 use MilesChou\Pherm\Stty;

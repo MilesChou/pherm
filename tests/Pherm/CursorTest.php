@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Pherm;
 
 use MilesChou\Pherm\Contracts\Cursor;
 use Tests\TestCase;

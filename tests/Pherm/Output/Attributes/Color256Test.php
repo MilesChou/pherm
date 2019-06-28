@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Pherm\Output;
+namespace Tests\Pherm\Output\Attributes;
 
 use MilesChou\Pherm\Output\Attributes\Color256;
 use MilesChou\Pherm\Output\BufferedOutput;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Pherm;
 
 use InvalidArgumentException;
+use MilesChou\Pherm\Contracts\Terminal;
 use MilesChou\Pherm\InputCharacter;
 use MilesChou\Pherm\NonCanonicalReader;
-use MilesChou\Pherm\Contracts\Terminal;
 use Tests\TestCase;
 
 class NonCanonicalReaderTest extends TestCase

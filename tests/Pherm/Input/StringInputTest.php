@@ -2,7 +2,6 @@
 
 namespace Tests\Pherm\Input;
 
-use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Input\StringInput;
 use Tests\TestCase;
 
@@ -11,7 +10,7 @@ class StringInputTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeOkayWhenRead() : void
+    public function shouldBeOkayWhenRead(): void
     {
         $target = new StringInput();
         $target->input('中文');

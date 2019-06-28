@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Binding;
+namespace Tests\Pherm\Binding;
 
 use MilesChou\Pherm\Binding\Key;
 use MilesChou\Pherm\Output\BufferedOutput;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Pherm\Exceptions;
+namespace Tests\Pherm\Concerns;
 
 use MilesChou\Pherm\Concerns\BufferTrait;
 use Tests\TestCase;

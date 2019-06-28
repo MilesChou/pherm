@@ -2,11 +2,11 @@
 
 namespace MilesChou\Pherm\Concerns;
 
+use MilesChou\Pherm\Contracts\InputStream;
+use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Control;
 use MilesChou\Pherm\Cursor;
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
-use MilesChou\Pherm\Contracts\InputStream;
-use MilesChou\Pherm\Contracts\OutputStream;
 
 trait IoTrait
 {
