@@ -185,7 +185,7 @@ class TerminalTest extends TestCase
         $this->target->setOutput($output)
             ->setStty($this->createSttyMock())
             ->bootstrap()
-            ->move()->top();
+            ->moveCursor()->top();
 
         $this->assertSame("\033[1;1H", $output->fetch());
     }
@@ -200,7 +200,7 @@ class TerminalTest extends TestCase
         $this->target->setOutput($output)
             ->setStty($this->createSttyMock())
             ->bootstrap()
-            ->move()->end();
+            ->moveCursor()->end();
 
         $this->assertSame("\033[24;80H", $output->fetch());
     }
@@ -212,7 +212,7 @@ class TerminalTest extends TestCase
         $this->target->setOutput($output)
             ->setStty($this->createSttyMock())
             ->bootstrap()
-            ->move()->row(2);
+            ->moveCursor()->row(2);
 
         $this->assertSame("\033[2;1H", $output->fetch());
     }
@@ -224,7 +224,7 @@ class TerminalTest extends TestCase
         $this->target->setOutput($output)
             ->setStty($this->createSttyMock())
             ->bootstrap()
-            ->move()->column(10);
+            ->moveCursor()->column(10);
 
         $this->assertSame("\033[1;10H", $output->fetch());
     }
@@ -239,7 +239,7 @@ class TerminalTest extends TestCase
         $this->target->setOutput($output)
             ->setStty($this->createSttyMock())
             ->bootstrap()
-            ->move(10, 20);
+            ->moveCursor(10, 20);
 
         $this->assertSame("\033[20;10H", $output->fetch());
     }

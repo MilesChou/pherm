@@ -6,15 +6,6 @@ use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\Terminal;
 use OverflowException;
 
-/**
- * @method Terminal bottom(int $column = 1)
- * @method Terminal center(int $deltaColumn = 1, int $deltaRow = 1)
- * @method Terminal column(int $column)
- * @method Terminal end(int $backwardColumn = 1, int $backwardRow = 1)
- * @method Terminal middle(int $column = 1)
- * @method Terminal row(int $row)
- * @method Terminal top(int $column = 1)
- */
 class Cursor implements CursorContract
 {
     use TerminalAwareTrait;
@@ -51,9 +42,40 @@ class Cursor implements CursorContract
         }
     }
 
+    public function bottom(int $column = 1): Terminal
+    {
+        return $this->move($column, $this->terminal->height());
+    }
+
+    public function center(int $deltaColumn = 0, int $deltaRow = 0): Terminal
+    {
+        return $this->move(
+            (int)($this->terminal->width() / 2) + $deltaColumn,
+            (int)($this->terminal->height() / 2) + $deltaRow
+        );
+    }
+
+    public function column(int $column): Terminal
+    {
+        return $this->move($column, 1);
+    }
+
+    public function end(int $backwardColumn = 0, int $backwardRow = 0): Terminal
+    {
+        return $this->move(
+            $this->terminal->width() - $backwardColumn,
+            $this->terminal->height() - $backwardRow
+        );
+    }
+
     public function last(): array
     {
         return [$this->x, $this->y];
+    }
+
+    public function middle(int $column = 1): Terminal
+    {
+        return $this->move($column, $this->terminal->height() / 2);
     }
 
     public function move(int $column, int $row): Terminal
@@ -65,47 +87,6 @@ class Cursor implements CursorContract
         }
 
         return $this->terminal;
-    }
-
-    public function moveBottom(int $column = 1): Terminal
-    {
-        return $this->move($column, $this->terminal->height());
-    }
-
-    public function moveCenter(int $deltaColumn = 0, int $deltaRow = 0): Terminal
-    {
-        return $this->move(
-            (int)($this->terminal->width() / 2) + $deltaColumn,
-            (int)($this->terminal->height() / 2) + $deltaRow
-        );
-    }
-
-    public function moveColumn(int $column): Terminal
-    {
-        return $this->move($column, 1);
-    }
-
-    public function moveEnd(int $backwardColumn = 0, int $backwardRow = 0): Terminal
-    {
-        return $this->move(
-            $this->terminal->width() - $backwardColumn,
-            $this->terminal->height() - $backwardRow
-        );
-    }
-
-    public function moveMiddle(int $column = 1): Terminal
-    {
-        return $this->move($column, $this->terminal->height() / 2);
-    }
-
-    public function moveRow(int $row): Terminal
-    {
-        return $this->move(1, $row);
-    }
-
-    public function moveTop(int $column = 1): Terminal
-    {
-        return $this->move($column, 1);
     }
 
     public function position(int $x, int $y)
@@ -124,5 +105,15 @@ class Cursor implements CursorContract
         $this->y = $y;
 
         return $this;
+    }
+
+    public function row(int $row): Terminal
+    {
+        return $this->move(1, $row);
+    }
+
+    public function top(int $column = 1): Terminal
+    {
+        return $this->move($column, 1);
     }
 }

@@ -29,7 +29,7 @@ interface Cursor
      * @param int $column
      * @return Terminal
      */
-    public function moveBottom(int $column = 1): Terminal;
+    public function bottom(int $column = 1): Terminal;
 
     /**
      * Move the cursor to the center of the window
@@ -38,7 +38,7 @@ interface Cursor
      * @param int $deltaRow
      * @return Terminal
      */
-    public function moveCenter(int $deltaColumn = 0, int $deltaRow = 0): Terminal;
+    public function center(int $deltaColumn = 0, int $deltaRow = 0): Terminal;
 
     /**
      * Move the cursor to a specific column
@@ -46,7 +46,7 @@ interface Cursor
      * @param int $column
      * @return Terminal
      */
-    public function moveColumn(int $column): Terminal;
+    public function column(int $column): Terminal;
 
     /**
      * Move the cursor to the bottom right of the window
@@ -55,7 +55,7 @@ interface Cursor
      * @param int $backwardRow
      * @return Terminal
      */
-    public function moveEnd(int $backwardColumn = 0, int $backwardRow = 0): Terminal;
+    public function end(int $backwardColumn = 0, int $backwardRow = 0): Terminal;
 
     /**
      * Move the cursor to the middle of the window
@@ -63,7 +63,7 @@ interface Cursor
      * @param int $column
      * @return Terminal
      */
-    public function moveMiddle(int $column = 1): Terminal;
+    public function middle(int $column = 1): Terminal;
 
     /**
      * Move the cursor to the start of a specific row
@@ -71,7 +71,7 @@ interface Cursor
      * @param int $row
      * @return Terminal
      */
-    public function moveRow(int $row): Terminal;
+    public function row(int $row): Terminal;
 
     /**
      * Move the cursor to the top left of the window
@@ -79,7 +79,7 @@ interface Cursor
      * @param int $column
      * @return Terminal
      */
-    public function moveTop(int $column = 1): Terminal;
+    public function top(int $column = 1): Terminal;
 
     /**
      * @param int $x

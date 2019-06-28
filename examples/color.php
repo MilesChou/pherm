@@ -13,7 +13,7 @@ $terminal->clear();
 
 $str = 'Hello world!';
 
-$terminal->move()->top();
+$terminal->moveCursor()->top();
 
 $payload = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -25,4 +25,4 @@ foreach (range(16, 231) as $i => $bg) {
     }
 }
 
-$terminal->move()->center(-(mb_strlen($str) / 2))->write($str);
+$terminal->moveCursor()->center(-(mb_strlen($str) / 2))->write($str);

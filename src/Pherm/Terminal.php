@@ -31,6 +31,11 @@ class Terminal implements TerminalContract
     private $control;
 
     /**
+     * @var Cursor
+     */
+    private $cursor;
+
+    /**
      * @var Key
      */
     private $keyBinding;
@@ -53,8 +58,11 @@ class Terminal implements TerminalContract
         }
 
         if (null === $control) {
-            $this->control = new Control();
+            $control = new Control();
         }
+
+        $this->control = $control;
+        $this->cursor = new Cursor($this, $this->control);
     }
 
     public function attribute(?int $foreground = null, ?int $background = null)
@@ -78,37 +86,41 @@ class Terminal implements TerminalContract
     /**
      * Clear screen and buffer
      *
+     * @param int|null $fg
+     * @param int|null $bg
      * @return static
      */
-    public function clear()
+    public function clear(?int $fg = null, ?int $bg = null)
     {
         // Clear terminal
         $this->output->write("\033[2J");
 
-        // Clear buffer
-        $this->backBuffer->clear();
-        $this->frontBuffer->clear();
+        // Clear backend buffer
+        $this->backBuffer->clear($fg, $bg);
 
         return $this;
     }
 
     /**
-     * @return Cursor
+     * Alias for moveCursor()
+     *
+     * @param array<int, mixed> $args
+     * @return Cursor|TerminalContract
      */
-    public function cursor(): Cursor
+    public function cursor(...$args)
     {
-        return new Cursor($this, $this->control);
+        return $this->moveCursor(...$args);
     }
 
-    public function flushCells(): void
+    public function flush(): void
     {
-        [$sizeX, $siezY] = $this->size();
-
         foreach ($this->getBuffer() as $index => $cell) {
-            $y = (int)($index / $sizeX);
-            $x = $index % $sizeX;
+            $y = (int)($index / $this->width);
+            $x = $index % $this->width;
 
-            $this->writeCursor($x, $y, $cell[0] ?? ' ');
+            $this->cursor($x + 1, $y + 1);
+            $this->attribute($cell[1], $cell[2]);
+            $this->write($cell[0]);
         }
     }
 
@@ -121,17 +133,15 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * Alias for cursor()
-     *
      * @return Cursor|TerminalContract
      */
-    public function move()
+    public function moveCursor()
     {
         if (2 === func_num_args()) {
-            return $this->cursor()->move(...func_get_args());
+            return $this->cursor->move(...func_get_args());
         }
 
-        return $this->cursor();
+        return $this->cursor;
     }
 
     /**
@@ -142,7 +152,7 @@ class Terminal implements TerminalContract
      */
     public function writeCursor(int $column, int $row, string $buffer)
     {
-        $this->cursor()->move($column, $row);
+        $this->cursor->move($column, $row);
         $this->output->write($buffer);
 
         return $this;

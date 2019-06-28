@@ -83,17 +83,15 @@ $terminal->disableEchoBack();
 $terminal->disableCursor();
 $terminal->clear();
 
-$terminal->attribute(15, 32);
-
 foreach ($keyboard as $key => $data) {
     foreach ($data as $item) {
-        $terminal->writeCell($item[0], $item[1], $item[2], 0, 0);
+        $terminal->writeCell($item[0], $item[1], $item[2], 15, 32);
     }
 }
 
-$terminal->flushCells();
+$terminal->flush();
 
-$terminal->move()->bottom();
+$terminal->moveCursor()->bottom();
 
 while (true) {
     $input = $terminal->read(4);

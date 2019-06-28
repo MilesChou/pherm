@@ -42,10 +42,14 @@ class CellBuffer
         }
     }
 
-    public function clear(): void
+    /**
+     * @param int|null $fg
+     * @param int|null $bg
+     */
+    public function clear(?int $fg = null, ?int $bg = null): void
     {
-        array_walk($this->cells, static function (&$v) {
-            $v = [' ', null, null];
+        array_walk($this->cells, static function (&$v) use ($fg, $bg) {
+            $v = [' ', $fg, $bg];
         });
     }
 
