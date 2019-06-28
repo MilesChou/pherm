@@ -313,45 +313,13 @@ class TerminalTest extends TestCase
     /**
      * @test
      */
-    public function shouldWriteBackgroundWhenCallBackground(): void
-    {
-        $output = new BufferedOutput;
-
-        $this->target->setOutput($output)
-            ->setStty($this->createSttyMock())
-            ->bootstrap();
-
-        $this->target->background(123);
-
-        $this->assertSame("\033[48;5;123m", $output->fetch());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldWriteForegroundWhenCallForeground(): void
-    {
-        $output = new BufferedOutput;
-
-        $this->target->setOutput($output)
-            ->setStty($this->createSttyMock())
-            ->bootstrap();
-
-        $this->target->foreground(123);
-
-        $this->assertSame("\033[38;5;123m", $output->fetch());
-    }
-
-    /**
-     * @test
-     */
     public function shouldWriteBackgroundAndForegroundWhenCallAttribute(): void
     {
-        $output = new BufferedOutput;
-
-        $this->target->setOutput($output)
-            ->setStty($this->createSttyMock())
+        $this->target->setStty($this->createSttyMock())
             ->bootstrap();
+
+        /** @var BufferedOutput $output */
+        $output = $this->target->getOutput();
 
         $this->target->attribute(48, 62);
 
@@ -368,7 +336,7 @@ class TerminalTest extends TestCase
 
         // 80 * 24 = 1920
         $this->assertCount(1920, $this->target->getBuffer());
-        $this->assertSame([' ', 0, 0], $this->target->getCell(1, 1));
-        $this->assertSame([' ', 0, 0], $this->target->getCell(80, 24));
+        $this->assertSame([' ', null, null], $this->target->getCell(1, 1));
+        $this->assertSame([' ', null, null], $this->target->getCell(80, 24));
     }
 }

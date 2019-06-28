@@ -31,16 +31,6 @@ class Terminal implements TerminalContract
     private $control;
 
     /**
-     * @var int
-     */
-    private $currentBackground;
-
-    /**
-     * @var int
-     */
-    private $currentForeground;
-
-    /**
      * @var Key
      */
     private $keyBinding;
@@ -69,28 +59,7 @@ class Terminal implements TerminalContract
 
     public function attribute(?int $foreground = null, ?int $background = null)
     {
-        if ($foreground === null) {
-            $foreground = $this->defaultForeground;
-        }
-
-        if ($background === null) {
-            $background = $this->defaultBackground;
-        }
-
-        $this->background($background);
-        $this->foreground($foreground);
-
-        return $this;
-    }
-
-    public function background(int $background)
-    {
-        $background &= 0x1FF;
-
-        if ($background !== $this->currentBackground) {
-            $this->currentBackground = $background;
-            $this->write("\033[48;5;{$background}m");
-        }
+        $this->attribute->send($foreground, $background);
 
         return $this;
     }
@@ -117,20 +86,8 @@ class Terminal implements TerminalContract
         $this->output->write("\033[2J");
 
         // Clear buffer
-        $this->backBuffer->clear($this->defaultForeground, $this->defaultBackground);
-        $this->frontBuffer->clear($this->defaultForeground, $this->defaultBackground);
-
-        return $this;
-    }
-
-    public function foreground(int $foreground)
-    {
-        $foreground &= 0x1FF;
-
-        if ($foreground !== $this->currentForeground) {
-            $this->currentForeground = $foreground;
-            $this->write("\033[38;5;{$foreground}m");
-        }
+        $this->backBuffer->clear();
+        $this->frontBuffer->clear();
 
         return $this;
     }

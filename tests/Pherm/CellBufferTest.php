@@ -41,9 +41,9 @@ class CellBufferTest extends TestCase
     {
         $target = new CellBuffer(10, 20);
 
-        $target->clear(15, 0);
+        $target->clear();
 
-        $this->assertSame([' ', 15, 0], $target->cells[0]);
+        $this->assertSame([' ', null, null], $target->cells[0]);
     }
 
     /**

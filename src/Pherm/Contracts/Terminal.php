@@ -5,42 +5,6 @@ namespace MilesChou\Pherm\Contracts;
 interface Terminal
 {
     /**
-     * @param int|null $foreground
-     * @param int|null $background
-     * @return static
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    public function attribute(?int $foreground = null, ?int $background = null);
-
-    /**
-     * @param int $background
-     * @return static
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    public function background(int $background);
-
-    /**
-     * @param int $defaultBackground
-     * @return static
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    public function defaultBackground(int $defaultBackground);
-
-    /**
-     * @param int $foreground
-     * @return static
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    public function foreground(int $foreground);
-
-    /**
-     * @param int $defaultForeground
-     * @return static
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    public function defaultForeground(int $defaultForeground);
-
-    /**
      * @return int
      */
     public function width(): int;

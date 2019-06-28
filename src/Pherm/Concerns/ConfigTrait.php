@@ -8,20 +8,6 @@ trait ConfigTrait
 {
     /**
      * @var int
-     *
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    private $defaultBackground = 0;
-
-    /**
-     * @var int
-     *
-     * @see https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-     */
-    private $defaultForeground = 0;
-
-    /**
-     * @var int
      */
     private $colourSupport;
 
@@ -49,28 +35,6 @@ trait ConfigTrait
      * @var int
      */
     private $width;
-
-    /**
-     * @param int $defaultBackground
-     * @return static
-     */
-    public function defaultBackground(int $defaultBackground)
-    {
-        $this->defaultBackground = $defaultBackground;
-
-        return $this;
-    }
-
-    /**
-     * @param int $defaultForeground
-     * @return static
-     */
-    public function defaultForeground(int $defaultForeground)
-    {
-        $this->defaultForeground = $defaultForeground;
-
-        return $this;
-    }
 
     public function disableCanonicalMode()
     {
