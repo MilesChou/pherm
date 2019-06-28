@@ -7,13 +7,14 @@ use MilesChou\Pherm\Terminal;
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $terminal = (new Terminal(new InputStream(), new OutputStream()))
+    ->enableInstantOutput()
     ->bootstrap();
 
 $terminal->clear();
+$terminal->moveCursor()->top();
 
 $str = 'Hello world!';
 
-$terminal->moveCursor()->top();
 
 $payload = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

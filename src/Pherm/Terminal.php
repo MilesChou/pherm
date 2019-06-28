@@ -26,16 +26,6 @@ class Terminal implements TerminalContract
     private $attribute;
 
     /**
-     * @var Control
-     */
-    private $control;
-
-    /**
-     * @var Cursor
-     */
-    private $cursor;
-
-    /**
      * @var Key
      */
     private $keyBinding;
@@ -61,10 +51,17 @@ class Terminal implements TerminalContract
             $control = new Control();
         }
 
-        $this->control = $control;
-        $this->cursor = new Cursor($this, $this->control);
+        $this->setControl($control);
+        $this->setCursor(new Cursor($this, $control));
     }
 
+    /**
+     * Proxy to Attribute object
+     *
+     * @param int|null $foreground
+     * @param int|null $background
+     * @return static
+     */
     public function attribute(?int $foreground = null, ?int $background = null)
     {
         $this->attribute->send($foreground, $background);
@@ -112,6 +109,9 @@ class Terminal implements TerminalContract
         return $this->moveCursor(...$args);
     }
 
+    /**
+     * Flush buffer to output
+     */
     public function flush(): void
     {
         foreach ($this->getBuffer() as $index => $cell) {
@@ -133,32 +133,6 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * @return Cursor|TerminalContract
-     */
-    public function moveCursor()
-    {
-        if (2 === func_num_args()) {
-            return $this->cursor->move(...func_get_args());
-        }
-
-        return $this->cursor;
-    }
-
-    /**
-     * @param int $column
-     * @param int $row
-     * @param string $buffer
-     * @return static
-     */
-    public function writeCursor(int $column, int $row, string $buffer)
-    {
-        $this->cursor->move($column, $row);
-        $this->output->write($buffer);
-
-        return $this;
-    }
-
-    /**
      * @return Key
      */
     public function keyBinding()
@@ -171,11 +145,47 @@ class Terminal implements TerminalContract
     }
 
     /**
+     * @return Cursor|TerminalContract
+     */
+    public function moveCursor()
+    {
+        if (2 === func_num_args()) {
+            return $this->cursor->move(...func_get_args());
+        }
+
+        return $this->cursor;
+    }
+
+    public function read(int $bytes): string
+    {
+        $buffer = '';
+        $this->input->read($bytes, function ($data) use (&$buffer) {
+            $buffer .= $data;
+        });
+        return $buffer;
+    }
+
+    /**
      * @return array [x, y]
      */
     public function size(): array
     {
         return [$this->width, $this->height];
+    }
+
+    public function write(string $buffer)
+    {
+        $this->output->write($buffer);
+
+        return $this;
+    }
+
+    public function writeCursor(int $column, int $row, string $buffer)
+    {
+        $this->cursor->move($column, $row);
+        $this->output->write($buffer);
+
+        return $this;
     }
 
     /**
