@@ -91,7 +91,7 @@ foreach ($keyboard as $key => $data) {
 
 $terminal->flush();
 
-$terminal->moveCursor()->bottom();
+$terminal->cursor()->bottom();
 
 while (true) {
     $input = $terminal->read(4);

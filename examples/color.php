@@ -10,7 +10,7 @@ $terminal = (new Terminal(new InputStream(), new OutputStream()))
     ->bootstrap();
 
 $terminal->clear();
-$terminal->moveCursor()->top();
+$terminal->cursor()->top();
 
 $str = 'Hello 世界!';
 
@@ -24,6 +24,6 @@ foreach (range(16, 231) as $i => $bg) {
     }
 }
 
-$terminal->moveCursor()->center(-(mb_strlen($str) / 2))->write($str);
+$terminal->cursor()->center(-(mb_strlen($str) / 2))->write($str);
 
 $terminal->flush();

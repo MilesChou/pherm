@@ -14,6 +14,6 @@ $terminal->clear();
 
 $str = 'Hello world!';
 
-$terminal->moveCursor()->center(-(mb_strlen($str) / 2))->write($str);
+$terminal->cursor()->center(-(mb_strlen($str) / 2))->write($str);
 
-$terminal->moveCursor()->bottom();
+$terminal->cursor()->bottom();

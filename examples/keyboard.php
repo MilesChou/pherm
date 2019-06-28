@@ -87,11 +87,11 @@ $terminal->attribute(15, 32);
 
 foreach ($keyboard as $key => $data) {
     foreach ($data as $item) {
-        $terminal->writeCursor($item[0], $item[1], $item[2]);
+        $terminal->moveCursor($item[0], $item[1])->write($item[2]);
     }
 }
 
-$terminal->moveCursor()->bottom();
+$terminal->cursor()->bottom();
 
 while (true) {
     $input = $terminal->read(4);

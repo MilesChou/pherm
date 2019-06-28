@@ -51,17 +51,9 @@ class Terminal implements TerminalContract
      */
     public function __construct(InputContract $input = null, OutputContract $output = null, Control $control = null)
     {
-        if (null === $input) {
-            $input = new InputStream();
-        }
-
-        if (null === $output) {
-            $output = new OutputStream();
-        }
-
-        if (null === $control) {
-            $control = new Control();
-        }
+        $input = $input ?? new InputStream();
+        $output = $output ?? new OutputStream();
+        $control = $control ?? new Control();
 
         $this->setInput($input);
         $this->setOutput($output);
@@ -124,14 +116,11 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * Alias for moveCursor()
-     *
-     * @param array<int, mixed> $args
-     * @return Cursor|TerminalContract
+     * @return Cursor
      */
-    public function cursor(...$args)
+    public function cursor(): Cursor
     {
-        return $this->moveCursor(...$args);
+        return $this->cursor;
     }
 
     /**
@@ -223,23 +212,23 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * @return Cursor|TerminalContract
+     * @param int $x
+     * @param int $y
+     * @return TerminalContract
      */
-    public function moveCursor()
+    public function moveCursor(int $x, int $y): TerminalContract
     {
-        if (2 === func_num_args()) {
-            return $this->cursor->move(...func_get_args());
-        }
-
-        return $this->cursor;
+        return $this->cursor->move($x, $y);
     }
 
     public function read(int $bytes): string
     {
         $buffer = '';
+
         $this->input->read($bytes, function ($data) use (&$buffer) {
             $buffer .= $data;
         });
+
         return $buffer;
     }
 
@@ -289,18 +278,6 @@ class Terminal implements TerminalContract
             }
 
             $this->cursor->position($x + 1, $y);
-        }
-
-        return $this;
-    }
-
-    public function writeCursor(int $x, int $y, string $buffer)
-    {
-        if ($this->isInstantOutput()) {
-            $this->cursor->move($x, $y);
-            $this->output->write($buffer);
-        } else {
-            $this->backBuffer->set($x, $y, $buffer, $this->currentForeground, $this->currentBackground);
         }
 
         return $this;

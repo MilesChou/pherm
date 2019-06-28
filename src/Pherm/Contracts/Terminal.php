@@ -125,16 +125,6 @@ interface Terminal
     public function write(string $buffer);
 
     /**
-     * Write to the output stream on specific cursor
-     *
-     * @param int $x
-     * @param int $y
-     * @param string $buffer
-     * @return static
-     */
-    public function writeCursor(int $x, int $y, string $buffer);
-
-    /**
      * @return bool
      */
     public function isInstantOutput(): bool;

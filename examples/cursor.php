@@ -13,44 +13,44 @@ $terminal = (new Terminal(new InputStream(), new OutputStream()))
 $terminal->clear()->cursor()->center();
 sleep(1);
 
-$terminal->moveCursor()->top();
+$terminal->cursor()->top();
 $terminal->write(implode(',', $terminal->cursor()->current()));
 sleep(1);
 
-$terminal->moveCursor()->top($terminal->width() / 2);
+$terminal->cursor()->top($terminal->width() / 2);
 $str = implode(',', $terminal->cursor()->current());
-$terminal->moveCursor()->top($terminal->width() / 2 - strlen($str) / 2)->write($str);
+$terminal->cursor()->top($terminal->width() / 2 - strlen($str) / 2)->write($str);
 sleep(1);
 
-$terminal->moveCursor()->top($terminal->width());
+$terminal->cursor()->top($terminal->width());
 $str = implode(',', $terminal->cursor()->current());
-$terminal->moveCursor()->top($terminal->width() - strlen($str) + 1)->write($str);
+$terminal->cursor()->top($terminal->width() - strlen($str) + 1)->write($str);
 sleep(1);
 
-$terminal->moveCursor()->middle();
+$terminal->cursor()->middle();
 $terminal->write(implode(',', $terminal->cursor()->current()));
 sleep(1);
 
-$terminal->moveCursor()->center();
+$terminal->cursor()->center();
 $str = implode(',', $terminal->cursor()->current());
-$terminal->moveCursor()->center(-(strlen($str) / 2))->write($str);
+$terminal->cursor()->center(-(strlen($str) / 2))->write($str);
 sleep(1);
 
-$terminal->moveCursor()->middle($terminal->width());
+$terminal->cursor()->middle($terminal->width());
 $str = implode(',', $terminal->cursor()->current());
-$terminal->moveCursor()->middle($terminal->width() - strlen($str) + 1)->write($str);
+$terminal->cursor()->middle($terminal->width() - strlen($str) + 1)->write($str);
 sleep(1);
 
-$terminal->moveCursor()->bottom();
+$terminal->cursor()->bottom();
 $terminal->write(implode(',', $terminal->cursor()->current()));
 sleep(1);
 
-$terminal->moveCursor()->bottom($terminal->width() / 2);
+$terminal->cursor()->bottom($terminal->width() / 2);
 $str = implode(',', $terminal->cursor()->current());
-$terminal->moveCursor()->bottom($terminal->width() / 2 - strlen($str) / 2)->write($str);
+$terminal->cursor()->bottom($terminal->width() / 2 - strlen($str) / 2)->write($str);
 sleep(1);
 
-$terminal->moveCursor()->end();
+$terminal->cursor()->end();
 $str = implode(',', $terminal->cursor()->current());
-$terminal->moveCursor()->end(strlen($str) -1)->write($str);
+$terminal->cursor()->end(strlen($str) -1)->write($str);
 sleep(1);
