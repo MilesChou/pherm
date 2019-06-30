@@ -15,9 +15,19 @@ interface Terminal
     public function height(): int;
 
     /**
+     * @return Attribute
+     */
+    public function getAttribute(): Attribute;
+
+    /**
      * Get the number of colours the terminal supports (1, 8, 256, true colours)
      */
     public function getColourSupport(): int;
+
+    /**
+     * @return Cursor
+     */
+    public function getCursor(): Cursor;
 
     /**
      * Disables echoing every character back to the terminal. This means

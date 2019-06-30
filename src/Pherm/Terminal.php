@@ -9,6 +9,7 @@ use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Contracts\Attribute;
+use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\InputStream as InputContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
@@ -30,11 +31,6 @@ class Terminal implements TerminalContract
     private $attribute;
 
     /**
-     * @var CellBuffer
-     */
-    private $frontBuffer;
-
-    /**
      * @var Key
      */
     private $keyBinding;
@@ -50,6 +46,11 @@ class Terminal implements TerminalContract
     private $currentBackground;
 
     /**
+     * @var Renderer
+     */
+    private $renderer;
+
+    /**
      * @param InputContract|null $input
      * @param OutputContract|null $output
      * @param Control|null $control
@@ -60,10 +61,12 @@ class Terminal implements TerminalContract
         $output = $output ?? new OutputStream();
         $control = $control ?? new Control();
 
+        $cursor = new Cursor($this, $control);
+
         $this->setInput($input);
         $this->setOutput($output);
         $this->setControl($control);
-        $this->setCursor(new Cursor($this, $control));
+        $this->setCursor($cursor);
 
         // TODO: Now just use Color256
         $this->attribute = new Color256($output);
@@ -96,7 +99,7 @@ class Terminal implements TerminalContract
         $this->prepareConfiguration();
         $this->prepareCellBuffer();
 
-        $this->frontBuffer = new CellBuffer($this->width, $this->height);
+        $this->renderer = new Renderer($this);
 
         return $this;
     }
@@ -163,50 +166,19 @@ class Terminal implements TerminalContract
      */
     public function flush(): void
     {
-        $cellBuffer = $this->getCellBuffer();
-
-        for ($y = 0; $y < $this->frontBuffer->height(); $y++) {
-            $lineOffset = $y * $this->frontBuffer->width();
-            for ($x = 0; $x < $this->frontBuffer->width();) {
-                $cellOffset = $lineOffset + $x;
-
-                $back = $cellBuffer->cells[$cellOffset];
-
-                if ($back[0] < ' ') {
-                    $back[0] = ' ';
-                }
-
-                $w = Char::width($back[0]);
-
-                if ($back === $this->frontBuffer->cells[$cellOffset]) {
-                    $x += $w;
-                    continue;
-                }
-
-                $this->frontBuffer->cells[$cellOffset] = $back;
-
-                $this->attribute->send($back[1], $back[2]);
-
-                if ($w === 2 && $x === $this->frontBuffer->width() - 1) {
-                    $this->output->write(' ');
-                } else {
-                    $this->cursor->moveInstant($x + 1, $y + 1);
-                    $this->output->write($back[0]);
-                    if ($w === 2) {
-                        $next = $cellOffset + 1;
-                        $this->frontBuffer->cells[$next] = [
-                            "\0",
-                            $back[1],
-                            $back[2],
-                        ];
-                    }
-                }
-
-                $x += $w;
-            }
-        }
+        $this->renderer->renderBuffer($this->getCellBuffer());
 
         $this->output->flush();
+    }
+
+    public function getAttribute(): Attribute
+    {
+        return $this->attribute;
+    }
+
+    public function getCursor(): CursorContract
+    {
+        return $this->cursor();
     }
 
     /**

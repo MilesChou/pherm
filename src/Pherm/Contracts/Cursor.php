@@ -63,6 +63,13 @@ interface Cursor
     public function end(int $backwardX = 0, int $backwardY = 0): Terminal;
 
     /**
+     * @param int $x
+     * @param int $y
+     * @return Terminal
+     */
+    public function instant(int $x, int $y): Terminal;
+
+    /**
      * Move the cursor to the middle of the window
      *
      * @param int $x

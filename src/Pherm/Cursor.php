@@ -105,6 +105,13 @@ class Cursor implements CursorContract
         );
     }
 
+    public function instant(int $x, int $y): Terminal
+    {
+        $this->terminal->getOutput()->write($this->control->cup($y, $x));
+
+        return $this->terminal;
+    }
+
     public function last(): array
     {
         return [$this->x, $this->y];
@@ -119,17 +126,10 @@ class Cursor implements CursorContract
     {
         if ($this->terminal->isInstantOutput()) {
             $this->checkPosition($x, $y);
-            $this->moveInstant($x, $y);
+            $this->instant($x, $y);
         } else {
             $this->position($x, $y);
         }
-
-        return $this->terminal;
-    }
-
-    public function moveInstant(int $x, int $y): Terminal
-    {
-        $this->terminal->getOutput()->write($this->control->cup($y, $x));
 
         return $this->terminal;
     }
