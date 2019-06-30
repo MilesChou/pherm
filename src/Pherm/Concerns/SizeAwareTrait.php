@@ -2,6 +2,8 @@
 
 namespace MilesChou\Pherm\Concerns;
 
+use InvalidArgumentException;
+
 trait SizeAwareTrait
 {
     /**
@@ -31,7 +33,40 @@ trait SizeAwareTrait
     }
 
     /**
-     * @return array [x, y]
+     * @return array [width, height]
+     */
+    public function getSize(): array
+    {
+        return [$this->width, $this->height];
+    }
+
+    /**
+     * @param int $width
+     * @param int $height
+     * @return static
+     * @throws InvalidArgumentException
+     */
+    public function setSize(int $width, int $height)
+    {
+        if ($width < 1) {
+            throw new InvalidArgumentException('Width must > 0');
+        }
+
+        if ($height < 1) {
+            throw new InvalidArgumentException('Height must > 0');
+        }
+
+        $this->width = $width;
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * Alias for getSize()
+     *
+     * @return array
+     * @see getSize();
      */
     public function size(): array
     {

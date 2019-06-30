@@ -2,28 +2,20 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\Terminal;
 use OverflowException;
 
 class Cursor implements CursorContract
 {
+    use PositionAwareTrait;
     use TerminalAwareTrait;
 
     /**
      * @var Control
      */
     private $control;
-
-    /**
-     * @var int
-     */
-    private $x = 1;
-
-    /**
-     * @var int
-     */
-    private $y = 1;
 
     /**
      * @param Terminal $terminal
@@ -114,7 +106,7 @@ class Cursor implements CursorContract
 
     public function last(): array
     {
-        return [$this->x, $this->y];
+        return $this->getPosition();
     }
 
     public function middle(int $x = 1): Terminal
@@ -138,10 +130,7 @@ class Cursor implements CursorContract
     {
         $this->checkPosition($x, $y);
 
-        $this->x = $x;
-        $this->y = $y;
-
-        return $this;
+        return $this->setPosition($x, $y);
     }
 
     public function row(int $y): Terminal

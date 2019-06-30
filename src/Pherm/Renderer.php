@@ -2,6 +2,7 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
 use MilesChou\Pherm\Contracts\Attribute;
 use MilesChou\Pherm\Contracts\Cursor;
@@ -12,6 +13,7 @@ use MilesChou\Pherm\Support\Char;
 
 class Renderer implements RendererContract
 {
+    use PositionAwareTrait;
     use SizeAwareTrait;
 
     /**
