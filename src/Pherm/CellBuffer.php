@@ -54,6 +54,8 @@ class CellBuffer
     }
 
     /**
+     * The x, y number is base on 1
+     *
      * @param int $x
      * @param int $y
      * @return array

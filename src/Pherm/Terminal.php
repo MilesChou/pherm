@@ -30,6 +30,11 @@ class Terminal implements TerminalContract
     private $attribute;
 
     /**
+     * @var CellBuffer
+     */
+    private $frontBuffer;
+
+    /**
      * @var Key
      */
     private $keyBinding;
@@ -89,7 +94,9 @@ class Terminal implements TerminalContract
     public function bootstrap()
     {
         $this->prepareConfiguration();
-        $this->prepareBuffer();
+        $this->prepareCellBuffer();
+
+        $this->frontBuffer = new CellBuffer($this->width, $this->height);
 
         return $this;
     }
@@ -107,7 +114,7 @@ class Terminal implements TerminalContract
         $this->output->write("\033[2J");
 
         // Clear backend buffer
-        $this->backBuffer->clear($fg, $bg);
+        $this->getCellBuffer()->clear($fg, $bg);
 
         // Reset cursor
         $this->cursor->position(1, 1);
@@ -156,11 +163,14 @@ class Terminal implements TerminalContract
      */
     public function flush(): void
     {
+        $cellBuffer = $this->getCellBuffer();
+
         for ($y = 0; $y < $this->frontBuffer->height(); $y++) {
             $lineOffset = $y * $this->frontBuffer->width();
             for ($x = 0; $x < $this->frontBuffer->width();) {
                 $cellOffset = $lineOffset + $x;
-                $back = $this->backBuffer->cells[$cellOffset];
+
+                $back = $cellBuffer->cells[$cellOffset];
 
                 if ($back[0] < ' ') {
                     $back[0] = ' ';
@@ -267,7 +277,7 @@ class Terminal implements TerminalContract
                 return $this;
             }
 
-            $this->backBuffer->set($x, $y, $char, $this->currentForeground, $this->currentBackground);
+            $this->getCellBuffer()->set($x, $y, $char, $this->currentForeground, $this->currentBackground);
 
             if ($x + 1 > $this->width) {
                 if ($y + 1 > $this->height) {

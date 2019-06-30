@@ -10,12 +10,7 @@ trait BufferTrait
     /**
      * @var CellBuffer
      */
-    private $frontBuffer;
-
-    /**
-     * @var CellBuffer
-     */
-    private $backBuffer;
+    private $cellBuffer;
 
     /**
      * @param int $x
@@ -24,15 +19,23 @@ trait BufferTrait
      */
     public function getCell(int $x, int $y): array
     {
-        return $this->backBuffer->get($x, $y);
+        return $this->cellBuffer->get($x, $y);
     }
 
     /**
      * @return array
      */
-    public function getBuffer(): array
+    public function getCells(): array
     {
-        return $this->backBuffer->cells;
+        return $this->cellBuffer->cells;
+    }
+
+    /**
+     * @return CellBuffer
+     */
+    public function getCellBuffer(): CellBuffer
+    {
+        return $this->cellBuffer;
     }
 
     /**
@@ -42,7 +45,7 @@ trait BufferTrait
      */
     public function isDisplayable(int $x, int $y): bool
     {
-        return $this->backBuffer->inRange($x, $y);
+        return $this->cellBuffer->inRange($x, $y);
     }
 
     /**
@@ -59,17 +62,16 @@ trait BufferTrait
             throw new OutOfRangeException("X: $x, Y: $y is not displayable in terminal");
         }
 
-        $this->backBuffer->set($x, $y, $string, $fg, $bg);
+        $this->cellBuffer->set($x, $y, $string, $fg, $bg);
 
         return $this;
     }
 
-    public function prepareBuffer(): void
+    public function prepareCellBuffer(): void
     {
         [$width, $height] = $this->size();
 
-        $this->backBuffer = new CellBuffer($width, $height);
-        $this->frontBuffer = new CellBuffer($width, $height);
+        $this->cellBuffer = new CellBuffer($width, $height);
     }
 
     /**

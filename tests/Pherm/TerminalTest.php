@@ -335,7 +335,7 @@ class TerminalTest extends TestCase
         $this->target->bootstrap()->clear();
 
         // 80 * 24 = 1920
-        $this->assertCount(1920, $this->target->getBuffer());
+        $this->assertCount(1920, $this->target->getCells());
         $this->assertSame([' ', null, null], $this->target->getCell(1, 1));
         $this->assertSame([' ', null, null], $this->target->getCell(80, 24));
     }

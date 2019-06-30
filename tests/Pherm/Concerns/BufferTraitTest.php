@@ -18,7 +18,7 @@ class BufferTraitTest extends TestCase
         $this->target->method('size')
             ->willReturn([10, 20]);
 
-        $this->target->prepareBuffer();
+        $this->target->prepareCellBuffer();
     }
 
     protected function tearDown(): void
