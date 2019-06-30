@@ -59,7 +59,7 @@ trait BufferTrait
     public function writeCell(int $x, int $y, string $string, int $fg, int $bg)
     {
         if (!$this->isDisplayable($x, $y)) {
-            throw new OutOfRangeException("X: $x, Y: $y is not displayable in terminal");
+            throw new OutOfRangeException("X: $x, Y: $y is out of buffer's  range");
         }
 
         $this->cellBuffer->set($x, $y, $string, $fg, $bg);
