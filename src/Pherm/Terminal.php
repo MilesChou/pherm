@@ -38,12 +38,12 @@ class Terminal implements TerminalContract
     /**
      * @var int|null
      */
-    private $currentForeground;
+    private $lastFg = Attribute::INVALID;
 
     /**
      * @var int|null
      */
-    private $currentBackground;
+    private $lastBg = Attribute::INVALID;
 
     /**
      * @var Renderer
@@ -75,18 +75,22 @@ class Terminal implements TerminalContract
     /**
      * Proxy to Attribute object
      *
-     * @param int|null $foreground
-     * @param int|null $background
+     * @param int|null $fg
+     * @param int|null $bg
      * @return static
      */
-    public function attribute(?int $foreground = null, ?int $background = null)
+    public function attribute(?int $fg = null, ?int $bg = null)
     {
         if ($this->isInstantOutput()) {
-            $this->output->write($this->attribute->generate($foreground, $background));
-        } else {
-            $this->currentForeground = $foreground;
-            $this->currentBackground = $background;
+            if ($fg === $this->lastFg && $bg === $this->lastBg) {
+                return $this;
+            }
+
+            $this->output->write($this->attribute->generate($fg, $bg));
         }
+
+        $this->lastFg = $fg;
+        $this->lastBg = $bg;
 
         return $this;
     }
@@ -249,7 +253,7 @@ class Terminal implements TerminalContract
                 return $this;
             }
 
-            $this->getCellBuffer()->set($x, $y, $char, $this->currentForeground, $this->currentBackground);
+            $this->getCellBuffer()->set($x, $y, $char, $this->lastFg, $this->lastBg);
 
             if ($x + 1 > $this->width) {
                 if ($y + 1 > $this->height) {

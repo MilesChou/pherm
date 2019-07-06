@@ -43,19 +43,6 @@ class Color256Test extends TestCase
     /**
      * @test
      */
-    public function shouldSendNothingWhenCallSendWithSameAttr(): void
-    {
-        $this->target->generate(1, 1);
-
-        // Do again
-        $actual = $this->target->generate(1, 1);
-
-        $this->assertSame('', $actual);
-    }
-
-    /**
-     * @test
-     */
     public function shouldSendCorrectFgBgAttrWhenCallSend(): void
     {
         $actual = $this->target->generate(3, 4);

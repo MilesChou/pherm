@@ -8,26 +8,12 @@ use MilesChou\Pherm\Contracts\OutputStream;
 abstract class Attribute implements AttributeContract
 {
     /**
-     * @var int|null
-     */
-    protected $lastFg = self::INVALID;
-
-    /**
-     * @var int|null
-     */
-    protected $lastBg = self::INVALID;
-
-    /**
      * @var string
      */
     protected $buffer = '';
 
     public function generate(?int $fg, ?int $bg): string
     {
-        if ($fg === $this->lastFg && $bg === $this->lastBg) {
-            return '';
-        }
-
         // See https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters for more information about SGR0
         $this->writeBuffer("\033[m");
 
@@ -50,9 +36,6 @@ abstract class Attribute implements AttributeContract
         if ($fg !== self::COLOR_DEFAULT && ($fg & self::REVERSE) !== 0) {
             // TODO: no data
         }
-
-        $this->lastFg = $fg;
-        $this->lastBg = $bg;
 
         return $this->flushBuffer();
     }

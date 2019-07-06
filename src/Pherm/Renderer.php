@@ -27,6 +27,16 @@ class Renderer implements RendererContract
     private $cursor;
 
     /**
+     * @var int|null
+     */
+    private $lastFg = Attribute::INVALID;
+
+    /**
+     * @var int|null
+     */
+    private $lastBg = Attribute::INVALID;
+
+    /**
      * @var OutputStream
      */
     private $output;
@@ -70,7 +80,11 @@ class Renderer implements RendererContract
 
                 $this->outputBuffer->cells[$cellOffset] = $back;
 
-                $this->output->write($this->attribute->generate($back[1], $back[2]));
+                if ($back[1] !== $this->lastFg || $back[2] !== $this->lastBg) {
+                    $this->output->write($this->attribute->generate($back[1], $back[2]));
+                    $this->lastFg = $back[1];
+                    $this->lastBg = $back[2];
+                }
 
                 if ($w === 2 && $x === $this->outputBuffer->width() - 1) {
                     $this->output->write(' ');
