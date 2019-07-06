@@ -4,11 +4,11 @@ namespace MilesChou\Pherm;
 
 use InvalidArgumentException;
 use MilesChou\Pherm\Binding\Key;
+use MilesChou\Pherm\Concerns\AttributeTrait;
 use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
-use MilesChou\Pherm\Contracts\Attribute;
 use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\InputStream as InputContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
@@ -20,30 +20,16 @@ use MilesChou\Pherm\Support\Char;
 
 class Terminal implements TerminalContract
 {
+    use AttributeTrait;
     use BufferTrait;
     use ConfigTrait;
     use InstantOutputTrait;
     use IoTrait;
 
     /**
-     * @var Attribute
-     */
-    private $attribute;
-
-    /**
      * @var Key
      */
     private $keyBinding;
-
-    /**
-     * @var int|null
-     */
-    private $lastFg = Attribute::INVALID;
-
-    /**
-     * @var int|null
-     */
-    private $lastBg = Attribute::INVALID;
 
     /**
      * @var Renderer
@@ -173,11 +159,6 @@ class Terminal implements TerminalContract
         $this->renderer->renderBuffer($this->getCellBuffer());
 
         $this->output->flush();
-    }
-
-    public function getAttribute(): Attribute
-    {
-        return $this->attribute;
     }
 
     public function getCursor(): CursorContract

@@ -2,9 +2,9 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Concerns\AttributeTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
-use MilesChou\Pherm\Contracts\Attribute;
 use MilesChou\Pherm\Contracts\Cursor;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Renderer as RendererContract;
@@ -13,28 +13,14 @@ use MilesChou\Pherm\Support\Char;
 
 class Renderer implements RendererContract
 {
+    use AttributeTrait;
     use PositionAwareTrait;
     use SizeAwareTrait;
-
-    /**
-     * @var Attribute
-     */
-    private $attribute;
 
     /**
      * @var Cursor
      */
     private $cursor;
-
-    /**
-     * @var int|null
-     */
-    private $lastFg = Attribute::INVALID;
-
-    /**
-     * @var int|null
-     */
-    private $lastBg = Attribute::INVALID;
 
     /**
      * @var OutputStream
