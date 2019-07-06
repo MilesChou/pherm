@@ -3,7 +3,6 @@
 namespace MilesChou\Pherm\Output;
 
 use MilesChou\Pherm\Contracts\Attribute as AttributeContract;
-use MilesChou\Pherm\Contracts\OutputStream;
 
 abstract class Attribute implements AttributeContract
 {
