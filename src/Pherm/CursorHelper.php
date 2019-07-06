@@ -3,11 +3,10 @@
 namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
-use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\Terminal;
 use OverflowException;
 
-class Cursor implements CursorContract
+class CursorHelper
 {
     use PositionAwareTrait;
     use TerminalAwareTrait;

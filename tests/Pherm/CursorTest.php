@@ -2,13 +2,13 @@
 
 namespace Tests\Pherm;
 
-use MilesChou\Pherm\Contracts\Cursor;
+use MilesChou\Pherm\CursorHelper;
 use Tests\TestCase;
 
 class CursorTest extends TestCase
 {
     /**
-     * @var Cursor
+     * @var CursorHelper
      */
     private $target;
 

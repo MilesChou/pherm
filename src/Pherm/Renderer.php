@@ -5,7 +5,6 @@ namespace MilesChou\Pherm;
 use MilesChou\Pherm\Concerns\AttributeTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
-use MilesChou\Pherm\Contracts\Cursor;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Renderer as RendererContract;
 use MilesChou\Pherm\Contracts\Terminal;
@@ -18,9 +17,9 @@ class Renderer implements RendererContract
     use SizeAwareTrait;
 
     /**
-     * @var Cursor
+     * @var CursorHelper
      */
-    private $cursor;
+    private $cursorHelper;
 
     /**
      * @var OutputStream
@@ -34,11 +33,12 @@ class Renderer implements RendererContract
 
     /**
      * @param Terminal $terminal
+     * @param CursorHelper $cursorHelper
      */
-    public function __construct(Terminal $terminal)
+    public function __construct(Terminal $terminal, CursorHelper $cursorHelper)
     {
-        $this->cursor = $terminal->getCursor();
         $this->output = $terminal->getOutput();
+        $this->cursorHelper = $cursorHelper;
 
         $this->outputBuffer = new CellBuffer($terminal->width(), $terminal->height());
     }
@@ -76,7 +76,7 @@ class Renderer implements RendererContract
                 if ($w === 2 && $x === $this->outputBuffer->width() - 1) {
                     $this->output->write(' ');
                 } else {
-                    $this->cursor->instant($x + 1, $y + 1);
+                    $this->cursorHelper->instant($x + 1, $y + 1);
                     $this->output->write($back[0]);
                     if ($w === 2) {
                         $next = $cellOffset + 1;

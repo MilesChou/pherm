@@ -2,6 +2,8 @@
 
 namespace MilesChou\Pherm\Contracts;
 
+use MilesChou\Pherm\CursorHelper;
+
 interface Terminal
 {
     /**
@@ -25,9 +27,9 @@ interface Terminal
     public function getColourSupport(): int;
 
     /**
-     * @return Cursor
+     * @return CursorHelper
      */
-    public function getCursor(): Cursor;
+    public function getCursor(): CursorHelper;
 
     /**
      * Disables echoing every character back to the terminal. This means

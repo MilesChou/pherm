@@ -9,7 +9,6 @@ use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
-use MilesChou\Pherm\Contracts\Cursor as CursorContract;
 use MilesChou\Pherm\Contracts\InputStream as InputContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
@@ -47,12 +46,12 @@ class Terminal implements TerminalContract
         $output = $output ?? new OutputStream();
         $control = $control ?? new Control();
 
-        $cursor = new Cursor($this, $control);
+        $cursorHelper = new CursorHelper($this, $control);
 
         $this->setInput($input);
         $this->setOutput($output);
         $this->setControl($control);
-        $this->setCursor($cursor);
+        $this->setCursorHelper($cursorHelper);
 
         // TODO: Now just use Color256
         $this->attribute = new Color256();
@@ -89,7 +88,7 @@ class Terminal implements TerminalContract
         $this->prepareConfiguration();
         $this->prepareCellBuffer();
 
-        $this->renderer = new Renderer($this);
+        $this->renderer = new Renderer($this, $this->cursor());
 
         return $this;
     }
@@ -110,17 +109,17 @@ class Terminal implements TerminalContract
         $this->getCellBuffer()->clear($fg, $bg);
 
         // Reset cursor
-        $this->cursor->position(1, 1);
+        $this->cursorHelper->position(1, 1);
 
         return $this;
     }
 
     /**
-     * @return Cursor
+     * @return CursorHelper
      */
-    public function cursor(): Cursor
+    public function cursor(): CursorHelper
     {
-        return $this->cursor;
+        return $this->cursorHelper;
     }
 
     /**
@@ -161,7 +160,7 @@ class Terminal implements TerminalContract
         $this->output->flush();
     }
 
-    public function getCursor(): CursorContract
+    public function getCursor(): CursorHelper
     {
         return $this->cursor();
     }
@@ -185,7 +184,7 @@ class Terminal implements TerminalContract
      */
     public function moveCursor(int $x, int $y): TerminalContract
     {
-        return $this->cursor->move($x, $y);
+        return $this->cursorHelper->move($x, $y);
     }
 
     public function read(int $bytes): string
@@ -223,13 +222,13 @@ class Terminal implements TerminalContract
         if ($this->isInstantOutput()) {
             $this->output->write($char);
         } else {
-            [$x, $y] = $this->cursor->last();
+            [$x, $y] = $this->cursorHelper->last();
 
             if ($char === "\n") {
                 if ($y + 1 > $this->height) {
                     return $this;
                 }
-                $this->cursor->position(1, $y + 1);
+                $this->cursorHelper->position(1, $y + 1);
 
                 return $this;
             }
@@ -244,7 +243,7 @@ class Terminal implements TerminalContract
                 $y++;
             }
 
-            $this->cursor->position($x + 1, $y);
+            $this->cursorHelper->position($x + 1, $y);
         }
 
         return $this;
