@@ -18,47 +18,29 @@ abstract class Attribute implements AttributeContract
     protected $lastBg = self::INVALID;
 
     /**
-     * @var OutputStream
+     * @var string
      */
-    protected $output;
+    protected $buffer = '';
 
-    /**
-     * @param OutputStream $output
-     */
-    public function __construct(OutputStream $output)
-    {
-        $this->output = $output;
-    }
-
-    /**
-     * Just for testing
-     *
-     * @return OutputStream
-     */
-    public function getOutput(): OutputStream
-    {
-        return $this->output;
-    }
-
-    public function send(?int $fg, ?int $bg): void
+    public function generate(?int $fg, ?int $bg): string
     {
         if ($fg === $this->lastFg && $bg === $this->lastBg) {
-            return;
+            return '';
         }
 
         // See https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters for more information about SGR0
-        $this->output->write("\033[m");
+        $this->writeBuffer("\033[m");
 
-        $this->sendColor($fg, $bg);
+        $this->writeBuffer($this->generateColor($fg, $bg));
 
         if ($fg !== self::COLOR_DEFAULT && ($fg & self::BOLD) !== 0) {
             // TODO: For Mac, too
-            $this->output->write("\033[1m");
+            $this->writeBuffer("\033[1m");
         }
 
         if ($bg !== self::COLOR_DEFAULT && ($bg & self::BOLD) !== 0) {
             // TODO: For Mac, too
-            $this->output->write("\033[5m");
+            $this->writeBuffer("\033[5m");
         }
 
         if ($fg !== self::COLOR_DEFAULT && ($fg & self::UNDER_LINE) !== 0) {
@@ -71,50 +53,73 @@ abstract class Attribute implements AttributeContract
 
         $this->lastFg = $fg;
         $this->lastBg = $bg;
+
+        return $this->flushBuffer();
     }
 
     /**
      * @param int|null $fg
      * @param int|null $bg
+     * @return string
      */
-    protected function sendColor(?int $fg, ?int $bg): void
+    protected function generateColor(?int $fg, ?int $bg): string
     {
         if ($fg === self::COLOR_DEFAULT && $bg === self::COLOR_DEFAULT) {
-            return;
+            return '';
         }
 
         $fgCol = $fg & 0x1FF;
         $bgCol = $bg & 0x1FF;
 
         if ($fg !== self::COLOR_DEFAULT && $bg !== self::COLOR_DEFAULT) {
-            $this->write($fgCol, $bgCol);
-            return;
+            return $this->generateBoth($fgCol, $bgCol);
         }
 
         if ($fg !== self::COLOR_DEFAULT) {
-            $this->writeForeground($fgCol);
-            return;
+            return $this->generateForeground($fgCol);
         }
 
         if ($bg !== self::COLOR_DEFAULT) {
-            $this->writeBackground($bgCol);
-            return;
+            return $this->genearateBackground($bgCol);
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function flushBuffer(): string
+    {
+        $string = $this->buffer;
+
+        $this->buffer = '';
+
+        return $string;
+    }
+
+    /**
+     * @param string $buffer
+     */
+    private function writeBuffer(string $buffer): void
+    {
+        $this->buffer .= $buffer;
     }
 
     /**
      * @param int $fg
      * @param int $bg
+     * @return string
      */
-    abstract protected function write(int $fg, int $bg): void;
+    abstract protected function generateBoth(int $fg, int $bg): string;
 
     /**
      * @param int $fg
+     * @return string
      */
-    abstract protected function writeForeground(int $fg): void;
+    abstract protected function generateForeground(int $fg): string;
 
     /**
      * @param int $bg
+     * @return string
      */
-    abstract protected function writeBackground(int $bg): void;
+    abstract protected function genearateBackground(int $bg): string;
 }

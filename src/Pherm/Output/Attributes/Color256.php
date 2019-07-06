@@ -6,19 +6,18 @@ use MilesChou\Pherm\Output\Attribute;
 
 class Color256 extends Attribute
 {
-    protected function write(int $fg, int $bg): void
+    protected function generateBoth(int $fg, int $bg): string
     {
-        $this->output->write("\033[38;5;{$fg}m");
-        $this->output->write("\033[48;5;{$bg}m");
+        return $this->generateForeground($fg) . $this->genearateBackground($bg);
     }
 
-    protected function writeForeground(int $fg): void
+    protected function generateForeground(int $fg): string
     {
-        $this->output->write("\033[38;5;{$fg}m");
+        return "\033[38;5;{$fg}m";
     }
 
-    protected function writeBackground(int $bg): void
+    protected function genearateBackground(int $bg): string
     {
-        $this->output->write("\033[48;5;{$bg}m");
+        return "\033[48;5;{$bg}m";
     }
 }

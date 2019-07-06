@@ -69,7 +69,7 @@ class Terminal implements TerminalContract
         $this->setCursor($cursor);
 
         // TODO: Now just use Color256
-        $this->attribute = new Color256($output);
+        $this->attribute = new Color256();
     }
 
     /**
@@ -82,7 +82,7 @@ class Terminal implements TerminalContract
     public function attribute(?int $foreground = null, ?int $background = null)
     {
         if ($this->isInstantOutput()) {
-            $this->attribute->send($foreground, $background);
+            $this->output->write($this->attribute->generate($foreground, $background));
         } else {
             $this->currentForeground = $foreground;
             $this->currentBackground = $background;

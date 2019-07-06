@@ -43,6 +43,7 @@ interface Attribute
     /**
      * @param int|null $fg
      * @param int|null $bg
+     * @return string
      */
-    public function send(?int $fg, ?int $bg): void;
+    public function generate(?int $fg, ?int $bg): string;
 }

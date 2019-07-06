@@ -70,7 +70,7 @@ class Renderer implements RendererContract
 
                 $this->outputBuffer->cells[$cellOffset] = $back;
 
-                $this->attribute->send($back[1], $back[2]);
+                $this->output->write($this->attribute->generate($back[1], $back[2]));
 
                 if ($w === 2 && $x === $this->outputBuffer->width() - 1) {
                     $this->output->write(' ');
