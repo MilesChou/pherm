@@ -37,7 +37,6 @@ class Renderer implements RendererContract
      */
     public function __construct(Terminal $terminal)
     {
-        $this->attribute = $terminal->getAttribute();
         $this->cursor = $terminal->getCursor();
         $this->output = $terminal->getOutput();
 
@@ -46,6 +45,8 @@ class Renderer implements RendererContract
 
     public function renderBuffer(CellBuffer $buffer): void
     {
+        $attribute = $this->getAttribute();
+
         for ($y = 0; $y < $this->outputBuffer->height(); $y++) {
             $lineOffset = $y * $this->outputBuffer->width();
             for ($x = 0; $x < $this->outputBuffer->width();) {
@@ -67,7 +68,7 @@ class Renderer implements RendererContract
                 $this->outputBuffer->cells[$cellOffset] = $back;
 
                 if ($back[1] !== $this->lastFg || $back[2] !== $this->lastBg) {
-                    $this->output->write($this->attribute->generate($back[1], $back[2]));
+                    $this->output->write($attribute->generate($back[1], $back[2]));
                     $this->lastFg = $back[1];
                     $this->lastBg = $back[2];
                 }

@@ -4,6 +4,7 @@ namespace MilesChou\Pherm\Concerns;
 
 use MilesChou\Pherm\CellBuffer;
 use MilesChou\Pherm\Contracts\Attribute;
+use MilesChou\Pherm\Output\Attributes\Color256;
 use OutOfRangeException;
 
 trait AttributeTrait
@@ -28,6 +29,10 @@ trait AttributeTrait
      */
     public function getAttribute(): Attribute
     {
+        if (null === $this->attribute) {
+            $this->attribute = new Color256();
+        }
+
         return $this->attribute;
     }
 
