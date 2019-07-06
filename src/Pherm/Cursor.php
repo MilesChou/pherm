@@ -99,6 +99,8 @@ class Cursor implements CursorContract
 
     public function instant(int $x, int $y): Terminal
     {
+        $this->checkPosition($x, $y);
+
         $this->terminal->getOutput()->write($this->control->cup($y, $x));
 
         return $this->terminal;
@@ -117,7 +119,6 @@ class Cursor implements CursorContract
     public function move(int $x, int $y): Terminal
     {
         if ($this->terminal->isInstantOutput()) {
-            $this->checkPosition($x, $y);
             $this->instant($x, $y);
         } else {
             $this->position($x, $y);
