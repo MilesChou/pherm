@@ -30,17 +30,23 @@ class Renderer implements RendererContract
      * @var CellBuffer
      */
     private $outputBuffer;
+    /**
+     * @var Control
+     */
+    private $control;
 
     /**
      * @param Terminal $terminal
      * @param CursorHelper $cursorHelper
+     * @param Control $control
      */
-    public function __construct(Terminal $terminal, CursorHelper $cursorHelper)
+    public function __construct(Terminal $terminal, CursorHelper $cursorHelper, Control $control)
     {
         $this->output = $terminal->getOutput();
         $this->cursorHelper = $cursorHelper;
 
-        $this->outputBuffer = new CellBuffer($terminal->width(), $terminal->height());
+        $this->outputBuffer = new CellBuffer($control->width(), $control->height());
+        $this->control = $control;
     }
 
     public function renderBuffer(CellBuffer $buffer): void

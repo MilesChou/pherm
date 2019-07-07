@@ -10,7 +10,7 @@ interface TTY
      * @return static
      * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
-    public function disableCanonicalMode(): TTY;
+    public function disableCanonicalMode();
 
     /**
      * Disables echoing every character back to the terminal. This means
@@ -18,7 +18,7 @@ interface TTY
      *
      * @return static
      */
-    public function disableEchoBack(): TTY;
+    public function disableEchoBack();
 
     /**
      * Enable canonical input - read input by line
@@ -26,14 +26,14 @@ interface TTY
      * @return static
      * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
-    public function enableCanonicalMode(): TTY;
+    public function enableCanonicalMode();
 
     /**
      * Enable echoing back every character input to the terminal.
      *
      * @return static
      */
-    public function enableEchoBack(): TTY;
+    public function enableEchoBack();
 
     /**
      * @return int

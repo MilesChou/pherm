@@ -147,7 +147,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->clearDown();
 
@@ -159,7 +159,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->enableCursor();
 
@@ -171,7 +171,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->disableCursor();
 
@@ -183,7 +183,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->cursor()->top();
 
@@ -198,7 +198,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->cursor()->end();
 
@@ -210,7 +210,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->cursor()->row(2);
 
@@ -222,7 +222,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->cursor()->column(10);
 
@@ -237,7 +237,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->moveCursor(10, 20);
 
@@ -249,7 +249,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->showSecondaryScreen();
 
@@ -261,7 +261,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->showPrimaryScreen();
 
@@ -276,7 +276,7 @@ class TerminalTest extends TestCase
 
         $this->target->setInput(new InputStream($tempStream))
             ->setOutput(new BufferedOutput())
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap();
 
         $this->assertSame('myst', $this->target->read(4));
@@ -290,7 +290,7 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setTTY($this->createTTYMock())
+            ->setControl($this->createControlMock())
             ->bootstrap()
             ->write('My awesome string');
 
@@ -302,7 +302,7 @@ class TerminalTest extends TestCase
      */
     public function shouldWriteBackgroundAndForegroundWhenCallAttribute(): void
     {
-        $this->target->setTTY($this->createTTYMock())
+        $this->target->setControl($this->createControlMock())
             ->bootstrap();
 
         /** @var BufferedOutput $output */

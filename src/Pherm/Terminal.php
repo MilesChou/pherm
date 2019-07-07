@@ -7,10 +7,10 @@ use InvalidArgumentException;
 use MilesChou\Pherm\Binding\Key;
 use MilesChou\Pherm\Concerns\AttributeTrait;
 use MilesChou\Pherm\Concerns\BufferTrait;
-use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
+use MilesChou\Pherm\Concerns\SizeAwareTrait;
 use MilesChou\Pherm\Contracts\InputStream as InputContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
@@ -18,13 +18,13 @@ use MilesChou\Pherm\Output\Attributes\Color256;
 use MilesChou\Pherm\Support\Char;
 
 /**
- * @mixin TTY
+ * @mixin Control
  */
 class Terminal implements TerminalContract
 {
+    use SizeAwareTrait;
     use AttributeTrait;
     use BufferTrait;
-    use ConfigTrait;
     use InstantOutputTrait;
     use IoTrait;
     use PositionAwareTrait;
@@ -45,11 +45,6 @@ class Terminal implements TerminalContract
     private $container;
 
     /**
-     * @var Cursor
-     */
-    private $cursor;
-
-    /**
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -66,8 +61,8 @@ class Terminal implements TerminalContract
 
     public function __call($method, $arguments)
     {
-        if (method_exists($this->tty, $method)) {
-            $this->tty->{$method}(...$arguments);
+        if (method_exists($this->control, $method)) {
+            $this->control->{$method}(...$arguments);
 
             return $this;
         }
@@ -98,13 +93,13 @@ class Terminal implements TerminalContract
 
     public function bootstrap()
     {
-        $this->prepareConfiguration();
+        $this->height = $this->control->height();
+        $this->width = $this->control->width();
+
         $this->prepareCellBuffer();
 
-        $this->cursor = new Cursor($this->tty);
         $this->renderer = $this->container->make(Renderer::class);
-
-        $this->tty->store();
+        $this->control->store();
 
         return $this;
     }
@@ -138,15 +133,15 @@ class Terminal implements TerminalContract
     public function current(): array
     {
         // store state
-        $icanon = $this->tty->isCanonicalMode();
-        $echo = $this->tty->isEchoBack();
+        $icanon = $this->control->isCanonicalMode();
+        $echo = $this->control->isEchoBack();
 
         if ($icanon) {
-            $this->tty->disableCanonicalMode();
+            $this->control->disableCanonicalMode();
         }
 
         if ($echo) {
-            $this->tty->disableEchoBack();
+            $this->control->disableEchoBack();
         }
 
         fwrite(STDOUT, $this->control->dsr);
@@ -158,11 +153,11 @@ class Terminal implements TerminalContract
 
         // restore state
         if ($icanon) {
-            $this->tty->enableCanonicalMode();
+            $this->control->enableCanonicalMode();
         }
 
         if ($echo) {
-            $this->tty->enableEchoBack();
+            $this->control->enableEchoBack();
         }
 
         if (sscanf(trim($cpr), $this->control->cpr, $row, $col) === 2) {
@@ -177,7 +172,7 @@ class Terminal implements TerminalContract
      */
     public function cursor(): CursorHelper
     {
-        return new CursorHelper($this, $this->tty, $this->control);
+        return new CursorHelper($this, $this->control);
     }
 
     /**
@@ -238,9 +233,9 @@ class Terminal implements TerminalContract
     public function moveCursor(int $x, int $y): TerminalContract
     {
         if ($this->isInstantOutput()) {
-            $this->output->write($this->cursor->move($x, $y));
+            $this->output->write($this->control->move($x, $y));
         } else {
-            $this->cursor->checkPosition($x, $y);
+            $this->control->checkPosition($x, $y);
 
             $this->setPosition($x, $y);
         }
@@ -315,7 +310,7 @@ class Terminal implements TerminalContract
      */
     public function __destruct()
     {
-        $this->tty->restore();
+        $this->control->restore();
         $this->enableCursor();
     }
 }

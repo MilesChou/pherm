@@ -2,14 +2,11 @@
 
 namespace MilesChou\Pherm;
 
-use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Contracts\Terminal;
-use OverflowException;
 
 class CursorHelper
 {
-    use ConfigTrait;
     use PositionAwareTrait;
     use TerminalAwareTrait;
 
@@ -20,16 +17,12 @@ class CursorHelper
 
     /**
      * @param Terminal $terminal
-     * @param TTY $tty
      * @param Control $control
      */
-    public function __construct(Terminal $terminal, TTY $tty, Control $control)
+    public function __construct(Terminal $terminal, Control $control)
     {
         $this->setTerminal($terminal);
         $this->control = $control;
-        $this->tty = $tty;
-
-        $this->prepareConfiguration();
     }
 
     public function __call($name, $arguments)
@@ -41,14 +34,14 @@ class CursorHelper
 
     public function bottom(int $x = 1): Terminal
     {
-        return $this->move($x, $this->height);
+        return $this->move($x, $this->control->height());
     }
 
     public function center(int $deltaX = 0, int $deltaY = 0): Terminal
     {
         return $this->move(
-            (int)($this->width / 2) + $deltaX,
-            (int)($this->height / 2) + $deltaY
+            (int)($this->control->width() / 2) + $deltaX,
+            (int)($this->control->height() / 2) + $deltaY
         );
     }
 
@@ -60,14 +53,14 @@ class CursorHelper
     public function end(int $backwardX = 0, int $backwardY = 0): Terminal
     {
         return $this->move(
-            $this->width - $backwardX,
-            $this->height - $backwardY
+            $this->control->width() - $backwardX,
+            $this->control->height() - $backwardY
         );
     }
 
     public function instant(int $x, int $y): Terminal
     {
-        $this->checkPosition($x, $y);
+        $this->control->checkPosition($x, $y);
 
         $this->terminal->getOutput()->write($this->control->cup($y, $x));
 
@@ -81,7 +74,7 @@ class CursorHelper
 
     public function middle(int $x = 1): Terminal
     {
-        return $this->move($x, $this->height / 2);
+        return $this->move($x, $this->control->height() / 2);
     }
 
     public function move(int $x, int $y): Terminal
@@ -97,7 +90,7 @@ class CursorHelper
 
     public function position(int $x, int $y)
     {
-        $this->checkPosition($x, $y);
+        $this->control->checkPosition($x, $y);
 
         return $this->setPosition($x, $y);
     }
@@ -110,20 +103,5 @@ class CursorHelper
     public function top(int $x = 1): Terminal
     {
         return $this->move($x, 1);
-    }
-
-    /**
-     * @param int $x
-     * @param int $y
-     */
-    private function checkPosition(int $x, int $y): void
-    {
-        if ($x < 1 || $x > $this->width) {
-            throw new OverflowException("X expect in range 1 to {$this->width}, actual is '$x'");
-        }
-
-        if ($y < 1 || $y > $this->height) {
-            throw new OverflowException("Y expect in range 1 to {$this->height}, actual is '$y'");
-        }
     }
 }

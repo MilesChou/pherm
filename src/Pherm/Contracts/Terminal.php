@@ -70,11 +70,6 @@ interface Terminal
     public function getOutput(): OutputStream;
 
     /**
-     * @return int
-     */
-    public function height(): int;
-
-    /**
      * @return bool
      */
     public function isInstantOutput(): bool;
@@ -101,16 +96,6 @@ interface Terminal
      * @return string
      */
     public function read(int $bytes): string;
-
-    /**
-     * @return array [x, y]
-     */
-    public function size(): array;
-
-    /**
-     * @return int
-     */
-    public function width(): int;
 
     /**
      * Write to the output stream

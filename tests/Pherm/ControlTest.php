@@ -5,6 +5,7 @@ namespace Tests\Pherm;
 use LogicException;
 use MilesChou\Pherm\Control;
 use MilesChou\Pherm\Contracts\Control as ControlContract;
+use MilesChou\Pherm\TTY;
 use OutOfRangeException;
 use Tests\TestCase;
 
@@ -17,7 +18,7 @@ class ControlTest extends TestCase
 
     protected function setUp()
     {
-        $this->target = new Control();
+        $this->target = new Control(new TTY());
     }
 
     /**
@@ -51,11 +52,11 @@ class ControlTest extends TestCase
      */
     public function shouldOverwriteConstArrowControlSeqWhenCallMagicMethod(): void
     {
-        $target = new Control([
+        $this->target->overwrite([
             'CUU' => 'whatever',
         ]);
 
-        $this->assertSame('whatever', $target->cuu);
+        $this->assertSame('whatever', $this->target->cuu);
     }
 
     /**
@@ -71,11 +72,11 @@ class ControlTest extends TestCase
      */
     public function shouldOverwriteConstNullControlCharWhenCallMagicMethod(): void
     {
-        $target = new Control([
+        $this->target->overwrite([
             'NUL' => 'whatever',
         ]);
 
-        $this->assertSame('whatever', $target->nul);
+        $this->assertSame('whatever', $this->target->nul);
     }
 
     /**
@@ -83,11 +84,11 @@ class ControlTest extends TestCase
      */
     public function shouldReturnCustomControlCharWhenCallMagicMethod(): void
     {
-        $target = new Control([
+        $this->target->overwrite([
             'CUSTOM' => 'whatever',
         ]);
 
-        $this->assertSame('whatever', $target->custom);
+        $this->assertSame('whatever', $this->target->custom);
     }
 
     /**
