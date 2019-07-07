@@ -2,12 +2,14 @@
 
 namespace MilesChou\Pherm;
 
+use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Contracts\Terminal;
 use OverflowException;
 
 class CursorHelper
 {
+    use ConfigTrait;
     use PositionAwareTrait;
     use TerminalAwareTrait;
 
@@ -18,12 +20,16 @@ class CursorHelper
 
     /**
      * @param Terminal $terminal
+     * @param TTY $tty
      * @param Control $control
      */
-    public function __construct(Terminal $terminal, Control $control)
+    public function __construct(Terminal $terminal, TTY $tty, Control $control)
     {
         $this->setTerminal($terminal);
         $this->control = $control;
+        $this->tty = $tty;
+
+        $this->prepareConfiguration();
     }
 
     public function __call($name, $arguments)
@@ -35,14 +41,14 @@ class CursorHelper
 
     public function bottom(int $x = 1): Terminal
     {
-        return $this->move($x, $this->terminal->height());
+        return $this->move($x, $this->height);
     }
 
     public function center(int $deltaX = 0, int $deltaY = 0): Terminal
     {
         return $this->move(
-            (int)($this->terminal->width() / 2) + $deltaX,
-            (int)($this->terminal->height() / 2) + $deltaY
+            (int)($this->width / 2) + $deltaX,
+            (int)($this->height / 2) + $deltaY
         );
     }
 
@@ -54,15 +60,15 @@ class CursorHelper
     public function current(): array
     {
         // store state
-        $icanon = $this->terminal->isCanonicalMode();
-        $echo = $this->terminal->isEchoBack();
+        $icanon = $this->tty->isCanonicalMode();
+        $echo = $this->tty->isEchoBack();
 
         if ($icanon) {
-            $this->terminal->disableCanonicalMode();
+            $this->tty->disableCanonicalMode();
         }
 
         if ($echo) {
-            $this->terminal->disableEchoBack();
+            $this->tty->disableEchoBack();
         }
 
         fwrite(STDOUT, $this->control->dsr);
@@ -74,11 +80,11 @@ class CursorHelper
 
         // restore state
         if ($icanon) {
-            $this->terminal->enableCanonicalMode();
+            $this->tty->enableCanonicalMode();
         }
 
         if ($echo) {
-            $this->terminal->enableEchoBack();
+            $this->tty->enableEchoBack();
         }
 
         if (sscanf(trim($cpr), $this->control->cpr, $row, $col) === 2) {
@@ -91,8 +97,8 @@ class CursorHelper
     public function end(int $backwardX = 0, int $backwardY = 0): Terminal
     {
         return $this->move(
-            $this->terminal->width() - $backwardX,
-            $this->terminal->height() - $backwardY
+            $this->width - $backwardX,
+            $this->height - $backwardY
         );
     }
 
@@ -112,7 +118,7 @@ class CursorHelper
 
     public function middle(int $x = 1): Terminal
     {
-        return $this->move($x, $this->terminal->height() / 2);
+        return $this->move($x, $this->height / 2);
     }
 
     public function move(int $x, int $y): Terminal
@@ -149,14 +155,12 @@ class CursorHelper
      */
     private function checkPosition(int $x, int $y): void
     {
-        [$sizeX, $sizeY] = $this->terminal->size();
-
-        if ($x < 1 || $x > $sizeX) {
-            throw new OverflowException("X expect in range 1 to $sizeX, actual is '$x'");
+        if ($x < 1 || $x > $this->width) {
+            throw new OverflowException("X expect in range 1 to {$this->width}, actual is '$x'");
         }
 
-        if ($y < 1 || $y > $sizeY) {
-            throw new OverflowException("Y expect in range 1 to $sizeY, actual is '$y'");
+        if ($y < 1 || $y > $this->height) {
+            throw new OverflowException("Y expect in range 1 to {$this->height}, actual is '$y'");
         }
     }
 }

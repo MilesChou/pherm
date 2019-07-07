@@ -16,6 +16,9 @@ use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
 use MilesChou\Pherm\Output\Attributes\Color256;
 use MilesChou\Pherm\Support\Char;
 
+/**
+ * @mixin TTY
+ */
 class Terminal implements TerminalContract
 {
     use AttributeTrait;
@@ -54,6 +57,15 @@ class Terminal implements TerminalContract
         $this->attribute = $container->make(Color256::class);
     }
 
+    public function __call($method, $arguments)
+    {
+        if (method_exists($this->tty, $method)) {
+            $this->tty->{$method}(...$arguments);
+
+            return $this;
+        }
+    }
+
     /**
      * Proxy to Attribute object
      *
@@ -85,8 +97,10 @@ class Terminal implements TerminalContract
         $this->prepareConfiguration();
         $this->prepareCellBuffer();
 
-        $this->setCursorHelper($this->container->make(CursorHelper::class));
+        $this->setCursorHelper(new CursorHelper($this, $this->tty, $this->control));
         $this->renderer = $this->container->make(Renderer::class);
+
+        $this->tty->store();
 
         return $this;
     }

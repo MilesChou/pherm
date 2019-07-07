@@ -26,7 +26,11 @@ class App extends Container
      */
     public function createTerminal(): Contracts\Terminal
     {
-        return $this->make(Contracts\Terminal::class);
+        $terminal = $this->make(Contracts\Terminal::class);
+
+        $this->instance(Terminal::class, $terminal);
+
+        return $terminal;
     }
 
     /**

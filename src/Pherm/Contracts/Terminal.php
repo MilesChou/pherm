@@ -33,14 +33,6 @@ interface Terminal
     public function clearLine();
 
     /**
-     * Disable canonical input (allow each key press for reading, rather than the whole line)
-     *
-     * @return static
-     * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
-     */
-    public function disableCanonicalMode();
-
-    /**
      * Disable cursor display
      *
      * @return static
@@ -48,34 +40,11 @@ interface Terminal
     public function disableCursor();
 
     /**
-     * Disables echoing every character back to the terminal. This means
-     * we do not have to clear the line when reading.
-     *
-     * @return static
-     */
-    public function disableEchoBack();
-
-    /**
-     * Enable canonical input - read input by line
-     *
-     * @return static
-     * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
-     */
-    public function enableCanonicalMode();
-
-    /**
      * Enable cursor display
      *
      * @return static
      */
     public function enableCursor();
-
-    /**
-     * Enable echoing back every character input to the terminal.
-     *
-     * @return static
-     */
-    public function enableEchoBack();
 
     /**
      * @return Attribute
@@ -101,16 +70,6 @@ interface Terminal
      * @return int
      */
     public function height(): int;
-
-    /**
-     * Is canonical mode enabled or not
-     */
-    public function isCanonicalMode(): bool;
-
-    /**
-     * Is echo back mode enabled
-     */
-    public function isEchoBack(): bool;
 
     /**
      * @return bool

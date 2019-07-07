@@ -15,19 +15,13 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 class TestCase extends BaseTestCase
 {
     /**
-     * @param array $parseAllMock
      * @return Mockery\MockInterface|TTY
      */
-    protected function createTTYMock($parseAllMock = [])
+    protected function createTTYMock()
     {
-        $stub = array_merge([
-            'echo' => true,
-            'icanon' => true,
-        ], $parseAllMock);
-
         $mock = Mockery::mock(TTY::class);
         $mock->makePartial();
-        $mock->shouldReceive('parseAll')->andReturn($stub);
+
         $mock->shouldReceive('width')->andReturn(80);
         $mock->shouldReceive('height')->andReturn(24);
 

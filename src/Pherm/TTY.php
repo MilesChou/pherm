@@ -13,7 +13,7 @@ class TTY implements TTYContract
     /**
      * @var bool
      */
-    private $isCanonical;
+    private $isCanonicalMode;
 
     /**
      * @var bool
@@ -25,46 +25,10 @@ class TTY implements TTYContract
      */
     private $originalConfiguration;
 
-    /**
-     * @param string $parameter
-     * @return string
-     */
-    public function exec($parameter = ''): string
-    {
-        if (!function_exists('proc_open')) {
-            throw new RuntimeException("Expect 'proc_open' function");
-        }
-
-        $descriptorspec = [
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
-        ];
-
-        $process = proc_open(
-            'stty ' . $parameter,
-            $descriptorspec,
-            $pipes,
-            null,
-            null,
-            ['suppress_errors' => true]
-        );
-
-        if (is_resource($process)) {
-            $info = stream_get_contents($pipes[1]);
-            fclose($pipes[1]);
-            fclose($pipes[2]);
-            proc_close($process);
-
-            return (string)$info;
-        } else {
-            throw new RuntimeException("Execute 'stty -a' error");
-        }
-    }
-
     public function disableCanonicalMode(): TTYContract
     {
         $this->exec('-icanon');
-        $this->isCanonical = false;
+        $this->isCanonicalMode = false;
 
         return $this;
     }
@@ -80,7 +44,7 @@ class TTY implements TTYContract
     public function enableCanonicalMode(): TTYContract
     {
         $this->exec('icanon');
-        $this->isCanonical = true;
+        $this->isCanonicalMode = true;
 
         return $this;
     }
@@ -104,25 +68,20 @@ class TTY implements TTYContract
 
     public function isCanonicalMode(): bool
     {
-        return $this->isCanonical;
+        if (null === $this->isCanonicalMode) {
+            $this->parseAll();
+        }
+
+        return $this->isCanonicalMode;
     }
 
     public function isEchoBack(): bool
     {
+        if (null === $this->isEchoBack) {
+            $this->parseAll();
+        }
+
         return $this->isEchoBack;
-    }
-
-    /**
-     * @return array
-     */
-    public function parseAll(): array
-    {
-        $output = $this->exec('-a');
-
-        return [
-            'echo' => (bool)preg_match('/[^-]echo/', $output),
-            'icanon' => (bool)preg_match('/[^-]icanon/', $output),
-        ];
     }
 
     /**
@@ -155,5 +114,52 @@ class TTY implements TTYContract
         }
 
         return $this->width;
+    }
+
+    /**
+     * @return array
+     */
+    private function parseAll(): array
+    {
+        $output = $this->exec('-a');
+
+        $this->isEchoBack = (bool)preg_match('/[^-]echo/', $output);
+        $this->isCanonicalMode = (bool)preg_match('/[^-]icanon/', $output);
+    }
+
+    /**
+     * @param string $parameter
+     * @return string
+     */
+    private function exec($parameter = ''): string
+    {
+        if (!function_exists('proc_open')) {
+            throw new RuntimeException("Expect 'proc_open' function");
+        }
+
+        $descriptorspec = [
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
+
+        $process = proc_open(
+            'stty ' . $parameter,
+            $descriptorspec,
+            $pipes,
+            null,
+            null,
+            ['suppress_errors' => true]
+        );
+
+        if (is_resource($process)) {
+            $info = stream_get_contents($pipes[1]);
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            proc_close($process);
+
+            return (string)$info;
+        } else {
+            throw new RuntimeException("Execute 'stty -a' error");
+        }
     }
 }
