@@ -2,6 +2,7 @@
 
 namespace MilesChou\Pherm;
 
+use Illuminate\Container\Container;
 use InvalidArgumentException;
 use MilesChou\Pherm\Binding\Key;
 use MilesChou\Pherm\Concerns\AttributeTrait;
@@ -12,9 +13,7 @@ use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Contracts\InputStream as InputContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
-use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Output\Attributes\Color256;
-use MilesChou\Pherm\Output\OutputStream;
 use MilesChou\Pherm\Support\Char;
 
 class Terminal implements TerminalContract
@@ -36,25 +35,23 @@ class Terminal implements TerminalContract
     private $renderer;
 
     /**
-     * @param InputContract|null $input
-     * @param OutputContract|null $output
-     * @param Control|null $control
+     * @var Container
      */
-    public function __construct(InputContract $input = null, OutputContract $output = null, Control $control = null)
+    private $container;
+
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
-        $input = $input ?? new InputStream();
-        $output = $output ?? new OutputStream();
-        $control = $control ?? new Control();
+        $this->container = $container;
 
-        $cursorHelper = new CursorHelper($this, $control);
-
-        $this->setInput($input);
-        $this->setOutput($output);
-        $this->setControl($control);
-        $this->setCursorHelper($cursorHelper);
+        $this->setInput($container->make(InputContract::class));
+        $this->setOutput($container->make(OutputContract::class));
+        $this->setControl($container->make(Control::class));
 
         // TODO: Now just use Color256
-        $this->attribute = new Color256();
+        $this->attribute = $container->make(Color256::class);
     }
 
     /**
@@ -83,12 +80,13 @@ class Terminal implements TerminalContract
     /**
      * @return static
      */
-    public function bootstrap()
+    public function bootstrap(): TerminalContract
     {
         $this->prepareConfiguration();
         $this->prepareCellBuffer();
 
-        $this->renderer = new Renderer($this, $this->cursor());
+        $this->setCursorHelper($this->container->make(CursorHelper::class));
+        $this->renderer = $this->container->make(Renderer::class);
 
         return $this;
     }

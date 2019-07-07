@@ -274,15 +274,13 @@ class TerminalTest extends TestCase
         fwrite($tempStream, 'mystring');
         rewind($tempStream);
 
-        $input = new InputStream($tempStream);
-        $output = new BufferedOutput();
-
-        $target = new Terminal($input, $output);
-        $target->setStty($this->createSttyMock())
+        $this->target->setInput(new InputStream($tempStream))
+            ->setOutput(new BufferedOutput())
+            ->setStty($this->createSttyMock())
             ->bootstrap();
 
-        $this->assertSame('myst', $target->read(4));
-        $this->assertSame('ring', $target->read(4));
+        $this->assertSame('myst', $this->target->read(4));
+        $this->assertSame('ring', $this->target->read(4));
 
         fclose($tempStream);
     }

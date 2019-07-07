@@ -2,10 +2,8 @@
 
 namespace MilesChou\Pherm\Concerns;
 
-use MilesChou\Pherm\CellBuffer;
 use MilesChou\Pherm\Contracts\Attribute;
 use MilesChou\Pherm\Output\Attributes\Color256;
-use OutOfRangeException;
 
 trait AttributeTrait
 {

@@ -1,8 +1,6 @@
 <?php
 
-use MilesChou\Pherm\Input\InputStream;
-use MilesChou\Pherm\Output\OutputStream;
-use MilesChou\Pherm\Terminal;
+use MilesChou\Pherm\App;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
@@ -75,7 +73,7 @@ $keyboard = [
     'K_RSHIFT' => [[42, 10, 'S'], [43, 10, 'H'], [44, 10, 'I'], [45, 10, 'F'], [46, 10, 'T']],
 ];
 
-$terminal = new Terminal(new InputStream(), new OutputStream());
+$terminal = App::create()->createTerminal();
 $terminal->bootstrap();
 $terminal->enableInstantOutput();
 $terminal->disableCanonicalMode();

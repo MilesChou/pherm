@@ -15,7 +15,8 @@
     ],
     "require": {
         "php": ">=7.1",
-        "ext-posix": "*"
+        "ext-posix": "*",
+        "illuminate/container": "^5.5"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",

@@ -17,6 +17,11 @@ interface Terminal
     public function height(): int;
 
     /**
+     * @return static
+     */
+    public function bootstrap(): Terminal;
+
+    /**
      * @return Attribute
      */
     public function getAttribute(): Attribute;

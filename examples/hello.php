@@ -1,12 +1,11 @@
 <?php
 
-use MilesChou\Pherm\Input\InputStream;
-use MilesChou\Pherm\Output\OutputStream;
-use MilesChou\Pherm\Terminal;
+use MilesChou\Pherm\App;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
-$terminal = (new Terminal(new InputStream(), new OutputStream()))
+$terminal = App::create()
+    ->createTerminal()
     ->enableInstantOutput()
     ->bootstrap();
 
