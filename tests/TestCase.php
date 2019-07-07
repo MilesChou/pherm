@@ -7,7 +7,7 @@ use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Input\StringInput;
 use MilesChou\Pherm\Output\BufferedOutput;
 use MilesChou\Pherm\Output\OutputStream;
-use MilesChou\Pherm\Stty;
+use MilesChou\Pherm\TTY;
 use MilesChou\Pherm\Terminal;
 use Mockery;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -16,20 +16,20 @@ class TestCase extends BaseTestCase
 {
     /**
      * @param array $parseAllMock
-     * @return Mockery\MockInterface|Stty
+     * @return Mockery\MockInterface|TTY
      */
-    protected function createSttyMock($parseAllMock = [])
+    protected function createTTYMock($parseAllMock = [])
     {
         $stub = array_merge([
-            'columns' => 80,
             'echo' => true,
             'icanon' => true,
-            'rows' => 24,
         ], $parseAllMock);
 
-        $mock = Mockery::mock(Stty::class);
+        $mock = Mockery::mock(TTY::class);
         $mock->makePartial();
         $mock->shouldReceive('parseAll')->andReturn($stub);
+        $mock->shouldReceive('width')->andReturn(80);
+        $mock->shouldReceive('height')->andReturn(24);
 
         return $mock;
     }
@@ -46,7 +46,7 @@ class TestCase extends BaseTestCase
 
         /** @var Terminal $instance */
         $instance = $app->createTerminal();
-        $instance->setStty($this->createSttyMock($parseAllMock));
+        $instance->setTTY($this->createTTYMock($parseAllMock));
         $instance->enableInstantOutput();
 
         return $instance;

@@ -252,7 +252,7 @@ class Terminal implements TerminalContract
      */
     public function __destruct()
     {
-        $this->stty->restore();
+        $this->tty->restore();
         $this->enableCursor();
     }
 }

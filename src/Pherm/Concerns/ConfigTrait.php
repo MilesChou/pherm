@@ -2,7 +2,7 @@
 
 namespace MilesChou\Pherm\Concerns;
 
-use MilesChou\Pherm\Stty;
+use MilesChou\Pherm\TTY;
 
 trait ConfigTrait
 {
@@ -19,13 +19,13 @@ trait ConfigTrait
     private $isCanonical;
 
     /**
-     * @var Stty
+     * @var TTY
      */
-    private $stty;
+    private $tty;
 
     public function disableCanonicalMode()
     {
-        $this->stty->exec('-icanon');
+        $this->tty->exec('-icanon');
         $this->isCanonical = false;
 
         return $this;
@@ -33,7 +33,7 @@ trait ConfigTrait
 
     public function disableEchoBack()
     {
-        $this->stty->exec('-echo');
+        $this->tty->exec('-echo');
         $this->echoBack = false;
 
         return $this;
@@ -41,7 +41,7 @@ trait ConfigTrait
 
     public function enableCanonicalMode()
     {
-        $this->stty->exec('icanon');
+        $this->tty->exec('icanon');
         $this->isCanonical = true;
 
         return $this;
@@ -49,7 +49,7 @@ trait ConfigTrait
 
     public function enableEchoBack()
     {
-        $this->stty->exec('echo');
+        $this->tty->exec('echo');
         $this->echoBack = true;
 
         return $this;
@@ -66,28 +66,29 @@ trait ConfigTrait
     }
 
     /**
-     * @param Stty $stty
+     * @param TTY $tty
      * @return static
      */
-    public function setStty(Stty $stty)
+    public function setTTY(TTY $tty)
     {
-        $this->stty = $stty;
+        $this->tty = $tty;
 
         return $this;
     }
 
     protected function prepareConfiguration(): void
     {
-        if (null === $this->stty) {
-            $this->setStty(new Stty());
+        if (null === $this->tty) {
+            $this->setTTY(new TTY());
         }
 
-        $this->stty->store();
-        $parsed = $this->stty->parseAll();
+        $this->tty->store();
+        $parsed = $this->tty->parseAll();
 
         $this->echoBack = $parsed['echo'];
         $this->isCanonical = $parsed['icanon'];
-        $this->height = $parsed['rows'];
-        $this->width = $parsed['columns'];
+
+        $this->height = $this->tty->height();
+        $this->width = $this->tty->width();
     }
 }
