@@ -3,7 +3,6 @@
 namespace MilesChou\Pherm\Concerns;
 
 use MilesChou\Pherm\Control;
-use MilesChou\Pherm\CursorHelper;
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 
 trait IoTrait
@@ -14,11 +13,6 @@ trait IoTrait
      * @var Control
      */
     private $control;
-
-    /**
-     * @var CursorHelper
-     */
-    private $cursorHelper;
 
     public function clearDown()
     {
@@ -71,17 +65,6 @@ trait IoTrait
     public function setControl(Control $control)
     {
         $this->control = $control;
-
-        return $this;
-    }
-
-    /**
-     * @param CursorHelper $cursorHelper
-     * @return static
-     */
-    public function setCursorHelper(CursorHelper $cursorHelper)
-    {
-        $this->cursorHelper = $cursorHelper;
 
         return $this;
     }

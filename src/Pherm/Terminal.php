@@ -10,6 +10,7 @@ use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\ConfigTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
+use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Contracts\InputStream as InputContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
 use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
@@ -26,6 +27,7 @@ class Terminal implements TerminalContract
     use ConfigTrait;
     use InstantOutputTrait;
     use IoTrait;
+    use PositionAwareTrait;
 
     /**
      * @var Key
@@ -41,6 +43,11 @@ class Terminal implements TerminalContract
      * @var Container
      */
     private $container;
+
+    /**
+     * @var Cursor
+     */
+    private $cursor;
 
     /**
      * @param Container $container
@@ -89,15 +96,12 @@ class Terminal implements TerminalContract
         return $this;
     }
 
-    /**
-     * @return static
-     */
-    public function bootstrap(): TerminalContract
+    public function bootstrap()
     {
         $this->prepareConfiguration();
         $this->prepareCellBuffer();
 
-        $this->setCursorHelper(new CursorHelper($this, $this->tty, $this->control));
+        $this->cursor = new Cursor($this->tty);
         $this->renderer = $this->container->make(Renderer::class);
 
         $this->tty->store();
@@ -121,9 +125,51 @@ class Terminal implements TerminalContract
         $this->getCellBuffer()->clear($fg, $bg);
 
         // Reset cursor
-        $this->cursorHelper->position(1, 1);
+        $this->setPosition(1, 1);
 
         return $this;
+    }
+
+    /**
+     * Current cursor position
+     *
+     * @return array
+     */
+    public function current(): array
+    {
+        // store state
+        $icanon = $this->tty->isCanonicalMode();
+        $echo = $this->tty->isEchoBack();
+
+        if ($icanon) {
+            $this->tty->disableCanonicalMode();
+        }
+
+        if ($echo) {
+            $this->tty->disableEchoBack();
+        }
+
+        fwrite(STDOUT, $this->control->dsr);
+
+        // 16 is work when return "\033[xxx;xxxH"
+        if (!$cpr = fread(STDIN, 16)) {
+            return [-1, -1];
+        }
+
+        // restore state
+        if ($icanon) {
+            $this->tty->enableCanonicalMode();
+        }
+
+        if ($echo) {
+            $this->tty->enableEchoBack();
+        }
+
+        if (sscanf(trim($cpr), $this->control->cpr, $row, $col) === 2) {
+            return [$col, $row];
+        }
+
+        return [-1, -1];
     }
 
     /**
@@ -131,7 +177,7 @@ class Terminal implements TerminalContract
      */
     public function cursor(): CursorHelper
     {
-        return $this->cursorHelper;
+        return new CursorHelper($this, $this->tty, $this->control);
     }
 
     /**
@@ -191,7 +237,15 @@ class Terminal implements TerminalContract
      */
     public function moveCursor(int $x, int $y): TerminalContract
     {
-        return $this->cursorHelper->move($x, $y);
+        if ($this->isInstantOutput()) {
+            $this->output->write($this->cursor->move($x, $y));
+        } else {
+            $this->cursor->checkPosition($x, $y);
+
+            $this->setPosition($x, $y);
+        }
+
+        return $this;
     }
 
     public function read(int $bytes): string
@@ -229,13 +283,13 @@ class Terminal implements TerminalContract
         if ($this->isInstantOutput()) {
             $this->output->write($char);
         } else {
-            [$x, $y] = $this->cursorHelper->last();
+            [$x, $y] = $this->getPosition();
 
             if ($char === "\n") {
                 if ($y + 1 > $this->height) {
                     return $this;
                 }
-                $this->cursorHelper->position(1, $y + 1);
+                $this->setPosition(1, $y + 1);
 
                 return $this;
             }
@@ -250,7 +304,7 @@ class Terminal implements TerminalContract
                 $y++;
             }
 
-            $this->cursorHelper->position($x + 1, $y);
+            $this->setPosition($x + 1, $y);
         }
 
         return $this;

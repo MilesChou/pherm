@@ -57,43 +57,6 @@ class CursorHelper
         return $this->move($x, 1);
     }
 
-    public function current(): array
-    {
-        // store state
-        $icanon = $this->tty->isCanonicalMode();
-        $echo = $this->tty->isEchoBack();
-
-        if ($icanon) {
-            $this->tty->disableCanonicalMode();
-        }
-
-        if ($echo) {
-            $this->tty->disableEchoBack();
-        }
-
-        fwrite(STDOUT, $this->control->dsr);
-
-        // 16 is work when return "\033[xxx;xxxH"
-        if (!$cpr = fread(STDIN, 16)) {
-            return [-1, -1];
-        }
-
-        // restore state
-        if ($icanon) {
-            $this->tty->enableCanonicalMode();
-        }
-
-        if ($echo) {
-            $this->tty->enableEchoBack();
-        }
-
-        if (sscanf(trim($cpr), $this->control->cpr, $row, $col) === 2) {
-            return [$col, $row];
-        }
-
-        return [-1, -1];
-    }
-
     public function end(int $backwardX = 0, int $backwardY = 0): Terminal
     {
         return $this->move(

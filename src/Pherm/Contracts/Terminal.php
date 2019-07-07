@@ -7,7 +7,7 @@ interface Terminal
     /**
      * @return static
      */
-    public function bootstrap(): Terminal;
+    public function bootstrap();
 
     /**
      * Clear the terminal window
@@ -38,11 +38,21 @@ interface Terminal
     public function disableCursor();
 
     /**
+     * @return static
+     */
+    public function disableInstantOutput();
+
+    /**
      * Enable cursor display
      *
      * @return static
      */
     public function enableCursor();
+
+    /**
+     * @return static
+     */
+    public function enableInstantOutput();
 
     /**
      * @return Attribute
@@ -76,6 +86,13 @@ interface Terminal
      * @return bool
      */
     public function isInteractive(): bool;
+
+    /**
+     * @param int $x
+     * @param int $y
+     * @return Terminal
+     */
+    public function moveCursor(int $x, int $y): Terminal;
 
     /**
      * Read from the input stream

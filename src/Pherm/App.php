@@ -22,7 +22,7 @@ class App extends Container
     }
 
     /**
-     * @return Contracts\Terminal
+     * @return Terminal
      */
     public function createTerminal(): Contracts\Terminal
     {

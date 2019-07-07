@@ -4,6 +4,7 @@ namespace Tests\Pherm;
 
 use LogicException;
 use MilesChou\Pherm\Control;
+use MilesChou\Pherm\Contracts\Control as ControlContract;
 use OutOfRangeException;
 use Tests\TestCase;
 
@@ -42,7 +43,7 @@ class ControlTest extends TestCase
      */
     public function shouldGetConstArrowControlSeqWhenCallMagicMethod(): void
     {
-        $this->assertSame(Control::CONTROL_SEQUENCES['CUU'], $this->target->cuu);
+        $this->assertSame(ControlContract::CONTROL_SEQUENCES['CUU'], $this->target->cuu);
     }
 
     /**
@@ -62,7 +63,7 @@ class ControlTest extends TestCase
      */
     public function shouldGetConstNullControlCharWhenCallMagicMethod(): void
     {
-        $this->assertSame(Control::CONTROL_CHARACTER['NUL'], $this->target->nul);
+        $this->assertSame(ControlContract::CONTROL_CHARACTER['NUL'], $this->target->nul);
     }
 
     /**
