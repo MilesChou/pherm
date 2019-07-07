@@ -297,17 +297,6 @@ class TerminalTest extends TestCase
         $this->assertSame('My awesome string', $output->fetch());
     }
 
-    public function testGetColourSupport(): void
-    {
-        $output = new BufferedOutput;
-
-        $this->target->setOutput($output)
-            ->setStty($this->createSttyMock())
-            ->bootstrap();
-
-        $this->assertTrue($this->target->getColourSupport() === 8 || $this->target->getColourSupport() === 256);
-    }
-
     /**
      * @test
      */

@@ -9,11 +9,6 @@ trait ConfigTrait
     use SizeAwareTrait;
 
     /**
-     * @var int
-     */
-    private $colourSupport;
-
-    /**
      * @var bool
      */
     private $echoBack;
@@ -60,11 +55,6 @@ trait ConfigTrait
         return $this;
     }
 
-    public function getColourSupport(): int
-    {
-        return $this->colourSupport;
-    }
-
     public function isCanonicalMode(): bool
     {
         return $this->isCanonical;
@@ -99,7 +89,5 @@ trait ConfigTrait
         $this->isCanonical = $parsed['icanon'];
         $this->height = $parsed['rows'];
         $this->width = $parsed['columns'];
-
-        $this->colourSupport = (int)exec('tput colors');
     }
 }

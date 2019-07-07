@@ -86,15 +86,6 @@ trait IoTrait
         return $this;
     }
 
-    public function supportsColour(): bool
-    {
-        if (DIRECTORY_SEPARATOR === '\\') {
-            return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI') || 'xterm' === getenv('TERM');
-        }
-
-        return $this->isInteractive();
-    }
-
     public function showSecondaryScreen()
     {
         $this->output->write("\033[?47h");

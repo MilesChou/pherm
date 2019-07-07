@@ -27,11 +27,6 @@ interface Terminal
     public function getAttribute(): Attribute;
 
     /**
-     * Get the number of colours the terminal supports (1, 8, 256, true colours)
-     */
-    public function getColourSupport(): int;
-
-    /**
      * @return CursorHelper
      */
     public function getCursor(): CursorHelper;
@@ -84,11 +79,6 @@ interface Terminal
      * @return bool
      */
     public function isInteractive(): bool;
-
-    /**
-     * Test whether terminal supports colour output
-     */
-    public function supportsColour(): bool;
 
     /**
      * Clear the terminal window
