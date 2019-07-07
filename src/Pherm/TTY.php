@@ -116,10 +116,7 @@ class TTY implements TTYContract
         return $this->width;
     }
 
-    /**
-     * @return array
-     */
-    private function parseAll(): array
+    private function parseAll(): void
     {
         $output = $this->exec('-a');
 
