@@ -2,8 +2,6 @@
 
 namespace MilesChou\Pherm\Contracts;
 
-use MilesChou\Pherm\CursorHelper;
-
 interface Terminal
 {
     /**
@@ -50,11 +48,6 @@ interface Terminal
      * @return Attribute
      */
     public function getAttribute(): Attribute;
-
-    /**
-     * @return CursorHelper
-     */
-    public function getCursor(): CursorHelper;
 
     /**
      * @return InputStream

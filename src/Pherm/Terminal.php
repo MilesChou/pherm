@@ -172,11 +172,6 @@ class Terminal implements TerminalContract
         $this->output->flush();
     }
 
-    public function getCursor(): CursorHelper
-    {
-        return $this->cursor();
-    }
-
     /**
      * @return Key
      */
