@@ -3,23 +3,13 @@
 namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Concerns\AttributeTrait;
-use MilesChou\Pherm\Concerns\PositionAwareTrait;
-use MilesChou\Pherm\Concerns\SizeAwareTrait;
 use MilesChou\Pherm\Contracts\OutputStream;
 use MilesChou\Pherm\Contracts\Renderer as RendererContract;
-use MilesChou\Pherm\Contracts\Terminal;
 use MilesChou\Pherm\Support\Char;
 
 class Renderer implements RendererContract
 {
     use AttributeTrait;
-    use PositionAwareTrait;
-    use SizeAwareTrait;
-
-    /**
-     * @var CursorHelper
-     */
-    private $cursorHelper;
 
     /**
      * @var OutputStream
@@ -30,23 +20,22 @@ class Renderer implements RendererContract
      * @var CellBuffer
      */
     private $outputBuffer;
+
     /**
      * @var Control
      */
     private $control;
 
     /**
-     * @param Terminal $terminal
-     * @param CursorHelper $cursorHelper
+     * @param OutputStream $output
      * @param Control $control
      */
-    public function __construct(Terminal $terminal, CursorHelper $cursorHelper, Control $control)
+    public function __construct(OutputStream $output, Control $control)
     {
-        $this->output = $terminal->getOutput();
-        $this->cursorHelper = $cursorHelper;
+        $this->output = $output;
+        $this->control = $control;
 
         $this->outputBuffer = new CellBuffer($control->width(), $control->height());
-        $this->control = $control;
     }
 
     public function renderBuffer(CellBuffer $buffer): void
@@ -82,7 +71,7 @@ class Renderer implements RendererContract
                 if ($w === 2 && $x === $this->outputBuffer->width() - 1) {
                     $this->output->write(' ');
                 } else {
-                    $this->cursorHelper->instant($x + 1, $y + 1);
+                    $this->output->write($this->control->cup($y, $x));
                     $this->output->write($back[0]);
                     if ($w === 2) {
                         $next = $cellOffset + 1;
