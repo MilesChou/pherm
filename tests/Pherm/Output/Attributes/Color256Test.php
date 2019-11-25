@@ -47,8 +47,8 @@ class Color256Test extends TestCase
     {
         $actual = $this->target->generate(3, 4);
 
-        $this->assertContains("\033[38;5;3m", $actual);
-        $this->assertContains("\033[48;5;4m", $actual);
+        $this->assertStringContainsString("\033[38;5;3m", $actual);
+        $this->assertStringContainsString("\033[48;5;4m", $actual);
     }
 
     /**
@@ -58,8 +58,8 @@ class Color256Test extends TestCase
     {
         $actual = $this->target->generate(3, Color256::COLOR_DEFAULT);
 
-        $this->assertContains("\033[38;5;3m", $actual);
-        $this->assertNotContains("\033[48;5", $actual);
+        $this->assertStringContainsString("\033[38;5;3m", $actual);
+        $this->assertStringNotContainsString("\033[48;5", $actual);
     }
 
     /**
@@ -69,8 +69,8 @@ class Color256Test extends TestCase
     {
         $actual = $this->target->generate(Color256::COLOR_DEFAULT, 3);
 
-        $this->assertNotContains("\033[38;5", $actual);
-        $this->assertContains("\033[48;5;3m", $actual);
+        $this->assertStringNotContainsString("\033[38;5", $actual);
+        $this->assertStringContainsString("\033[48;5;3m", $actual);
     }
 
     /**
@@ -80,10 +80,10 @@ class Color256Test extends TestCase
     {
         $actual = $this->target->generate(3 | Color256::BOLD, 3);
 
-        $this->assertContains("\033[38;5;3m", $actual);
-        $this->assertContains("\033[48;5;3m", $actual);
-        $this->assertContains("\033[1m", $actual);
-        $this->assertNotContains("\033[5m", $actual);
+        $this->assertStringContainsString("\033[38;5;3m", $actual);
+        $this->assertStringContainsString("\033[48;5;3m", $actual);
+        $this->assertStringContainsString("\033[1m", $actual);
+        $this->assertStringNotContainsString("\033[5m", $actual);
     }
 
     /**
@@ -93,9 +93,9 @@ class Color256Test extends TestCase
     {
         $actual = $this->target->generate(3, 3 | Color256::BOLD);
 
-        $this->assertContains("\033[38;5;3m", $actual);
-        $this->assertContains("\033[48;5;3m", $actual);
-        $this->assertContains("\033[5m", $actual);
-        $this->assertNotContains("\033[1m", $actual);
+        $this->assertStringContainsString("\033[38;5;3m", $actual);
+        $this->assertStringContainsString("\033[48;5;3m", $actual);
+        $this->assertStringContainsString("\033[5m", $actual);
+        $this->assertStringNotContainsString("\033[1m", $actual);
     }
 }

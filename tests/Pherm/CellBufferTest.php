@@ -3,6 +3,7 @@
 namespace Tests\Pherm;
 
 use MilesChou\Pherm\CellBuffer;
+use OutOfRangeException;
 use Tests\TestCase;
 
 class CellBufferTest extends TestCase
@@ -87,20 +88,22 @@ class CellBufferTest extends TestCase
 
     /**
      * @test
-     * @expectedException \OutOfRangeException
      */
     public function shouldThrowExceptionWhenGetOutOfRange(): void
     {
+        $this->expectException(OutOfRangeException::class);
+
         $target = new CellBuffer(5, 15);
         $target->get(6, 15);
     }
 
     /**
      * @test
-     * @expectedException \OutOfRangeException
      */
     public function shouldThrowExceptionWhenSetOutOfRange(): void
     {
+        $this->expectException(OutOfRangeException::class);
+
         $target = new CellBuffer(5, 15);
         $target->set(5, 16, 'a', 3, 4);
     }

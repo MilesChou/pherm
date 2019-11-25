@@ -3,6 +3,7 @@
 namespace Tests\Pherm\Concerns;
 
 use MilesChou\Pherm\Concerns\BufferTrait;
+use OutOfRangeException;
 use Tests\TestCase;
 
 class BufferTraitTest extends TestCase
@@ -38,19 +39,21 @@ class BufferTraitTest extends TestCase
 
     /**
      * @test
-     * @expectedException \OutOfRangeException
      */
     public function shouldThrowExceptionWhenGetCellWithOutOfRange(): void
     {
+        $this->expectException(OutOfRangeException::class);
+
         $this->target->getCell(11, 20);
     }
 
     /**
      * @test
-     * @expectedException \OutOfRangeException
      */
     public function shouldThrowExceptionWhenWriteCellWithOutOfRange(): void
     {
+        $this->expectException(OutOfRangeException::class);
+
         $this->target->writeCell(10, 21, ' ', 0, 0);
     }
 }

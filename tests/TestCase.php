@@ -8,7 +8,6 @@ use MilesChou\Pherm\Control;
 use MilesChou\Pherm\Input\StringInput;
 use MilesChou\Pherm\Output\BufferedOutput;
 use MilesChou\Pherm\Output\OutputStream;
-use MilesChou\Pherm\TTY;
 use MilesChou\Pherm\Terminal;
 use Mockery;
 use PHPUnit\Framework\TestCase as BaseTestCase;

@@ -3,8 +3,8 @@
 namespace Tests\Pherm;
 
 use LogicException;
-use MilesChou\Pherm\Control;
 use MilesChou\Pherm\Contracts\Control as ControlContract;
+use MilesChou\Pherm\Control;
 use MilesChou\Pherm\TTY;
 use OutOfRangeException;
 use Tests\TestCase;
@@ -16,26 +16,28 @@ class ControlTest extends TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->target = new Control(new TTY());
     }
 
     /**
      * @test
-     * @expectedException OutOfRangeException
      */
     public function shouldThrowExceptionWhenCallMagicMethodWithNonExistName(): void
     {
+        $this->expectException(OutOfRangeException::class);
+
         $this->target->notExist;
     }
 
     /**
      * @test
-     * @expectedException LogicException
      */
     public function shouldThrowExceptionWhenCallExistMethodWithSameName(): void
     {
+        $this->expectException(LogicException::class);
+
         $this->target->cup;
     }
 
@@ -109,10 +111,11 @@ class ControlTest extends TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
      */
     public function shouldThrowExceptionWhenSetProperty(): void
     {
+        $this->expectException(LogicException::class);
+
         $this->target->whatever = 'whatever';
     }
 }

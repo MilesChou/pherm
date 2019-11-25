@@ -2,6 +2,7 @@
 
 namespace Tests\Pherm;
 
+use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Input\StringInput;
 use MilesChou\Pherm\Output\BufferedOutput;
@@ -15,7 +16,7 @@ class TerminalTest extends TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->target = $this->createTerminalInstance();
     }
@@ -82,11 +83,12 @@ class TerminalTest extends TestCase
 
     /**
      * @test
-     * @expectedException \MilesChou\Pherm\Exceptions\NotInteractiveTerminal
-     * @expectedExceptionMessage Input stream is not interactive (non TTY)
      */
     public function shouldThrowsExceptionWhenCallMustBeInteractiveWithInputNotTTY(): void
     {
+        $this->expectException(NotInteractiveTerminal::class);
+        $this->expectExceptionMessage('Input stream is not interactive (non TTY)');
+
         $input = (new StringInput())->mockInteractive(false);
 
         $this->target->setInput($input)
@@ -97,11 +99,12 @@ class TerminalTest extends TestCase
 
     /**
      * @test
-     * @expectedException \MilesChou\Pherm\Exceptions\NotInteractiveTerminal
-     * @expectedExceptionMessage Output stream is not interactive (non TTY)
      */
     public function shouldThrowsExceptionWhenCallMustBeInteractiveWithOutputNotTTY(): void
     {
+        $this->expectException(NotInteractiveTerminal::class);
+        $this->expectExceptionMessage('Output stream is not interactive (non TTY)');
+
         $input = (new StringInput())->mockInteractive(true);
         $output = (new BufferedOutput())->mockInteractive(false);
 
@@ -310,8 +313,8 @@ class TerminalTest extends TestCase
 
         $this->target->attribute(48, 62);
 
-        $this->assertContains("\033[38;5;48m", $output->fetch(false));
-        $this->assertContains("\033[48;5;62m", $output->fetch(false));
+        $this->assertStringContainsString("\033[38;5;48m", $output->fetch(false));
+        $this->assertStringContainsString("\033[48;5;62m", $output->fetch(false));
     }
 
     /**

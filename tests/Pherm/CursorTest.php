@@ -3,6 +3,7 @@
 namespace Tests\Pherm;
 
 use MilesChou\Pherm\CursorHelper;
+use OverflowException;
 use Tests\TestCase;
 
 class CursorTest extends TestCase
@@ -22,7 +23,7 @@ class CursorTest extends TestCase
         ];
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // col 80, row 24
         $this->target = $this->createTerminalInstance()->bootstrap()->cursor();
@@ -31,10 +32,11 @@ class CursorTest extends TestCase
     /**
      * @test
      * @dataProvider overflowCase
-     * @expectedException \OverflowException
      */
     public function shouldThrowWriteCorrectStringWhenCallMove($x, $y): void
     {
+        $this->expectException(OverflowException::class);
+
         $this->target->move($x, $y);
     }
 
