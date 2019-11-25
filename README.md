@@ -2,7 +2,7 @@
 
 [![License][license-svg]][license-link]
 [![Build Status][travis-svg]][travis-link]
-[![Coverage Status][coveralls-svg]][coveralls-link]
+[![Coverage Status][coverage-svg]][coverage-link]
 [![Codacy Badge][codacy-svg]][codacy-link]
 
 > This repo is fork from [`php-school/terminal`](https://github.com/php-school/terminal) 
@@ -15,8 +15,8 @@ See [examples](/examples) to know how to use.
 [license-link]: https://github.com/oidcphp/core/blob/master/LICENSE
 [travis-svg]: https://travis-ci.com/MilesChou/pherm.svg?branch=master
 [travis-link]: https://travis-ci.com/MilesChou/pherm
-[coveralls-svg]: https://coveralls.io/repos/github/MilesChou/pherm/badge.svg?branch=master
-[coveralls-link]: https://coveralls.io/github/MilesChou/pherm?branch=master
+[coverage-svg]: https://codecov.io/gh/MilesChou/pherm/branch/master/graph/badge.svg
+[coverage-link]: https://codecov.io/gh/MilesChou/pherm
 [codacy-svg]: https://api.codacy.com/project/badge/Grade/3d1e8acb28da4daf94b649f859a271b7
 [codacy-link]: https://www.codacy.com/manual/MilesChou/pherm
 
