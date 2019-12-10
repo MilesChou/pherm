@@ -3,10 +3,9 @@
 namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
-use MilesChou\Pherm\Contracts\TTY as TTYContract;
 use RuntimeException;
 
-class TTY implements TTYContract
+class TTY
 {
     use SizeAwareTrait;
 
@@ -26,9 +25,12 @@ class TTY implements TTYContract
     private $originalConfiguration;
 
     /**
-     * @inheritDoc
+     * Disable canonical input (allow each key press for reading, rather than the whole line)
+     *
+     * @return static
+     * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
-    public function disableCanonicalMode(): TTYContract
+    public function disableCanonicalMode(): TTY
     {
         $this->exec('-icanon');
         $this->isCanonicalMode = false;
@@ -37,9 +39,13 @@ class TTY implements TTYContract
     }
 
     /**
-     * @inheritDoc
+     * Disables echoing every character back to the terminal.
+     *
+     * This means we do not have to clear the line when reading.
+     *
+     * @return static
      */
-    public function disableEchoBack(): TTYContract
+    public function disableEchoBack(): TTY
     {
         $this->exec('-echo');
         $this->isEchoBack = false;
@@ -48,9 +54,12 @@ class TTY implements TTYContract
     }
 
     /**
-     * @inheritDoc
+     * Enable canonical input - read input by line
+     *
+     * @return static
+     * @see https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
      */
-    public function enableCanonicalMode(): TTYContract
+    public function enableCanonicalMode(): TTY
     {
         $this->exec('icanon');
         $this->isCanonicalMode = true;
@@ -59,9 +68,11 @@ class TTY implements TTYContract
     }
 
     /**
-     * @inheritDoc
+     * Enable echoing back every character input to the terminal.
+     *
+     * @return static
      */
-    public function enableEchoBack(): TTYContract
+    public function enableEchoBack(): TTY
     {
         $this->exec('echo');
         $this->isEchoBack = true;
@@ -78,6 +89,9 @@ class TTY implements TTYContract
         return $this->height;
     }
 
+    /**
+     * Is canonical mode enabled or not
+     */
     public function isCanonicalMode(): bool
     {
         if (null === $this->isCanonicalMode) {
@@ -87,6 +101,9 @@ class TTY implements TTYContract
         return $this->isCanonicalMode;
     }
 
+    /**
+     * Is echo back mode enabled
+     */
     public function isEchoBack(): bool
     {
         if (null === $this->isEchoBack) {

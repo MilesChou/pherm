@@ -5,7 +5,6 @@ namespace MilesChou\Pherm;
 use LogicException;
 use MilesChou\Pherm\Contracts\Control as ControlContract;
 use MilesChou\Pherm\Contracts\Cursor as CursorContract;
-use MilesChou\Pherm\Contracts\TTY as TTYContract;
 use OutOfRangeException;
 use OverflowException;
 
@@ -40,14 +39,14 @@ class Control implements ControlContract, CursorContract
     private $overwrite;
 
     /**
-     * @var TTYContract
+     * @var TTY
      */
     private $tty;
 
     /**
-     * @param TTYContract $tty
+     * @param TTY $tty
      */
-    public function __construct(TTYContract $tty)
+    public function __construct(TTY $tty)
     {
         $this->tty = $tty;
     }
