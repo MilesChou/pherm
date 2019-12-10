@@ -3,6 +3,7 @@
 namespace Tests\Pherm;
 
 use MilesChou\Pherm\CursorHelper;
+use MilesChou\Pherm\TTY;
 use OverflowException;
 use Tests\TestCase;
 

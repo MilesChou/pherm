@@ -35,7 +35,7 @@ class Renderer implements RendererContract
         $this->output = $output;
         $this->control = $control;
 
-        $this->outputBuffer = new CellBuffer($control->width(), $control->height());
+        $this->outputBuffer = new CellBuffer($control->tty->width(), $control->tty->height());
     }
 
     public function renderBuffer(CellBuffer $buffer): void

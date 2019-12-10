@@ -47,5 +47,6 @@ class App extends Container
         $this->singleton(Contracts\Terminal::class, Terminal::class);
         $this->bind(Contracts\InputStream::class, InputStream::class);
         $this->bind(Contracts\OutputStream::class, OutputStream::class);
+        $this->bind(Contracts\TTY::class, TTY::class);
     }
 }

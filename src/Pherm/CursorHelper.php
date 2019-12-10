@@ -34,14 +34,14 @@ class CursorHelper
 
     public function bottom(int $x = 1): Terminal
     {
-        return $this->move($x, $this->control->height());
+        return $this->move($x, $this->control->tty->height());
     }
 
     public function center(int $deltaX = 0, int $deltaY = 0): Terminal
     {
         return $this->move(
-            (int)($this->control->width() / 2) + $deltaX,
-            (int)($this->control->height() / 2) + $deltaY
+            (int)($this->control->tty->width() / 2) + $deltaX,
+            (int)($this->control->tty->height() / 2) + $deltaY
         );
     }
 
@@ -53,8 +53,8 @@ class CursorHelper
     public function end(int $backwardX = 0, int $backwardY = 0): Terminal
     {
         return $this->move(
-            $this->control->width() - $backwardX,
-            $this->control->height() - $backwardY
+            $this->control->tty->width() - $backwardX,
+            $this->control->tty->height() - $backwardY
         );
     }
 
@@ -74,7 +74,7 @@ class CursorHelper
 
     public function middle(int $x = 1): Terminal
     {
-        return $this->move($x, $this->control->height() / 2);
+        return $this->move($x, $this->control->tty->height() / 2);
     }
 
     public function move(int $x, int $y): Terminal

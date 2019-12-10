@@ -93,13 +93,13 @@ class Terminal implements TerminalContract
 
     public function bootstrap()
     {
-        $this->height = $this->control->height();
-        $this->width = $this->control->width();
+        $this->height = $this->control->tty->height();
+        $this->width = $this->control->tty->width();
 
         $this->prepareCellBuffer();
 
         $this->renderer = $this->container->make(Renderer::class);
-        $this->control->store();
+        $this->control->tty->store();
 
         return $this;
     }
@@ -133,15 +133,15 @@ class Terminal implements TerminalContract
     public function current(): array
     {
         // store state
-        $icanon = $this->control->isCanonicalMode();
-        $echo = $this->control->isEchoBack();
+        $icanon = $this->control->tty->isCanonicalMode();
+        $echo = $this->control->tty->isEchoBack();
 
         if ($icanon) {
-            $this->control->disableCanonicalMode();
+            $this->control->tty->disableCanonicalMode();
         }
 
         if ($echo) {
-            $this->control->disableEchoBack();
+            $this->control->tty->disableEchoBack();
         }
 
         fwrite(STDOUT, $this->control->dsr);
@@ -153,11 +153,11 @@ class Terminal implements TerminalContract
 
         // restore state
         if ($icanon) {
-            $this->control->enableCanonicalMode();
+            $this->control->tty->enableCanonicalMode();
         }
 
         if ($echo) {
-            $this->control->enableEchoBack();
+            $this->control->tty->enableEchoBack();
         }
 
         if (sscanf(trim($cpr), $this->control->cpr, $row, $col) === 2) {
@@ -310,7 +310,7 @@ class Terminal implements TerminalContract
      */
     public function __destruct()
     {
-        $this->control->restore();
+        $this->control->tty->restore();
         $this->enableCursor();
     }
 }
