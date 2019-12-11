@@ -2,9 +2,9 @@
 
 namespace MilesChou\Pherm\Input;
 
-use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
+use MilesChou\Pherm\Contracts\Input;
 
-class StringInput implements InputStreamContract
+class StringInput implements Input
 {
     /**
      * @var array

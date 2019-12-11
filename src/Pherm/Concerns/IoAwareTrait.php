@@ -2,42 +2,42 @@
 
 namespace MilesChou\Pherm\Concerns;
 
-use MilesChou\Pherm\Contracts\InputStream;
-use MilesChou\Pherm\Contracts\OutputStream;
+use MilesChou\Pherm\Contracts\Input;
+use MilesChou\Pherm\Contracts\Output;
 
 trait IoAwareTrait
 {
     /**
-     * @var InputStream
+     * @var Input
      */
     private $input;
 
     /**
-     * @var OutputStream
+     * @var Output
      */
     private $output;
 
     /**
-     * @return InputStream
+     * @return Input
      */
-    public function getInput(): InputStream
+    public function getInput(): Input
     {
         return $this->input;
     }
 
     /**
-     * @return OutputStream
+     * @return Output
      */
-    public function getOutput(): OutputStream
+    public function getOutput(): Output
     {
         return $this->output;
     }
 
     /**
-     * @param InputStream $input
+     * @param Input $input
      * @return static
      */
-    public function setInput(InputStream $input)
+    public function setInput(Input $input)
     {
         $this->input = $input;
 
@@ -45,10 +45,10 @@ trait IoAwareTrait
     }
 
     /**
-     * @param OutputStream $output
+     * @param Output $output
      * @return static
      */
-    public function setOutput(OutputStream $output)
+    public function setOutput(Output $output)
     {
         $this->output = $output;
 

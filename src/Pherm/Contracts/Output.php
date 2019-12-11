@@ -2,7 +2,7 @@
 
 namespace MilesChou\Pherm\Contracts;
 
-interface OutputStream
+interface Output
 {
     /**
      * Flush the buffer to output stream

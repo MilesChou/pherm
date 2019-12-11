@@ -3,7 +3,7 @@
 namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Concerns\AttributeTrait;
-use MilesChou\Pherm\Contracts\OutputStream;
+use MilesChou\Pherm\Contracts\Output;
 use MilesChou\Pherm\Support\Char;
 
 class Renderer
@@ -11,7 +11,7 @@ class Renderer
     use AttributeTrait;
 
     /**
-     * @var OutputStream
+     * @var Output
      */
     private $output;
 
@@ -26,10 +26,10 @@ class Renderer
     private $control;
 
     /**
-     * @param OutputStream $output
+     * @param Output $output
      * @param Control $control
      */
-    public function __construct(OutputStream $output, Control $control)
+    public function __construct(Output $output, Control $control)
     {
         $this->output = $output;
         $this->control = $control;

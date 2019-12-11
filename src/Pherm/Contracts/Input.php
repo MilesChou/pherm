@@ -2,7 +2,7 @@
 
 namespace MilesChou\Pherm\Contracts;
 
-interface InputStream
+interface Input
 {
     /**
      * Whether the stream is connected to an interactive terminal

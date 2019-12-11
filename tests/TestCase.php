@@ -2,13 +2,11 @@
 
 namespace Tests;
 
-use MilesChou\Pherm\App;
+use Illuminate\Container\Container;
 use MilesChou\Pherm\Contracts;
-use MilesChou\Pherm\Contracts\InputStream;
 use MilesChou\Pherm\Control;
 use MilesChou\Pherm\Input\StringInput;
 use MilesChou\Pherm\Output\BufferedOutput;
-use MilesChou\Pherm\Output\OutputStream;
 use MilesChou\Pherm\Terminal;
 use MilesChou\Pherm\TTY;
 use Mockery;
@@ -49,12 +47,12 @@ class TestCase extends BaseTestCase
      */
     protected function createTerminalInstance(): Terminal
     {
-        $app = App::create();
-        $app->instance(InputStream::class, new StringInput);
-        $app->instance(OutputStream::class, new BufferedOutput);
+        $container = new Container();
 
-        /** @var Terminal $instance */
-        $instance = $app->createTerminal();
+        $container->instance(Contracts\Input::class, new StringInput());
+        $container->instance(Contracts\Output::class, new BufferedOutput());
+
+        $instance = new Terminal($container);
         $instance->setControl(new Control($this->createTTYMock()));
         $instance->enableInstantOutput();
 

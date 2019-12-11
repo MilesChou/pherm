@@ -1,6 +1,11 @@
 <?php
 
-use MilesChou\Pherm\App;
+use Illuminate\Container\Container;
+use MilesChou\Pherm\Contracts\Input;
+use MilesChou\Pherm\Contracts\Output;
+use MilesChou\Pherm\Input\InputStream;
+use MilesChou\Pherm\Output\OutputStream;
+use MilesChou\Pherm\Terminal;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
@@ -73,21 +78,26 @@ $keyboard = [
     'K_RSHIFT' => [[42, 10, 'S'], [43, 10, 'H'], [44, 10, 'I'], [45, 10, 'F'], [46, 10, 'T']],
 ];
 
-$terminal = App::create()->createTerminal();
-$terminal->bootstrap();
+$container = new Container();
+$container->instance(Input::class, new InputStream());
+$container->instance(Output::class, new OutputStream());
+
+$terminal = (new Terminal($container));
 $terminal->enableInstantOutput();
 $terminal->disableCanonicalMode();
 $terminal->disableEchoBack();
 $terminal->disableCursor();
-$terminal->clear();
+$terminal->bootstrap();
 
-$terminal->attribute(15, 32);
+$terminal->clear();
 
 foreach ($keyboard as $key => $data) {
     foreach ($data as $item) {
-        $terminal->moveCursor($item[0], $item[1])->write($item[2]);
+        $terminal->writeCell($item[0], $item[1], $item[2], 15, 32);
     }
 }
+
+$terminal->flush();
 
 $terminal->cursor()->bottom();
 

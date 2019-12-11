@@ -3,13 +3,13 @@
 namespace MilesChou\Pherm\Input;
 
 use InvalidArgumentException;
-use MilesChou\Pherm\Contracts\InputStream as InputStreamContract;
+use MilesChou\Pherm\Contracts\Input;
 use function get_resource_type;
 use function is_resource;
 use function stream_get_meta_data;
 use function strpos;
 
-class InputStream implements InputStreamContract
+class InputStream implements Input
 {
     /**
      * @var resource

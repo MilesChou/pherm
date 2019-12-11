@@ -4,13 +4,13 @@ namespace MilesChou\Pherm\Output;
 
 use InvalidArgumentException;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
-use MilesChou\Pherm\Contracts\OutputStream as OutputStreamContract;
+use MilesChou\Pherm\Contracts\Output;
 use function get_resource_type;
 use function is_resource;
 use function stream_get_meta_data;
 use function strpos;
 
-class OutputStream implements OutputStreamContract
+class OutputStream implements Output
 {
     use InstantOutputTrait;
 

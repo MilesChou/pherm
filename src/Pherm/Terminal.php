@@ -2,7 +2,6 @@
 
 namespace MilesChou\Pherm;
 
-use Illuminate\Container\Container;
 use InvalidArgumentException;
 use MilesChou\Pherm\Binding\Key;
 use MilesChou\Pherm\Concerns\AttributeTrait;
@@ -11,10 +10,11 @@ use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
-use MilesChou\Pherm\Contracts\InputStream as InputContract;
-use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
+use MilesChou\Pherm\Contracts\Input;
+use MilesChou\Pherm\Contracts\Output;
 use MilesChou\Pherm\Output\Attributes\Color256;
 use MilesChou\Pherm\Support\Char;
+use Psr\Container\ContainerInterface;
 
 /**
  * @mixin Control
@@ -39,25 +39,18 @@ class Terminal
     private $renderer;
 
     /**
-     * @var Container
+     * @param ContainerInterface $container
      */
-    private $container;
-
-    /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-
-        $this->setInput($container->make(InputContract::class));
-        $this->setOutput($container->make(OutputContract::class));
-        $this->setControl($container->make(Control::class));
+        $this->setInput($container->get(Input::class));
+        $this->setOutput($container->get(Output::class));
+        $this->setControl($container->get(Control::class));
 
         // TODO: Now just use Color256
-        $this->attribute = $container->make(Color256::class);
+        $this->attribute = $container->get(Color256::class);
 
-        $this->renderer = $this->container->make(Renderer::class);
+        $this->renderer = $container->get(Renderer::class);
     }
 
     public function __call($method, $arguments)
