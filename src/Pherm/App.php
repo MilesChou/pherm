@@ -24,13 +24,9 @@ class App extends Container
     /**
      * @return Terminal
      */
-    public function createTerminal(): Contracts\Terminal
+    public function createTerminal(): Terminal
     {
-        $terminal = $this->make(Contracts\Terminal::class);
-
-        $this->instance(Terminal::class, $terminal);
-
-        return $terminal;
+        return $this->make(Terminal::class);
     }
 
     /**
@@ -44,7 +40,8 @@ class App extends Container
 
         $this->instance(Container::class, $this);
 
-        $this->singleton(Contracts\Terminal::class, Terminal::class);
+        $this->singleton(Terminal::class);
+
         $this->bind(Contracts\InputStream::class, InputStream::class);
         $this->bind(Contracts\OutputStream::class, OutputStream::class);
     }

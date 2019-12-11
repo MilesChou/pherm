@@ -3,7 +3,6 @@
 namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
-use MilesChou\Pherm\Contracts\Terminal;
 
 class CursorHelper
 {

@@ -13,14 +13,13 @@ use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
 use MilesChou\Pherm\Contracts\InputStream as InputContract;
 use MilesChou\Pherm\Contracts\OutputStream as OutputContract;
-use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
 use MilesChou\Pherm\Output\Attributes\Color256;
 use MilesChou\Pherm\Support\Char;
 
 /**
  * @mixin Control
  */
-class Terminal implements TerminalContract
+class Terminal
 {
     use SizeAwareTrait;
     use AttributeTrait;
@@ -57,6 +56,8 @@ class Terminal implements TerminalContract
 
         // TODO: Now just use Color256
         $this->attribute = $container->make(Color256::class);
+
+        $this->renderer = $this->container->make(Renderer::class);
     }
 
     public function __call($method, $arguments)
@@ -73,9 +74,9 @@ class Terminal implements TerminalContract
      *
      * @param int|null $fg
      * @param int|null $bg
-     * @return static
+     * @return Terminal
      */
-    public function attribute(?int $fg = null, ?int $bg = null)
+    public function attribute(?int $fg = null, ?int $bg = null): Terminal
     {
         if ($this->isInstantOutput()) {
             if ($fg === $this->lastFg && $bg === $this->lastBg) {
@@ -91,14 +92,16 @@ class Terminal implements TerminalContract
         return $this;
     }
 
-    public function bootstrap()
+    /**
+     * @return Terminal
+     */
+    public function bootstrap(): Terminal
     {
         $this->height = $this->control->tty->height();
         $this->width = $this->control->tty->width();
 
         $this->prepareCellBuffer();
 
-        $this->renderer = $this->container->make(Renderer::class);
         $this->control->tty->store();
 
         return $this;
@@ -109,9 +112,9 @@ class Terminal implements TerminalContract
      *
      * @param int|null $fg
      * @param int|null $bg
-     * @return static
+     * @return Terminal
      */
-    public function clear(?int $fg = null, ?int $bg = null)
+    public function clear(?int $fg = null, ?int $bg = null): Terminal
     {
         // Clear terminal
         $this->output->write("\033[2J");
@@ -190,9 +193,9 @@ class Terminal implements TerminalContract
     }
 
     /**
-     * @return static
+     * @return Terminal
      */
-    public function enableInstantOutput()
+    public function enableInstantOutput(): Terminal
     {
         $this->instantOutput = true;
 
@@ -216,7 +219,7 @@ class Terminal implements TerminalContract
     /**
      * @return Key
      */
-    public function keyBinding()
+    public function keyBinding(): Key
     {
         if (null === $this->keyBinding) {
             $this->keyBinding = new Key($this);
@@ -228,9 +231,9 @@ class Terminal implements TerminalContract
     /**
      * @param int $x
      * @param int $y
-     * @return TerminalContract
+     * @return Terminal
      */
-    public function moveCursor(int $x, int $y): TerminalContract
+    public function moveCursor(int $x, int $y): Terminal
     {
         if ($this->isInstantOutput()) {
             $this->output->write($this->control->move($x, $y));
@@ -269,7 +272,7 @@ class Terminal implements TerminalContract
      * @param string $char
      * @return static
      */
-    public function writeChar(string $char)
+    public function writeChar(string $char): Terminal
     {
         if (mb_strlen($char) > 1) {
             throw new InvalidArgumentException('Char must be only one mbstring');

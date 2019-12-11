@@ -4,10 +4,9 @@ namespace MilesChou\Pherm;
 
 use MilesChou\Pherm\Concerns\AttributeTrait;
 use MilesChou\Pherm\Contracts\OutputStream;
-use MilesChou\Pherm\Contracts\Renderer as RendererContract;
 use MilesChou\Pherm\Support\Char;
 
-class Renderer implements RendererContract
+class Renderer
 {
     use AttributeTrait;
 
@@ -38,6 +37,9 @@ class Renderer implements RendererContract
         $this->outputBuffer = new CellBuffer($control->tty->width(), $control->tty->height());
     }
 
+    /**
+     * @param CellBuffer $buffer
+     */
     public function renderBuffer(CellBuffer $buffer): void
     {
         $attribute = $this->getAttribute();

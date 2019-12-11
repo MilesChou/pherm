@@ -2,28 +2,26 @@
 
 namespace MilesChou\Pherm;
 
-use MilesChou\Pherm\Contracts\Terminal as TerminalContract;
-
 trait TerminalAwareTrait
 {
     /**
-     * @var TerminalContract
+     * @var Terminal
      */
     protected $terminal;
 
     /**
-     * @return TerminalContract
+     * @return Terminal
      */
-    public function getTerminal(): TerminalContract
+    public function getTerminal(): Terminal
     {
         return $this->terminal;
     }
 
     /**
-     * @param TerminalContract $terminal
+     * @param Terminal $terminal
      * @return static
      */
-    public function setTerminal(TerminalContract $terminal)
+    public function setTerminal(Terminal $terminal)
     {
         $this->terminal = $terminal;
 
