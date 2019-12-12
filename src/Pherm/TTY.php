@@ -80,15 +80,6 @@ class TTY
         return $this;
     }
 
-    public function height(): int
-    {
-        if ($this->height === null) {
-            $this->reloadSize();
-        }
-
-        return $this->height;
-    }
-
     /**
      * Is canonical mode enabled or not
      */
@@ -123,7 +114,7 @@ class TTY
 
         $this->setSize((int)$size[1], (int)$size[0]);
 
-        return $this->getSize();
+        return $this->size();
     }
 
     public function restore(): void
@@ -134,15 +125,6 @@ class TTY
     public function store(): void
     {
         $this->originalConfiguration = $this->exec('-g');
-    }
-
-    public function width(): int
-    {
-        if ($this->width === null) {
-            $this->reloadSize();
-        }
-
-        return $this->width;
     }
 
     private function parseAll(): void

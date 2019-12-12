@@ -85,6 +85,7 @@ class Control
     public function __construct(TTY $tty)
     {
         $this->tty = $tty;
+        $this->tty->reloadSize();
     }
 
     public function __get($key)

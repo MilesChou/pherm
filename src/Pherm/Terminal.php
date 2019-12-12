@@ -46,7 +46,6 @@ class Terminal
 
         // TODO: Now just use Color256
         $this->attribute = $container->get(Color256::class);
-
         $this->renderer = $container->get(Renderer::class);
     }
 

@@ -33,14 +33,6 @@ trait SizeAwareTrait
     }
 
     /**
-     * @return array [width, height]
-     */
-    public function getSize(): array
-    {
-        return [$this->width, $this->height];
-    }
-
-    /**
      * @param int $width
      * @param int $height
      * @return static
@@ -63,13 +55,10 @@ trait SizeAwareTrait
     }
 
     /**
-     * Alias for getSize()
-     *
      * @return array
-     * @see getSize();
      */
     public function size(): array
     {
-        return [$this->width, $this->height];
+        return [$this->width(), $this->height()];
     }
 }
