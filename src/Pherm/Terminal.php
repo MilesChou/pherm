@@ -199,6 +199,14 @@ class Terminal
     }
 
     /**
+     * @return bool
+     */
+    public function isInstantOutput(): bool
+    {
+        return $this->isInstantOutput;
+    }
+
+    /**
      * @param int $x
      * @param int $y
      * @return Terminal
@@ -214,14 +222,6 @@ class Terminal
         }
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInstantOutput(): bool
-    {
-        return $this->isInstantOutput;
     }
 
     /**
@@ -242,14 +242,15 @@ class Terminal
     /**
      * @param string $buffer
      */
-    public function write(string $buffer)
+    public function write(string $buffer): void
     {
         if ($this->isInstantOutput()) {
             $this->output->write($buffer);
-        } else {
-            foreach (Char::charsToArray($buffer) as $char) {
-                $this->writeChar($char);
-            }
+            return;
+        }
+
+        foreach (Char::charsToArray($buffer) as $char) {
+            $this->writeChar($char);
         }
     }
 
@@ -266,28 +267,7 @@ class Terminal
         if ($this->isInstantOutput()) {
             $this->output->write($char);
         } else {
-            [$x, $y] = $this->getPosition();
-
-            if ($char === "\n") {
-                if ($y + 1 > $this->height) {
-                    return $this;
-                }
-                $this->setPosition(1, $y + 1);
-
-                return $this;
-            }
-
-            $this->getCellBuffer()->set($x, $y, $char, $this->lastFg, $this->lastBg);
-
-            if ($x + 1 > $this->width) {
-                if ($y + 1 > $this->height) {
-                    return $this;
-                }
-                $x = 0;
-                $y++;
-            }
-
-            $this->setPosition($x + 1, $y);
+            $this->writeBuffer($char);
         }
 
         return $this;
@@ -300,5 +280,33 @@ class Terminal
     {
         $this->control->tty->restore();
         $this->enableCursor();
+    }
+
+    private function writeBuffer(string $char): void
+    {
+        [$x, $y] = $this->getPosition();
+
+        if ($char === "\n") {
+            if ($y + 1 > $this->height) {
+                return;
+            }
+
+            $this->setPosition(1, $y + 1);
+
+            return;
+        }
+
+        $this->getCellBuffer()->set($x, $y, $char, $this->lastFg, $this->lastBg);
+
+        if ($x + 1 > $this->width) {
+            if ($y + 1 > $this->height) {
+                return;
+            }
+
+            $x = 0;
+            $y++;
+        }
+
+        $this->setPosition($x + 1, $y);
     }
 }
