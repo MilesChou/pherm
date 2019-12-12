@@ -24,6 +24,14 @@ class TerminalTest extends TestCase
     /**
      * @test
      */
+    public function shouldBeOkayWhenUsingFluentCall(): void
+    {
+        $this->assertSame(24, $this->target->control()->tty->height());
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnsTrueIfInputAndOutputAreTTYs(): void
     {
         $input = (new StringInput())->mockInteractive(true);

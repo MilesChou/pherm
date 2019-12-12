@@ -16,9 +16,6 @@ use MilesChou\Pherm\Output\OutputStream;
 use MilesChou\Pherm\Support\Char;
 use Psr\Container\ContainerInterface;
 
-/**
- * @mixin Control
- */
 class Terminal
 {
     use SizeAwareTrait;
@@ -60,15 +57,6 @@ class Terminal
         // TODO: Now just use Color256
         $this->attribute = new Color256();
         $this->renderer = new Renderer($this->output, $this->control);
-    }
-
-    public function __call($method, $arguments)
-    {
-        if (method_exists($this->control, $method)) {
-            $this->control->{$method}(...$arguments);
-
-            return $this;
-        }
     }
 
     /**
@@ -128,6 +116,14 @@ class Terminal
         $this->setPosition(1, 1);
 
         return $this;
+    }
+
+    /**
+     * @return Control
+     */
+    public function control(): Control
+    {
+        return $this->control;
     }
 
     /**
