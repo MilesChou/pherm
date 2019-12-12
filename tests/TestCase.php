@@ -51,9 +51,9 @@ class TestCase extends BaseTestCase
 
         $container->instance(Contracts\Input::class, new StringInput());
         $container->instance(Contracts\Output::class, new BufferedOutput());
+        $container->instance(TTY::class, $this->createTTYMock());
 
         $instance = new Terminal($container);
-        $instance->setControl(new Control($this->createTTYMock()));
         $instance->enableInstantOutput();
 
         return $instance;

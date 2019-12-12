@@ -10,7 +10,9 @@ use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
 use MilesChou\Pherm\Contracts\Input;
 use MilesChou\Pherm\Contracts\Output;
+use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Output\Attributes\Color256;
+use MilesChou\Pherm\Output\OutputStream;
 use MilesChou\Pherm\Support\Char;
 use Psr\Container\ContainerInterface;
 
@@ -24,6 +26,11 @@ class Terminal
     use BufferTrait;
     use IoTrait;
     use PositionAwareTrait;
+
+    /**
+     * @var Control
+     */
+    private $control;
 
     /**
      * @var bool
@@ -40,13 +47,19 @@ class Terminal
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->setInput($container->get(Input::class));
-        $this->setOutput($container->get(Output::class));
-        $this->setControl($container->get(Control::class));
+        $input = $container->has(Input::class) ? $container->get(Input::class) : new InputStream();
+        $output = $container->has(Output::class) ? $container->get(Output::class) : new OutputStream();
+
+        $this->setInput($input);
+        $this->setOutput($output);
+
+        $tty = $container->has(TTY::class) ? $container->get(TTY::class) : new TTY();
+
+        $this->control = new Control($tty);
 
         // TODO: Now just use Color256
-        $this->attribute = $container->get(Color256::class);
-        $this->renderer = $container->get(Renderer::class);
+        $this->attribute = new Color256();
+        $this->renderer = new Renderer($this->output, $this->control);
     }
 
     public function __call($method, $arguments)

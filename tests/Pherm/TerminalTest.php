@@ -2,7 +2,6 @@
 
 namespace Tests\Pherm;
 
-use MilesChou\Pherm\Control;
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Input\StringInput;
@@ -151,7 +150,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->clearDown();
 
@@ -163,7 +161,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->enableCursor();
 
@@ -175,7 +172,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->disableCursor();
 
@@ -187,7 +183,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->cursor()->top();
 
@@ -202,7 +197,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->cursor()->end();
 
@@ -214,7 +208,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->cursor()->row(2);
 
@@ -226,7 +219,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->cursor()->column(10);
 
@@ -241,7 +233,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->moveCursor(10, 20);
 
@@ -253,7 +244,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->showSecondaryScreen();
 
@@ -265,7 +255,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->showPrimaryScreen();
 
@@ -280,7 +269,6 @@ class TerminalTest extends TestCase
 
         $this->target->setInput(new InputStream($tempStream))
             ->setOutput(new BufferedOutput())
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap();
 
         $this->assertSame('myst', $this->target->read(4));
@@ -294,7 +282,6 @@ class TerminalTest extends TestCase
         $output = new BufferedOutput;
 
         $this->target->setOutput($output)
-            ->setControl(new Control($this->createTTYMock()))
             ->bootstrap()
             ->write('My awesome string');
 
@@ -306,8 +293,7 @@ class TerminalTest extends TestCase
      */
     public function shouldWriteBackgroundAndForegroundWhenCallAttribute(): void
     {
-        $this->target->setControl(new Control($this->createTTYMock()))
-            ->bootstrap();
+        $this->target->bootstrap();
 
         /** @var BufferedOutput $output */
         $output = $this->target->getOutput();

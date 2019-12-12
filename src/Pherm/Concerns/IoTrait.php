@@ -2,17 +2,11 @@
 
 namespace MilesChou\Pherm\Concerns;
 
-use MilesChou\Pherm\Control;
 use MilesChou\Pherm\Exceptions\NotInteractiveTerminal;
 
 trait IoTrait
 {
     use IoAwareTrait;
-
-    /**
-     * @var Control
-     */
-    private $control;
 
     public function clearDown()
     {
@@ -56,17 +50,6 @@ trait IoTrait
         if (!$this->output->isInteractive()) {
             throw new NotInteractiveTerminal('Output stream is not interactive (non TTY)');
         }
-    }
-
-    /**
-     * @param Control $control
-     * @return static
-     */
-    public function setControl(Control $control)
-    {
-        $this->control = $control;
-
-        return $this;
     }
 
     public function showSecondaryScreen()

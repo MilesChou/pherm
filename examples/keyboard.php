@@ -1,10 +1,6 @@
 <?php
 
 use Illuminate\Container\Container;
-use MilesChou\Pherm\Contracts\Input;
-use MilesChou\Pherm\Contracts\Output;
-use MilesChou\Pherm\Input\InputStream;
-use MilesChou\Pherm\Output\OutputStream;
 use MilesChou\Pherm\Terminal;
 
 include_once __DIR__ . '/../vendor/autoload.php';
@@ -78,11 +74,7 @@ $keyboard = [
     'K_RSHIFT' => [[42, 10, 'S'], [43, 10, 'H'], [44, 10, 'I'], [45, 10, 'F'], [46, 10, 'T']],
 ];
 
-$container = new Container();
-$container->instance(Input::class, new InputStream());
-$container->instance(Output::class, new OutputStream());
-
-$terminal = (new Terminal($container));
+$terminal = (new Terminal(new Container()));
 $terminal->enableInstantOutput();
 $terminal->disableCanonicalMode();
 $terminal->disableEchoBack();
