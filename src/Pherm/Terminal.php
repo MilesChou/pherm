@@ -3,7 +3,6 @@
 namespace MilesChou\Pherm;
 
 use InvalidArgumentException;
-use MilesChou\Pherm\Binding\Key;
 use MilesChou\Pherm\Concerns\AttributeTrait;
 use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\InstantOutputTrait;
@@ -27,11 +26,6 @@ class Terminal
     use InstantOutputTrait;
     use IoTrait;
     use PositionAwareTrait;
-
-    /**
-     * @var Key
-     */
-    private $keyBinding;
 
     /**
      * @var Renderer
@@ -207,18 +201,6 @@ class Terminal
         $this->renderer->renderBuffer($this->getCellBuffer());
 
         $this->output->flush();
-    }
-
-    /**
-     * @return Key
-     */
-    public function keyBinding(): Key
-    {
-        if (null === $this->keyBinding) {
-            $this->keyBinding = new Key($this);
-        }
-
-        return $this->keyBinding;
     }
 
     /**

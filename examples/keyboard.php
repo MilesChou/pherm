@@ -100,11 +100,3 @@ foreach ($keyboard as $key => $data) {
 $terminal->flush();
 
 $terminal->cursor()->bottom();
-
-while (true) {
-    $input = $terminal->read(4);
-
-    if ($input === 'q') {
-        break;
-    }
-}
