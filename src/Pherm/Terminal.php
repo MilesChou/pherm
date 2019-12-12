@@ -5,7 +5,6 @@ namespace MilesChou\Pherm;
 use InvalidArgumentException;
 use MilesChou\Pherm\Concerns\AttributeTrait;
 use MilesChou\Pherm\Concerns\BufferTrait;
-use MilesChou\Pherm\Concerns\InstantOutputTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
@@ -23,9 +22,13 @@ class Terminal
     use SizeAwareTrait;
     use AttributeTrait;
     use BufferTrait;
-    use InstantOutputTrait;
     use IoTrait;
     use PositionAwareTrait;
+
+    /**
+     * @var bool
+     */
+    private $isInstantOutput = false;
 
     /**
      * @var Renderer
@@ -166,15 +169,11 @@ class Terminal
     }
 
     /**
-     * @return static
+     * @return Terminal
      */
-    public function disableInstantOutput()
+    public function disableInstantOutput(): Terminal
     {
-        $this->instantOutput = false;
-
-        if (method_exists($this->output, 'disableInstantOutput')) {
-            $this->output->disableInstantOutput();
-        }
+        $this->isInstantOutput = false;
 
         return $this;
     }
@@ -184,11 +183,7 @@ class Terminal
      */
     public function enableInstantOutput(): Terminal
     {
-        $this->instantOutput = true;
-
-        if (method_exists($this->output, 'enableInstantOutput')) {
-            $this->output->enableInstantOutput();
-        }
+        $this->isInstantOutput = true;
 
         return $this;
     }
@@ -221,6 +216,18 @@ class Terminal
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function isInstantOutput(): bool
+    {
+        return $this->isInstantOutput;
+    }
+
+    /**
+     * @param int $bytes
+     * @return string
+     */
     public function read(int $bytes): string
     {
         $buffer = '';
@@ -232,6 +239,9 @@ class Terminal
         return $buffer;
     }
 
+    /**
+     * @param string $buffer
+     */
     public function write(string $buffer)
     {
         if ($this->isInstantOutput()) {
