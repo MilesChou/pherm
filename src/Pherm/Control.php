@@ -25,7 +25,6 @@ use OverflowException;
  * @property-read string $ed Erase in Display
  * @property-read string $rcp
  * @property-read string $scp
- * @property-read TTY $tty
  *
  * @see https://www.xfree86.org/current/ctlseqs.html
  */
@@ -90,10 +89,6 @@ class Control
 
     public function __get($key)
     {
-        if ('tty' === $key) {
-            return $this->tty;
-        }
-
         if (method_exists($this, $key)) {
             throw new LogicException("Key '$key' has the same name method, use method instead");
         }
@@ -174,6 +169,14 @@ class Control
         $this->overwrite = $overwrite;
 
         return $this;
+    }
+
+    /**
+     * @return TTY
+     */
+    public function tty(): TTY
+    {
+        return $this->tty;
     }
 
     /**

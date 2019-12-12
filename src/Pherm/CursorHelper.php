@@ -15,6 +15,11 @@ class CursorHelper
     private $control;
 
     /**
+     * @var TTY
+     */
+    private $tty;
+
+    /**
      * @param Terminal $terminal
      * @param Control $control
      */
@@ -22,6 +27,7 @@ class CursorHelper
     {
         $this->setTerminal($terminal);
         $this->control = $control;
+        $this->tty = $control->tty();
     }
 
     public function __call($name, $arguments)
@@ -33,14 +39,14 @@ class CursorHelper
 
     public function bottom(int $x = 1): Terminal
     {
-        return $this->move($x, $this->control->tty->height());
+        return $this->move($x, $this->tty->height());
     }
 
     public function center(int $deltaX = 0, int $deltaY = 0): Terminal
     {
         return $this->move(
-            (int)($this->control->tty->width() / 2) + $deltaX,
-            (int)($this->control->tty->height() / 2) + $deltaY
+            (int)($this->tty->width() / 2) + $deltaX,
+            (int)($this->tty->height() / 2) + $deltaY
         );
     }
 
@@ -52,8 +58,8 @@ class CursorHelper
     public function end(int $backwardX = 0, int $backwardY = 0): Terminal
     {
         return $this->move(
-            $this->control->tty->width() - $backwardX,
-            $this->control->tty->height() - $backwardY
+            $this->tty->width() - $backwardX,
+            $this->tty->height() - $backwardY
         );
     }
 
@@ -73,7 +79,7 @@ class CursorHelper
 
     public function middle(int $x = 1): Terminal
     {
-        return $this->move($x, $this->control->tty->height() / 2);
+        return $this->move($x, $this->tty->height() / 2);
     }
 
     public function move(int $x, int $y): Terminal

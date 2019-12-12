@@ -19,6 +19,7 @@
         "psr/container": "^1.0"
     },
     "require-dev": {
+        "amphp/amp": "^2.4",
         "codacy/coverage": "^1.4",
         "illuminate/container": "^6",
         "mockery/mockery": "^1.3",

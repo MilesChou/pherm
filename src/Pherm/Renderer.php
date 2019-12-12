@@ -34,7 +34,9 @@ class Renderer
         $this->output = $output;
         $this->control = $control;
 
-        $this->outputBuffer = new CellBuffer($control->tty->width(), $control->tty->height());
+        $tty = $control->tty();
+
+        $this->outputBuffer = new CellBuffer($tty->width(), $tty->height());
     }
 
     /**

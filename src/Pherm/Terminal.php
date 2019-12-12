@@ -87,12 +87,14 @@ class Terminal
      */
     public function bootstrap(): Terminal
     {
-        $this->height = $this->control->tty->height();
-        $this->width = $this->control->tty->width();
+        $tty = $this->control->tty();
+
+        $this->height = $tty->height();
+        $this->width = $tty->width();
 
         $this->prepareCellBuffer();
 
-        $this->control->tty->store();
+        $tty->store();
 
         return $this;
     }
@@ -133,16 +135,18 @@ class Terminal
      */
     public function current(): array
     {
+        $tty = $this->control->tty();
+
         // store state
-        $icanon = $this->control->tty->isCanonicalMode();
-        $echo = $this->control->tty->isEchoBack();
+        $icanon = $tty->isCanonicalMode();
+        $echo = $tty->isEchoBack();
 
         if ($icanon) {
-            $this->control->tty->disableCanonicalMode();
+            $tty->disableCanonicalMode();
         }
 
         if ($echo) {
-            $this->control->tty->disableEchoBack();
+            $tty->disableEchoBack();
         }
 
         fwrite(STDOUT, $this->control->dsr);
@@ -154,11 +158,11 @@ class Terminal
 
         // restore state
         if ($icanon) {
-            $this->control->tty->enableCanonicalMode();
+            $tty->enableCanonicalMode();
         }
 
         if ($echo) {
-            $this->control->tty->enableEchoBack();
+            $tty->enableEchoBack();
         }
 
         if (sscanf(trim($cpr), $this->control->cpr, $row, $col) === 2) {
@@ -286,7 +290,7 @@ class Terminal
      */
     public function __destruct()
     {
-        $this->control->tty->restore();
+        $this->control->tty()->restore();
         $this->enableCursor();
     }
 

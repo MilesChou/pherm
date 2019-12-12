@@ -1,5 +1,6 @@
 <?php
 
+use Amp\Delayed;
 use Illuminate\Container\Container;
 use MilesChou\Pherm\Terminal;
 
@@ -76,9 +77,12 @@ $keyboard = [
 
 $terminal = (new Terminal(new Container()));
 $terminal->enableInstantOutput();
-$terminal->disableCanonicalMode();
-$terminal->disableEchoBack();
 $terminal->disableCursor();
+
+$tty = $terminal->control()->tty();
+$tty->disableCanonicalMode();
+$tty->disableEchoBack();
+
 $terminal->bootstrap();
 
 $terminal->clear();
@@ -92,3 +96,17 @@ foreach ($keyboard as $key => $data) {
 $terminal->flush();
 
 $terminal->cursor()->bottom();
+
+Amp\asyncCall(static function () use ($terminal) {
+    while (true) {
+        $input = $terminal->read(4);
+
+        if ($input === 'q') {
+            return;
+        }
+
+        yield new Delayed(50);
+    }
+});
+
+Amp\Loop::run();

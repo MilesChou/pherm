@@ -26,7 +26,7 @@ class TerminalTest extends TestCase
      */
     public function shouldBeOkayWhenUsingFluentCall(): void
     {
-        $this->assertSame(24, $this->target->control()->tty->height());
+        $this->assertSame(24, $this->target->control()->tty()->height());
     }
 
     /**
