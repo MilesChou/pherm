@@ -25,7 +25,11 @@ See [examples](/examples) to know how to use.
 Hello world example:
 
 ```php
-$terminal = (new Terminal(new InputStream(), new OutputStream()))
+$container = new Container();
+$container->instance(Input::class, new InputStream());
+$container->instance(Output::class, new OutputStream());
+
+$terminal = (new Terminal($container))
     ->enableInstantOutput()
     ->bootstrap();
 
@@ -33,9 +37,9 @@ $terminal->clear();
 
 $str = 'Hello world!';
 
-$terminal->moveCursor()->center(-(mb_strlen($str) / 2))->write($str);
+$terminal->cursor()->center(-(mb_strlen($str) / 2))->write($str);
 
-$terminal->moveCursor()->bottom();
+$terminal->cursor()->bottom();
 ```
 
 ## Credits
