@@ -59,7 +59,7 @@ class CursorHelper
 
     public function instant(int $x, int $y): Terminal
     {
-        $this->control->checkPosition($x, $y);
+        $this->position($x, $y);
 
         $this->terminal->getOutput()->write($this->control->cup($y, $x));
 
@@ -87,7 +87,7 @@ class CursorHelper
         return $this->terminal;
     }
 
-    public function position(int $x, int $y)
+    public function position(int $x, int $y): CursorHelper
     {
         $this->control->checkPosition($x, $y);
 
