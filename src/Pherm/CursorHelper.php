@@ -2,11 +2,8 @@
 
 namespace MilesChou\Pherm;
 
-use MilesChou\Pherm\Concerns\PositionAwareTrait;
-
 class CursorHelper
 {
-    use PositionAwareTrait;
     use TerminalAwareTrait;
 
     /**
@@ -74,7 +71,7 @@ class CursorHelper
 
     public function last(): array
     {
-        return $this->getPosition();
+        return $this->terminal->getPosition();
     }
 
     public function middle(int $x = 1): Terminal
@@ -96,8 +93,9 @@ class CursorHelper
     public function position(int $x, int $y): CursorHelper
     {
         $this->control->checkPosition($x, $y);
+        $this->terminal->setPosition($x, $y);
 
-        return $this->setPosition($x, $y);
+        return $this;
     }
 
     public function row(int $y): Terminal

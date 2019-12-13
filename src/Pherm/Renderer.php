@@ -75,7 +75,7 @@ class Renderer
                 if ($w === 2 && $x === $this->outputBuffer->width() - 1) {
                     $this->output->write(' ');
                 } else {
-                    $this->output->write($this->control->cup($y, $x));
+                    $this->output->write($this->control->cup($y + 1, $x + 1));
                     $this->output->write($back[0]);
                     if ($w === 2) {
                         $next = $cellOffset + 1;

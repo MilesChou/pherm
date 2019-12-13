@@ -256,21 +256,25 @@ class Terminal
      */
     public function write(string $buffer): void
     {
-        if ($this->isInstantOutput()) {
-            $this->output->write($buffer);
-            return;
-        }
-
         foreach (Char::charsToArray($buffer) as $char) {
             $this->writeChar($char);
         }
     }
 
     /**
+     * Restore the original terminal configuration on shutdown.
+     */
+    public function __destruct()
+    {
+        $this->control->tty()->restore();
+        $this->enableCursor();
+    }
+
+    /**
      * @param string $char
      * @return static
      */
-    public function writeChar(string $char): Terminal
+    private function writeChar(string $char): Terminal
     {
         if (mb_strlen($char) > 1) {
             throw new InvalidArgumentException('Char must be only one mbstring');
@@ -283,15 +287,6 @@ class Terminal
         }
 
         return $this;
-    }
-
-    /**
-     * Restore the original terminal configuration on shutdown.
-     */
-    public function __destruct()
-    {
-        $this->control->tty()->restore();
-        $this->enableCursor();
     }
 
     private function writeBuffer(string $char): void
