@@ -1,8 +1,8 @@
 <?php
 
-namespace MilesChou\Pherm\Contracts;
+namespace MilesChou\Pherm\Output;
 
-interface Output
+interface OutputInterface
 {
     /**
      * Flush the buffer to output stream

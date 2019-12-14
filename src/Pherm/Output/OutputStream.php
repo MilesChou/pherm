@@ -3,13 +3,12 @@
 namespace MilesChou\Pherm\Output;
 
 use InvalidArgumentException;
-use MilesChou\Pherm\Contracts\Output;
 use function get_resource_type;
 use function is_resource;
 use function stream_get_meta_data;
 use function strpos;
 
-class OutputStream implements Output
+class OutputStream implements OutputInterface
 {
     /**
      * @var string

@@ -2,9 +2,7 @@
 
 namespace MilesChou\Pherm\Input;
 
-use MilesChou\Pherm\Contracts\Input;
-
-class StringInput implements Input
+class StringInput implements InputInterface
 {
     /**
      * @var array

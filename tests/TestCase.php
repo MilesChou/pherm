@@ -3,10 +3,11 @@
 namespace Tests;
 
 use Illuminate\Container\Container;
-use MilesChou\Pherm\Contracts;
 use MilesChou\Pherm\Control;
+use MilesChou\Pherm\Input\InputInterface;
 use MilesChou\Pherm\Input\StringInput;
 use MilesChou\Pherm\Output\BufferedOutput;
+use MilesChou\Pherm\Output\OutputInterface;
 use MilesChou\Pherm\Terminal;
 use MilesChou\Pherm\TTY;
 use Mockery;
@@ -49,8 +50,8 @@ class TestCase extends BaseTestCase
     {
         $container = new Container();
 
-        $container->instance(Contracts\Input::class, new StringInput());
-        $container->instance(Contracts\Output::class, new BufferedOutput());
+        $container->instance(InputInterface::class, new StringInput());
+        $container->instance(OutputInterface::class, new BufferedOutput());
         $container->instance(TTY::class, $this->createTTYMock());
 
         $instance = new Terminal($container);

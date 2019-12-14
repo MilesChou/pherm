@@ -5,12 +5,13 @@ namespace Tests\Pherm\Input;
 use MilesChou\Pherm\Input\InputStream;
 use Tests\TestCase;
 
-class ResourceInputStreamTest extends TestCase
+class InputStreamTest extends TestCase
 {
     public function testNonStream(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a valid stream');
+
         new InputStream(42);
     }
 
@@ -18,6 +19,7 @@ class ResourceInputStreamTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected a readable stream');
+
         new InputStream(\STDOUT);
     }
 

@@ -95,7 +95,7 @@ class TerminalTest extends TestCase
     public function shouldThrowsExceptionWhenCallMustBeInteractiveWithInputNotTTY(): void
     {
         $this->expectException(NotInteractiveTerminal::class);
-        $this->expectExceptionMessage('Input stream is not interactive (non TTY)');
+        $this->expectExceptionMessage('InputInterface stream is not interactive (non TTY)');
 
         $input = (new StringInput())->mockInteractive(false);
 

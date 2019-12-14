@@ -1,8 +1,8 @@
 <?php
 
-namespace MilesChou\Pherm\Contracts;
+namespace MilesChou\Pherm\Input;
 
-interface Input
+interface InputInterface
 {
     /**
      * Whether the stream is connected to an interactive terminal

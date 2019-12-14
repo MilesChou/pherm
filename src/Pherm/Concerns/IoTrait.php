@@ -44,7 +44,7 @@ trait IoTrait
     public function mustBeInteractive(): void
     {
         if (!$this->input->isInteractive()) {
-            throw new NotInteractiveTerminal('Input stream is not interactive (non TTY)');
+            throw new NotInteractiveTerminal('InputInterface stream is not interactive (non TTY)');
         }
 
         if (!$this->output->isInteractive()) {

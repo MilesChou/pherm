@@ -2,9 +2,7 @@
 
 namespace MilesChou\Pherm\Output;
 
-use MilesChou\Pherm\Contracts\Output;
-
-class BufferedOutput implements Output
+class BufferedOutput implements OutputInterface
 {
     /**
      * @var string

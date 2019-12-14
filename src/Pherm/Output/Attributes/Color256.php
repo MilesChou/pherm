@@ -8,7 +8,7 @@ class Color256 extends Attribute
 {
     protected function generateBoth(int $fg, int $bg): string
     {
-        return $this->generateForeground($fg) . $this->genearateBackground($bg);
+        return $this->generateForeground($fg) . $this->generateBackground($bg);
     }
 
     protected function generateForeground(int $fg): string
@@ -16,7 +16,7 @@ class Color256 extends Attribute
         return "\033[38;5;{$fg}m";
     }
 
-    protected function genearateBackground(int $bg): string
+    protected function generateBackground(int $bg): string
     {
         return "\033[48;5;{$bg}m";
     }

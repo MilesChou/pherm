@@ -8,8 +8,8 @@ use MilesChou\Pherm\Concerns\BufferTrait;
 use MilesChou\Pherm\Concerns\IoTrait;
 use MilesChou\Pherm\Concerns\PositionAwareTrait;
 use MilesChou\Pherm\Concerns\SizeAwareTrait;
-use MilesChou\Pherm\Contracts\Input;
-use MilesChou\Pherm\Contracts\Output;
+use MilesChou\Pherm\Input\InputInterface;
+use MilesChou\Pherm\Output\OutputInterface;
 use MilesChou\Pherm\Input\InputStream;
 use MilesChou\Pherm\Output\Attributes\Color256;
 use MilesChou\Pherm\Output\OutputStream;
@@ -44,8 +44,13 @@ class Terminal
      */
     public function __construct(ContainerInterface $container)
     {
-        $input = $container->has(Input::class) ? $container->get(Input::class) : new InputStream();
-        $output = $container->has(Output::class) ? $container->get(Output::class) : new OutputStream();
+        $input = $container->has(InputInterface::class)
+            ? $container->get(InputInterface::class)
+            : new InputStream();
+
+        $output = $container->has(OutputInterface::class)
+            ? $container->get(OutputInterface::class)
+            : new OutputStream();
 
         $this->setInput($input);
         $this->setOutput($output);
