@@ -2,14 +2,17 @@
 
 namespace MilesChou\Pherm;
 
-class CursorHelper
+class Cursor
 {
-    use TerminalAwareTrait;
-
     /**
      * @var Control
      */
     private $control;
+
+    /**
+     * @var Terminal
+     */
+    private $terminal;
 
     /**
      * @var TTY
@@ -22,16 +25,9 @@ class CursorHelper
      */
     public function __construct(Terminal $terminal, Control $control)
     {
-        $this->setTerminal($terminal);
         $this->control = $control;
+        $this->terminal = $terminal;
         $this->tty = $control->tty();
-    }
-
-    public function __call($name, $arguments)
-    {
-        if (method_exists($this, $method = 'move' . ucfirst($name))) {
-            return $this->{$method}(...$arguments);
-        }
     }
 
     public function bottom(int $x = 1): Terminal
@@ -90,7 +86,7 @@ class CursorHelper
         return $this->terminal;
     }
 
-    public function position(int $x, int $y): CursorHelper
+    public function position(int $x, int $y): Cursor
     {
         $this->control->checkPosition($x, $y);
         $this->terminal->setPosition($x, $y);

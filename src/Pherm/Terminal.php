@@ -173,11 +173,11 @@ class Terminal
     }
 
     /**
-     * @return CursorHelper
+     * @return Cursor
      */
-    public function cursor(): CursorHelper
+    public function cursor(): Cursor
     {
-        return new CursorHelper($this, $this->control);
+        return new Cursor($this, $this->control);
     }
 
     /**

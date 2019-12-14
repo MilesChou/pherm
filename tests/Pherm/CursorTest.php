@@ -2,14 +2,14 @@
 
 namespace Tests\Pherm;
 
-use MilesChou\Pherm\CursorHelper;
+use MilesChou\Pherm\Cursor;
 use OverflowException;
 use Tests\TestCase;
 
 class CursorTest extends TestCase
 {
     /**
-     * @var CursorHelper
+     * @var Cursor
      */
     private $target;
 
