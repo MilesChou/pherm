@@ -23,7 +23,7 @@ class Color256Test extends TestCase
 
     protected function setUp(): void
     {
-        $this->target = new Color256(new BufferedOutput);
+        $this->target = new Color256(new BufferedOutput());
     }
 
     protected function tearDown(): void

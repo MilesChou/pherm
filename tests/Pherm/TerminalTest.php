@@ -128,7 +128,7 @@ class TerminalTest extends TestCase
      */
     public function shouldBeOkayWhenCallClear(): void
     {
-        $actual = new BufferedOutput;
+        $actual = new BufferedOutput();
 
         $this->target->setOutput($actual)
             ->bootstrap();
@@ -143,7 +143,7 @@ class TerminalTest extends TestCase
      */
     public function shouldBeOkayWhenCallClearLine(): void
     {
-        $actual = new BufferedOutput;
+        $actual = new BufferedOutput();
 
         $this->target->setOutput($actual)
             ->bootstrap();
@@ -155,7 +155,7 @@ class TerminalTest extends TestCase
 
     public function testClearDown(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -166,7 +166,7 @@ class TerminalTest extends TestCase
 
     public function testEnableCursor(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -177,7 +177,7 @@ class TerminalTest extends TestCase
 
     public function testDisableCursor(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -188,7 +188,7 @@ class TerminalTest extends TestCase
 
     public function testMoveCursorToTop(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -202,7 +202,7 @@ class TerminalTest extends TestCase
      */
     public function sholudBeOkayWhenCallMoveCursorToEnd(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -213,7 +213,7 @@ class TerminalTest extends TestCase
 
     public function testMoveCursorToRow(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -224,7 +224,7 @@ class TerminalTest extends TestCase
 
     public function testMoveCursorToColumn(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -238,7 +238,7 @@ class TerminalTest extends TestCase
      */
     public function shouldReturnCorrectPositionWhenCallMoveCursor(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -249,7 +249,7 @@ class TerminalTest extends TestCase
 
     public function testShowAlternateScreen(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -260,7 +260,7 @@ class TerminalTest extends TestCase
 
     public function testShowMainScreen(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()
@@ -287,7 +287,7 @@ class TerminalTest extends TestCase
 
     public function testWriteForwardsToOutput(): void
     {
-        $output = new BufferedOutput;
+        $output = new BufferedOutput();
 
         $this->target->setOutput($output)
             ->bootstrap()

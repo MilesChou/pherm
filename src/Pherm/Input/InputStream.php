@@ -3,6 +3,7 @@
 namespace MilesChou\Pherm\Input;
 
 use InvalidArgumentException;
+
 use function get_resource_type;
 use function is_resource;
 use function stream_get_meta_data;
