@@ -8,6 +8,9 @@ trait IoTrait
 {
     use IoAwareTrait;
 
+    /**
+     * @return static
+     */
     public function clearDown()
     {
         $this->output->write("\033[J");
@@ -15,6 +18,9 @@ trait IoTrait
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function clearLine()
     {
         $this->output->write("\033[2K");
@@ -22,6 +28,9 @@ trait IoTrait
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function disableCursor()
     {
         $this->output->write("\033[?25l");
@@ -29,6 +38,9 @@ trait IoTrait
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function enableCursor()
     {
         $this->output->write("\033[?25h");
@@ -52,6 +64,9 @@ trait IoTrait
         }
     }
 
+    /**
+     * @return static
+     */
     public function showSecondaryScreen()
     {
         $this->output->write("\033[?47h");
@@ -59,6 +74,9 @@ trait IoTrait
         return $this;
     }
 
+    /**
+     * @return static
+     */
     public function showPrimaryScreen()
     {
         $this->output->write("\033[?47l");

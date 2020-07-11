@@ -21,6 +21,9 @@ class OutputStream implements OutputInterface
      */
     private $stream;
 
+    /**
+     * @param false|resource $stream
+     */
     public function __construct($stream = STDOUT)
     {
         if (!is_resource($stream) || get_resource_type($stream) !== 'stream') {

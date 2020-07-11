@@ -69,7 +69,7 @@ class Control
     ];
 
     /**
-     * @var array
+     * @var array<string>
      */
     private $overwrite;
 
@@ -87,6 +87,10 @@ class Control
         $this->tty->reloadSize();
     }
 
+    /**
+     * @param string $key
+     * @return string
+     */
     public function __get($key)
     {
         if (method_exists($this, $key)) {
@@ -96,11 +100,20 @@ class Control
         return $this->characters($key);
     }
 
+    /**
+     * @param string $key
+     * @return bool
+     */
     public function __isset($key)
     {
         return isset(static::CONTROL_CHARACTER[$key]) || isset(static::CONTROL_SEQUENCES[$key]);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
     public function __set($name, $value)
     {
         throw new LogicException('Cannot set the value on Control');
@@ -161,7 +174,7 @@ class Control
     }
 
     /**
-     * @param array $overwrite
+     * @param array<string> $overwrite
      * @return static
      */
     public function overwrite(array $overwrite): Control

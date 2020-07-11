@@ -95,6 +95,8 @@ abstract class Attribute
         if ($bg !== self::COLOR_DEFAULT) {
             return $this->generateBackground($bgCol);
         }
+
+        return '';
     }
 
     /**

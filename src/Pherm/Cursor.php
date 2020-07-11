@@ -65,6 +65,9 @@ class Cursor
         return $this->terminal;
     }
 
+    /**
+     * @return array<int>
+     */
     public function last(): array
     {
         return $this->terminal->getPosition();

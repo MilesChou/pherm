@@ -55,7 +55,7 @@ trait SizeAwareTrait
     }
 
     /**
-     * @return array
+     * @return array<int>
      */
     public function size(): array
     {

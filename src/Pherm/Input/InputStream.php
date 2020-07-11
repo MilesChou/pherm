@@ -16,6 +16,9 @@ class InputStream implements InputInterface
      */
     private $stream;
 
+    /**
+     * @param false|resource $stream
+     */
     public function __construct($stream = STDIN)
     {
         if (!is_resource($stream) || get_resource_type($stream) !== 'stream') {

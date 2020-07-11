@@ -60,7 +60,10 @@ class BufferedOutput implements OutputInterface
         return $this;
     }
 
-    public function toByteArray()
+    /**
+     * @return array<int>
+     */
+    public function toByteArray(): array
     {
         return array_map('ord', str_split($this->buffer));
     }

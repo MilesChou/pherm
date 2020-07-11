@@ -23,7 +23,7 @@ class Char
      * Transform the mbstring to an array
      *
      * @param string $str
-     * @return array
+     * @return array<string>
      */
     public static function charsToArray(string $str): array
     {
@@ -72,7 +72,7 @@ class Char
 
     /**
      * @param int $c
-     * @param array $table
+     * @param array<array<mixed>> $table
      * @return bool
      */
     private static function inTable(int $c, array $table): bool

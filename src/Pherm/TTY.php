@@ -105,7 +105,7 @@ class TTY
     }
 
     /**
-     * @return array [$width, $height]
+     * @return array<int> [$width, $height]
      */
     public function reloadSize(): array
     {

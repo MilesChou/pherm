@@ -15,7 +15,7 @@ trait PositionAwareTrait
     private $y = 1;
 
     /**
-     * @return array
+     * @return array<int>
      */
     public function getPosition(): array
     {

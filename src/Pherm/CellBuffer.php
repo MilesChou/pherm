@@ -17,7 +17,7 @@ class CellBuffer
     private $height;
 
     /**
-     * @var array [char, fg, bg]
+     * @var array<mixed> [char, fg, bg]
      */
     public $cells = [];
 
@@ -58,7 +58,7 @@ class CellBuffer
      *
      * @param int $x
      * @param int $y
-     * @return array
+     * @return array<mixed>
      */
     public function get(int $x, int $y): array
     {
@@ -145,7 +145,7 @@ class CellBuffer
     /**
      * @param int $x
      * @param int $y
-     * @param array $cell
+     * @param array<mixed> $cell
      * @return static
      */
     public function setCell(int $x, int $y, array $cell)

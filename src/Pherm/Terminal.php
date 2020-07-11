@@ -136,7 +136,7 @@ class Terminal
     /**
      * Current cursor position
      *
-     * @return array
+     * @return array<int>
      */
     public function current(): array
     {

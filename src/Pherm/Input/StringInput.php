@@ -5,7 +5,7 @@ namespace MilesChou\Pherm\Input;
 class StringInput implements InputInterface
 {
     /**
-     * @var array
+     * @var array<string>
      */
     private $input = [];
 
@@ -15,7 +15,7 @@ class StringInput implements InputInterface
     private $interactive = false;
 
     /**
-     * @param string|array $input
+     * @param string|array<string> $input
      * @return static
      */
     public function input($input)

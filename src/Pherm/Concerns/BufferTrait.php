@@ -15,7 +15,7 @@ trait BufferTrait
     /**
      * @param int $x
      * @param int $y
-     * @return array
+     * @return array<mixed>
      */
     public function getCell(int $x, int $y): array
     {
@@ -23,7 +23,7 @@ trait BufferTrait
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getCells(): array
     {
