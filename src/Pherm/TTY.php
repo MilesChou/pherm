@@ -109,10 +109,9 @@ class TTY
      */
     public function reloadSize(): array
     {
-        // [$rows, $columns]
-        $size = explode(' ', exec('stty size'));
+        $term = new \Symfony\Component\Console\Terminal();
 
-        $this->setSize((int)$size[1], (int)$size[0]);
+        $this->setSize($term->getWidth(), $term->getHeight());
 
         return $this->size();
     }
